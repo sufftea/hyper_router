@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stack_router/stack_router.dart';
 
-class NestedNavigator extends StatelessWidget {
-  const NestedNavigator({
+class NestedStackRouter extends StatelessWidget {
+  const NestedStackRouter({
     required this.controller,
     super.key,
   });
@@ -11,7 +11,6 @@ class NestedNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('building nestedNavigator');
     final parentRouter = StackRouter.of(context);
 
     final config = StackRouter(

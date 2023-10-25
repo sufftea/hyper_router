@@ -1,32 +1,36 @@
+import 'package:example/screens/home/home_screen.dart';
+import 'package:example/screens/post/post_screen.dart';
+import 'package:example/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/shell_route.dart';
+import 'package:flutter_stack_router/route_stack.dart';
+import 'package:flutter_stack_router/nested_stack_router.dart';
 import 'package:flutter_stack_router/stack_router.dart';
 
 class TabBarRouteData {
-  const TabBarRouteData(this.controller);
-
-  final TabStackRouterController controller;
+  const TabBarRouteData();
 }
 
 class TabBarScreen extends StatefulWidget {
-  const TabBarScreen({
-    required this.data,
-    super.key,
-  });
-
-  final TabBarRouteData data;
+  const TabBarScreen({super.key});
 
   @override
   State<TabBarScreen> createState() => _TabBarScreenState();
 }
 
 class _TabBarScreenState extends State<TabBarScreen> {
+  final controller = TabStackRouterController(
+    initialTab: 1,
+    tabs: [
+      RouteStack([const ProfileRouteData()]),
+      RouteStack([const HomeRouteData()]),
+      RouteStack([const PostRouteData('settings screen')]),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
-    final controller = widget.data.controller;
-
     return Scaffold(
-      body: NestedNavigator(controller: controller),
+      body: NestedStackRouter(controller: controller),
       bottomNavigationBar: AnimatedBuilder(
         animation: controller,
         builder: (context, child) {

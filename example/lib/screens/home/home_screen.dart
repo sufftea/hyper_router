@@ -32,14 +32,8 @@ class HomeScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 final routerState = StackRouter.stateOf(context);
-                routerState.push(TabBarRouteData(TabStackRouterController(
-                  initialTab: 1,
-                  tabs: [
-                    RouteStack([const ProfileRouteData()]),
-                    RouteStack([const HomeRouteData()]),
-                    RouteStack([const PostRouteData('settings screen')]),
-                  ],
-                )));
+
+                routerState.push(const TabBarRouteData());
               },
               child: const Text('open another tab screen'),
             ),
