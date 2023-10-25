@@ -22,9 +22,7 @@ final router = StackRouter(
       return const SettingsScreen();
     }),
     ScreenDestination<TabBarRouteData>(screenBuilder: (context, value) {
-      return TabBarScreen(
-        data: value,
-      );
+      return const TabBarScreen();
     }),
     ScreenDestination<ProfileRouteData>(screenBuilder: (context, value) {
       return const ProfileScreen();

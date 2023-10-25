@@ -1,7 +1,7 @@
 
 
 ### [WIP]
-Value-based router for flutter.
+Value-based router for Flutter.
 
 ## Features
 
@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
 }
 ```
 
-Configure the router. The type argument you specify in `ScreenDestination` will be used to push that screen to the navigation stack:
+Configure the router. The type argument you specify for `ScreenDestination` will be used represent that screen in the navigation stack:
 ```dart
 final router = StackRouter(
   controller: StackRouterController(
@@ -76,7 +76,7 @@ routerState.controller.stack = routerState.controller.stack
 ```
 What's going on:
 - `RouteStack` is just a wrapper around a list to prevent mutations and add convenience methods.
-- `controller` manages the list of values and updates the router when it changes. It's the same controller that you pass into the `StackRouter` constructor, you can access it outside of the widget tree if you need to (this will become usefull when we get to nesting routers)
+- `controller` manages the list of values and updates the router when it changes. It's the same controller that you pass into the `StackRouter` constructor. You can access it outside of the widget tree if you need to (this will be usefull when we get to nesting routers)
 - `routerState.localStack` represents the current route regardless of whether there are other routes on top of it. This helps prevent pushing the same route on top twice when the user taps the button for the second time while the route is still animating in.
 
 ### Nesting routers (tab bar navigation)
