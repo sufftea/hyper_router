@@ -21,6 +21,14 @@ class RouteStack {
     return RouteStack(_list.sublist(0, _list.length - 1));
   }
 
+  RouteStack root() {
+    if (list.isEmpty) {
+      return RouteStack(_list);
+    }
+
+    return RouteStack([_list.first]);
+  }
+
   @override
   bool operator ==(Object other) {
     return other is RouteStack && other._list == _list;

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/destination.dart';
-import 'package:flutter_stack_router/route_stack.dart';
 import 'package:flutter_stack_router/stack_router.dart';
 
 class PostRouteData {
@@ -40,11 +38,13 @@ class PostScreen extends StatelessWidget {
             ),
             OutlinedButton(
               onPressed: () {
+                debugPrint('SETTING STACK');
                 StackRouter.stateOf(context).controller.stack = RouteStack([
                   data,
                   const PostRouteData('1'),
                   const PostRouteData('2'),
                   const PostRouteData('3'),
+                  const PostRouteData('4'),
                 ]);
                 // MyRouter.push(context, const ProfileRouteData('anotherUserId'));
               },

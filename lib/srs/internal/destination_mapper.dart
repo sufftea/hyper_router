@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/destination.dart';
-import 'package:flutter_stack_router/route_stack.dart';
+import 'package:flutter_stack_router/srs/destination.dart';
+import 'package:flutter_stack_router/srs/route_stack.dart';
 
 class DestinationMapper {
   DestinationMapper(
@@ -20,10 +20,12 @@ class DestinationMapper {
       final currStack = RouteStack(stack.list.sublist(0, i));
       i++;
 
-      // TODO: Material/Cupertino setting
-      // TODO: test wrapping in builder (prevent building )
-      return MaterialPage(
-        child: destination.buildScreenWrapped(context, value, currStack),
+      return destination.buildPage(
+        context,
+        child: InheritedRouteStack(
+          stack: currStack,
+          child: destination.buildScreen(context, value),
+        ),
       );
     }).toList();
   }

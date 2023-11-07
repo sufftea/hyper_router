@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/destination_mapper.dart';
+import 'package:flutter_stack_router/srs/internal/destination_mapper.dart';
 import 'package:flutter_stack_router/stack_router.dart';
-import 'package:flutter_stack_router/route_stack.dart';
 
 class StackRouterDelegate extends RouterDelegate<RouteStack>
     with ChangeNotifier {
@@ -15,9 +14,6 @@ class StackRouterDelegate extends RouterDelegate<RouteStack>
   final StackRouterControllerBase controller;
   final DestinationMapper destinationMapper;
   final StackRouter router;
-
-  // @override
-  // GlobalKey<NavigatorState> navigatorKey;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// TODO: probably don't need this at all
 class StackRouterTransitionsDelegate extends TransitionDelegate {
   @override
   Iterable<RouteTransitionRecord> resolve({
@@ -12,7 +13,7 @@ class StackRouterTransitionsDelegate extends TransitionDelegate {
     debugPrint('newPageRouteHistory: $newPageRouteHistory');
     debugPrint('locationToExitingPageRoute: $locationToExitingPageRoute');
     debugPrint('pageRouteToPagelessRoutes: $pageRouteToPagelessRoutes');
-
+    
     return [];
   }
 }

@@ -2,8 +2,6 @@ import 'package:example/screens/home/home_screen.dart';
 import 'package:example/screens/post/post_screen.dart';
 import 'package:example/screens/profile/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/route_stack.dart';
-import 'package:flutter_stack_router/nested_stack_router.dart';
 import 'package:flutter_stack_router/stack_router.dart';
 
 class TabBarRouteData {
@@ -36,7 +34,11 @@ class _TabBarScreenState extends State<TabBarScreen> {
         builder: (context, child) {
           return BottomNavigationBar(
             onTap: (value) {
-              controller.tab = value;
+              if (controller.tab == value) {
+                controller.stack = controller.stack.root();
+              } else {
+                controller.tab = value;
+              }
             },
             currentIndex: controller.tab,
             items: const [
