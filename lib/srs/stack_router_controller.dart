@@ -1,50 +1,62 @@
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_stack_router/srs/destination/destination.dart';
+import 'package:flutter_stack_router/srs/internal/destination_mapper.dart';
 import 'package:flutter_stack_router/srs/route_stack.dart';
+import 'package:flutter_stack_router/srs/value/destination_value.dart';
 
-abstract class StackRouterControllerBase extends ChangeNotifier {
-  RouteStack get stack;
-  set stack(RouteStack value);
-}
-
-class StackRouterController extends StackRouterControllerBase {
+class StackRouterController extends ChangeNotifier {
   StackRouterController({
-    required RouteStack initialStack,
-  }) : _stack = initialStack;
+    required DestinationMapper mapper,
+    RouteStack? initialStack,
+    DestinationValue? initialDestination,
+  }) : _mapper = mapper {
+    _stack = initialStack ?? createStackFromTarget(initialDestination!);
+  }
 
-  RouteStack _stack;
+  final DestinationMapper _mapper;
+  late RouteStack _stack;
 
-  @override
   RouteStack get stack => _stack;
-
-  @override
   set stack(RouteStack value) {
     _stack = value;
     notifyListeners();
   }
-}
 
-class TabStackRouterController extends StackRouterControllerBase {
-  TabStackRouterController({
-    required List<RouteStack> tabs,
-    required initialTab,
-  })  : _currentTab = initialTab,
-        _tabs = tabs;
-
-  int _currentTab;
-  final List<RouteStack> _tabs;
-
-  int get tab => _currentTab;
-  set tab(int index) {
-    _currentTab = index;
-    notifyListeners();
+  void navigate(DestinationValue destinationValue) {
+    stack = createStackFromTarget(destinationValue);
   }
 
-  @override
-  RouteStack get stack => _tabs[_currentTab];
-  @override
-  set stack(RouteStack value) {
-    _tabs[_currentTab] = value;
-    notifyListeners();
+  /// Traverses the tree and returns a stack that leads to [target]
+  RouteStack createStackFromTarget(DestinationValue target) {
+    Destination? curr = _mapper.findDestination(target);
+
+    var path = <Destination>[];
+    while (curr != null) {
+      path.add(curr);
+      curr = curr.parent;
+    }
+
+    final reversedMap = _zip(path.toList(), _stack.list.reversed.toList());
+
+    var res = <DestinationValue>[];
+    for (final (destination!, value) in reversedMap) {
+      res = destination.visit(currentValue: value, onTop: res);
+    }
+
+    return RouteStack(res);
+  }
+
+  static Iterable<(T?, U?)> _zip<T, U>(List<T> a, List<U> b) {
+    return Iterable.generate(
+      max(a.length, b.length),
+      (index) {
+        return (
+          index < a.length ? a[index] : null,
+          index < b.length ? b[index] : null,
+        );
+      },
+    );
   }
 }

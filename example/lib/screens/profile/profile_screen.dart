@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-
-class ProfileRouteData {
-  const ProfileRouteData();
-}
+import 'package:flutter_stack_router/srs/value/destination_value.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  static const routeName = DestinationName('profile');
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('profile screen'),
+    return Scaffold(
+      body: Container(
+        color: Colors.yellow.shade200,
+        child: const Center(
+          child: Text('Profile'),
+        ),
       ),
     );
   }

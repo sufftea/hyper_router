@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stack_router/srs/destination/destination.dart';
 import 'package:flutter_stack_router/srs/internal/destination_mapper.dart';
 import 'package:flutter_stack_router/stack_router.dart';
 
@@ -11,7 +12,7 @@ class StackRouterDelegate extends RouterDelegate<RouteStack>
     required this.destinationMapper,
   });
 
-  final StackRouterControllerBase controller;
+  final StackRouterController controller;
   final DestinationMapper destinationMapper;
   final StackRouter router;
 
@@ -35,15 +36,21 @@ class StackRouterDelegate extends RouterDelegate<RouteStack>
 
   @override
   Future<bool> popRoute() async {
-    debugPrint('popping route. $this');
-    final newStack = controller.stack.popped();
+    final currentDestinationValue = controller.stack.list.last;
+    final currDestination =
+        destinationMapper.findDestination(currentDestinationValue);
 
-    if (newStack.list.isEmpty) {
-      return false;
-    } else {
-      controller.stack = newStack;
-      return true;
-    }
+    final value = currDestination.onPop(currentDestinationValue);
+
+    controller.stack = RouteStack([
+      ...controller.stack.list.sublist(
+        0,
+        controller.stack.list.length - 1,
+      ),
+      if (value != null) value,
+    ]);
+
+    return controller.stack.list.isEmpty;
   }
 
   @override

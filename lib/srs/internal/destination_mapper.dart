@@ -1,44 +1,54 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/destination.dart';
+import 'package:flutter_stack_router/srs/destination/destination.dart';
 import 'package:flutter_stack_router/srs/route_stack.dart';
+import 'package:flutter_stack_router/srs/value/destination_value.dart';
 
 class DestinationMapper {
-  DestinationMapper(
-    List<Destination> destinations,
-  ) : _destinations = {
-          for (final d in destinations) d.valueType: d,
-        };
-
-  final Map<Type, Destination> _destinations;
-
-  List<Page> mapStack(BuildContext context, RouteStack stack) {
-    int i = 1;
-
-    return stack.list.map((value) {
-      final destination = valueToDestination(value);
-
-      final currStack = RouteStack(stack.list.sublist(0, i));
-      i++;
-
-      return destination.buildPage(
-        context,
-        child: InheritedRouteStack(
-          stack: currStack,
-          child: destination.buildScreen(context, value),
-        ),
-      );
-    }).toList();
+  DestinationMapper({
+    required this.roots,
+  }) {
+    for (final child in roots) {
+      child.forEach((d) {
+        _destinations[d.key] = d;
+      });
+    }
   }
 
-  Destination valueToDestination(Object value) {
-    final destination = _destinations[value.runtimeType];
+  final _destinations = <Object, Destination>{};
+  final List<Destination> roots;
 
-    if (destination == null) {
-      throw StateError(
-        'Destination for ${value.runtimeType} is not provided',
-      );
+  List<Page> mapStack(BuildContext context, RouteStack stack) {
+    final result = <Page>[];
+    var currChildren = roots;
+
+    for (final value in stack.list) {
+      for (final destination in currChildren) {
+        if (destination.acceptsValue(value)) {
+          result.add(destination.buildPage(context, value));
+          currChildren = destination.children;
+        }
+      }
     }
 
-    return destination;
+    return result;
+  }
+
+  Destination findDestination(DestinationValue value) {
+    final result = _destinations[value];
+
+    if (result == null) {
+      throw 'todo';
+    }
+
+    return result;
+  }
+}
+
+extension _DestinationX<T extends DestinationValue> on Destination<T> {
+  void forEach(void Function(Destination d) visitor) {
+    visitor(this);
+    for (final child in children) {
+      child.forEach(visitor);
+    }
   }
 }

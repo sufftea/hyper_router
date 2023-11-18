@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stack_router/srs/value/destination_value.dart';
+import 'package:flutter_stack_router/stack_router.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class SearchScreen extends StatelessWidget {
+  const SearchScreen({super.key});
 
-  static const routeValue = DestinationName('home');
+  static const routeValue =DestinationName('search');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.green.shade200,
+        color: Colors.blue.shade200,
         child: const Center(
-          child: Text('Home'),
+          child: Text('Search'),
         ),
       ),
     );

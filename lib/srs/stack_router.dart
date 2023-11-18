@@ -1,54 +1,45 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/destination.dart';
+import 'package:flutter_stack_router/srs/destination/destination.dart';
 import 'package:flutter_stack_router/srs/internal/destination_mapper.dart';
 import 'package:flutter_stack_router/srs/stack_router_controller.dart';
 import 'package:flutter_stack_router/srs/internal/stack_router_delegate.dart';
 import 'package:flutter_stack_router/srs/route_stack.dart';
+import 'package:flutter_stack_router/srs/value/destination_value.dart';
 
 class StackRouter implements RouterConfig<Object> {
   StackRouter({
-    required this.controller,
-    List<Destination>? destinations,
-    DestinationMapper? destinationMapper,
+    required DestinationValue initialDestination,
+    required List<Destination> destinations,
     BackButtonDispatcher? backButtonDispatcher,
-  })  : assert((destinations == null) ^ (destinationMapper == null),
-            "Either [destinations] or [destinationMapper] must be null"),
-        backButtonDispatcher =
-            backButtonDispatcher ?? RootBackButtonDispatcher(),
-        destinationMapper =
-            destinationMapper ?? DestinationMapper(destinations!) {
+  }) : backButtonDispatcher =
+            backButtonDispatcher ?? RootBackButtonDispatcher() {
+    final mapper = DestinationMapper(roots: destinations);
+
+    controller = StackRouterController(
+      initialDestination: initialDestination,
+      mapper: mapper,
+    );
+
     routerDelegate = StackRouterDelegate(
       router: this,
       controller: controller,
-      destinationMapper: this.destinationMapper,
+      destinationMapper: mapper,
     );
   }
 
-  final DestinationMapper destinationMapper;
-  final StackRouterControllerBase controller;
+  late final StackRouterController controller;
 
-  // static MyRouter rootOf(BuildContext context) {
-  // }
+  static StackRouterController of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<InheritedStackRouter>()!
+        .router
+        .controller;
+  }
 
-  static StackRouter of(BuildContext context) {
+  static StackRouter configOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedStackRouter>()!
         .router;
-  }
-
-  static StackRouterState stateOf(BuildContext context) {
-    final router = of(context);
-
-    final stack = context
-        .dependOnInheritedWidgetOfExactType<InheritedRouteStack>()!
-        .stack;
-
-    return StackRouterState(
-      context,
-      localStack: stack,
-      router: router,
-    );
   }
 
   @override
@@ -85,20 +76,8 @@ class StackRouterState {
   const StackRouterState(
     this.context, {
     required this.localStack,
-    required StackRouter router,
-  }) : _router = router;
+  });
 
-  final StackRouter _router;
   final RouteStack localStack;
   final BuildContext context;
-
-  StackRouterControllerBase get controller => _router.controller;
-
-  void push(Object value) {
-    controller.stack = localStack.pushed(value);
-  }
-
-  void pop() {
-    controller.stack = localStack.popped();
-  }
 }

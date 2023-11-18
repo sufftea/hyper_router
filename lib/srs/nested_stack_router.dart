@@ -1,29 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/stack_router_controller.dart';
+import 'package:flutter_stack_router/srs/destination/shell_destination.dart';
+import 'package:flutter_stack_router/srs/internal/destination_mapper.dart';
+import 'package:flutter_stack_router/srs/value/destination_value.dart';
 import 'package:flutter_stack_router/stack_router.dart';
 
 class NestedStackRouter extends StatelessWidget {
-  const NestedStackRouter({
-    required this.controller,
+  NestedStackRouter({
+    required this.stack,
+    required List<Destination> destinations,
     super.key,
-  });
+  }) {
+    _mapper = DestinationMapper(roots: destinations);
+  }
 
-  final StackRouterControllerBase controller;
+  late final DestinationMapper _mapper;
+  final List<DestinationValue> stack;
 
   @override
   Widget build(BuildContext context) {
-    final parentRouter = StackRouter.of(context);
+    final parentRouter = StackRouter.configOf(context);
 
-    final config = StackRouter(
-      controller: controller,
-      destinationMapper: parentRouter.destinationMapper,
-      backButtonDispatcher: ChildBackButtonDispatcher(
-        parentRouter.backButtonDispatcher,
-      )..takePriority(),
+    return Navigator(
+      pages: _mapper.mapStack(context, RouteStack(stack)),
+      onPopPage: (route, result) {
+        return true;
+      },
     );
+    // final config = StackRouter(
+    //   initialStack: stack,
+    //   destinations: _mapper.roots,
+    //   backButtonDispatcher: ChildBackButtonDispatcher(
+    //     parentRouter.backButtonDispatcher,
+    //   )..takePriority(),
+    // );
 
-    return Router.withConfig(
-      config: config,
-    );
+    // return Router.withConfig(
+    //   config: config,
+    // );
   }
 }
