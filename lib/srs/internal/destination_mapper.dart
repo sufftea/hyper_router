@@ -34,7 +34,7 @@ class DestinationMapper {
   }
 
   Destination findDestination(DestinationValue value) {
-    final result = _destinations[value];
+    final result = _destinations[value.key];
 
     if (result == null) {
       throw 'todo';

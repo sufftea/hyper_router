@@ -41,6 +41,7 @@ class ShellDestination extends Destination<ShellRouterValue> {
       ShellRouterController(
         rootController: StackRouter.of(context),
         value: value,
+        tabs: tabs,
       ),
       navigator,
     );
@@ -124,14 +125,20 @@ class ShellRouterController {
   ShellRouterController({
     required this.rootController,
     required ShellRouterValue value,
-  }) : _value = value;
+    required List<Destination> tabs,
+  })  : _value = value,
+        _tabs = tabs;
 
+  final List<Destination> _tabs;
   final StackRouterController rootController;
   final ShellRouterValue _value;
 
   int get tab => _value.selectedTab;
-  set tab(int index) {
-    final target = _value.tabs[index].list.lastOrNull;
+  void setTab(int index, {bool preserveState = true}) {
+    final target = (preserveState
+            ? _value.tabs[index].list.lastOrNull
+            : _value.tabs[index].list.firstOrNull) ??
+        _tabs[index].defaultValue;
 
     if (target == null) {
       throw 'todo';

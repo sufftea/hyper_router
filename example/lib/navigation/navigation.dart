@@ -16,7 +16,7 @@ final router = StackRouter(
           nameKey: HomeScreen.routeValue,
         ),
         NamedDestination(
-          screenBuilder: (context) => const SearchScreen(),
+          screenBuilder: (context) => SearchScreen(),
           nameKey: SearchScreen.routeValue,
           children: [
             ValueDestination<SearchResultScreenData>(

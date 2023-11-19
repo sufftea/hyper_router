@@ -11,6 +11,8 @@ class ValueDestination<T extends DestinationValue> extends Destination<T> {
   });
 
   final Widget Function(BuildContext context, T value) screenBuilder;
+
+  @override
   final T? defaultValue;
 
   /// E.g. you can use [CustomPageBuilder] for a custom transition
@@ -32,13 +34,14 @@ class ValueDestination<T extends DestinationValue> extends Destination<T> {
     required T? currentValue,
     required Iterable<DestinationValue> onTop,
   }) {
-    final defaultValue = this.defaultValue;
-    if (defaultValue == null) {
+    final value = currentValue ?? defaultValue;
+    
+    if (value == null) {
       throw 'todo';
     }
 
     return [
-      currentValue ?? defaultValue,
+      value,
       ...onTop,
     ];
   }

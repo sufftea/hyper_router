@@ -12,7 +12,7 @@ class StackRouterController extends ChangeNotifier {
     RouteStack? initialStack,
     DestinationValue? initialDestination,
   }) : _mapper = mapper {
-    _stack = initialStack ?? createStackFromTarget(initialDestination!);
+    _stack = initialStack ?? _createStackFromTarget(initialDestination!, []);
   }
 
   final DestinationMapper _mapper;
@@ -25,11 +25,14 @@ class StackRouterController extends ChangeNotifier {
   }
 
   void navigate(DestinationValue destinationValue) {
-    stack = createStackFromTarget(destinationValue);
+    stack = _createStackFromTarget(destinationValue);
   }
 
   /// Traverses the tree and returns a stack that leads to [target]
-  RouteStack createStackFromTarget(DestinationValue target) {
+  RouteStack _createStackFromTarget(
+    DestinationValue target, [
+    List<DestinationValue>? currStack,
+  ]) {
     Destination? curr = _mapper.findDestination(target);
 
     var path = <Destination>[];
@@ -38,7 +41,12 @@ class StackRouterController extends ChangeNotifier {
       curr = curr.parent;
     }
 
-    final reversedMap = _zip(path.toList(), _stack.list.reversed.toList());
+    List<DestinationValue?> stack = (currStack ?? _stack.list).padded(
+      path.length,
+      null,
+    );
+
+    final reversedMap = _zip(path.toList(), stack.reversed.toList());
 
     var res = <DestinationValue>[];
     for (final (destination!, value) in reversedMap) {
@@ -58,5 +66,12 @@ class StackRouterController extends ChangeNotifier {
         );
       },
     );
+  }
+}
+
+extension ListX<T> on List<T> {
+  List<U> padded<U>(int length, U padding) {
+    return cast<U>() +
+        List<U>.generate(length - this.length, (index) => padding);
   }
 }

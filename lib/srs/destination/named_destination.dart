@@ -5,7 +5,7 @@ import 'package:flutter_stack_router/srs/value/destination_value.dart';
 class NamedDestination extends ValueDestination<DestinationName> {
   NamedDestination({
     required Widget Function(BuildContext context) screenBuilder,
-    required DestinationName nameKey,
+    required this.nameKey,
     super.pageBuilder,
     super.children,
   }) : super(
@@ -13,4 +13,8 @@ class NamedDestination extends ValueDestination<DestinationName> {
           screenBuilder: (context, _) => screenBuilder(context),
         );
 
+  final DestinationName nameKey;
+
+  @override
+  Object get key => nameKey.key;
 }

@@ -14,7 +14,7 @@ abstract class Destination<T extends DestinationValue> {
   }
 
   List<Destination> children;
-  late final Destination parent;
+  late final Destination? parent;
 
   Widget buildScreen(BuildContext context, T value);
 
@@ -31,6 +31,8 @@ abstract class Destination<T extends DestinationValue> {
     required T? currentValue,
     required Iterable<DestinationValue> onTop,
   });
+
+  T? get defaultValue => null;
 
   /// Returns `null` if wants to be popped, otherwise returns a new value that
   /// will replace it.

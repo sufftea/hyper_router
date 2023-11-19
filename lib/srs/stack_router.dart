@@ -15,6 +15,10 @@ class StackRouter implements RouterConfig<Object> {
             backButtonDispatcher ?? RootBackButtonDispatcher() {
     final mapper = DestinationMapper(roots: destinations);
 
+    for (final d in destinations) {
+      d.parent = null;
+    }
+
     controller = StackRouterController(
       initialDestination: initialDestination,
       mapper: mapper,

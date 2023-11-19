@@ -17,8 +17,9 @@ class ShellTabBarScreen extends StatelessWidget {
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
-          tabController.tab = value;
+          tabController.setTab(value);
         },
+        currentIndex: tabController.tab,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
