@@ -1,41 +1,47 @@
 import 'package:example/screens/home/home_screen.dart';
 import 'package:example/screens/profile/profile_screen.dart';
+import 'package:example/screens/random/random_screen.dart';
 import 'package:example/screens/search/search_screen.dart';
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:example/screens/shell_tab_bar/shell_tab_bar_screen.dart';
-import 'package:flutter_stack_router/srs/destination/shell_destination.dart';
-import 'package:flutter_stack_router/stack_router.dart';
+import 'package:flutter_stack_router/my_router.dart';
 
-final router = StackRouter(
-  initialDestination: HomeScreen.routeValue,
-  destinations: [
-    ShellDestination(
+final router = MyRouter(
+  initialRoute: HomeScreen.routeValue,
+  routes: [
+    ShellRoute(
+      shellBuilder: (context, controller, child) {
+        return ShellTabBarScreen(
+          controller: controller,
+          child: child,
+        );
+      },
       tabs: [
-        NamedDestination(
+        NamedRoute(
           screenBuilder: (context) => const HomeScreen(),
-          nameKey: HomeScreen.routeValue,
+          name: HomeScreen.routeValue,
         ),
-        NamedDestination(
+        NamedRoute(
           screenBuilder: (context) => SearchScreen(),
-          nameKey: SearchScreen.routeValue,
+          name: SearchScreen.routeValue,
           children: [
-            ValueDestination<SearchResultScreenData>(
+            ValueRoute<SearchResultScreenData>(
               screenBuilder: (context, value) =>
                   SearchResultScreen(data: value),
             ),
           ],
         ),
-        NamedDestination(
+        NamedRoute(
           screenBuilder: (context) => const ProfileScreen(),
-          nameKey: ProfileScreen.routeName,
+          name: ProfileScreen.routeName,
         ),
       ],
-      shellBuilder: (context, controller, child) {
-        return ShellTabBarScreen(
-          tabController: controller,
-          child: child,
-        );
-      },
+      onTop: [
+        NamedRoute(
+          screenBuilder: (context) => const RandomScreen(),
+          name: RandomScreen.routeValue,
+        ),
+      ],
     ),
   ],
 );

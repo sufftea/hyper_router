@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/value/destination_value.dart';
+import 'package:flutter_stack_router/my_router.dart';
 
-class SearchResultScreenData extends DestinationValue {
+class SearchResultScreenData extends RouteValue {
   const SearchResultScreenData(this.query);
 
   final String query;

@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/destination/shell_destination.dart';
+import 'package:flutter_stack_router/my_router.dart';
 
 class ShellTabBarScreen extends StatelessWidget {
   const ShellTabBarScreen({
     required this.child,
-    required this.tabController,
+    required this.controller,
     super.key,
   });
 
   final Widget child;
-  final ShellRouterController tabController;
+  final ShellController controller;
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('rebuilding shell screen. index: ${controller.tabIndex}');
+
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
-          tabController.setTab(value);
+          controller.setTabIndex(value);
         },
-        currentIndex: tabController.tab,
+        currentIndex: controller.tabIndex,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),

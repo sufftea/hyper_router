@@ -1,12 +1,11 @@
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/value/destination_value.dart';
-import 'package:flutter_stack_router/stack_router.dart';
+import 'package:flutter_stack_router/my_router.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
 
-  static const routeValue = DestinationName('search');
+  static const routeValue = RouteName('search');
 
   final textController = TextEditingController();
 
@@ -24,7 +23,7 @@ class SearchScreen extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  StackRouter.of(context).navigate(SearchResultScreenData(
+                  MyRouter.of(context).navigate(SearchResultScreenData(
                     textController.text,
                   ));
                 },

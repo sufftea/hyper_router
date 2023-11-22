@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stack_router/my_router.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class RandomScreen extends StatelessWidget {
+  const RandomScreen({super.key});
 
-  static const routeName = RouteName('profile');
+  static const routeValue = RouteName('random');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.yellow.shade200,
+        color: Colors.green.shade200,
         child: const Center(
-          child: Text('Profile'),
+          child: Text('something random'),
         ),
       ),
     );
