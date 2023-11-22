@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_stack_router/srs/base/my_router_delegate.dart';
-import 'package:flutter_stack_router/srs/base/nested_my_router.dart';
-import 'package:flutter_stack_router/srs/tree/my_route.dart';
-import 'package:flutter_stack_router/srs/tree/route_value.dart';
+import 'package:tea_router/srs/base/tea_router_delegate.dart';
+import 'package:tea_router/srs/base/nested_tea_router.dart';
+import 'package:tea_router/srs/tree/tea_route.dart';
+import 'package:tea_router/srs/tree/route_value.dart';
 
-class ShellRoute extends MyRoute<ShellValue> {
+class ShellRoute extends TeaRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
-    required List<MyRoute> tabs,
+    required List<TeaRoute> tabs,
     this.onTop = const [],
   })  : controller = ShellController(
           routes: tabs,
@@ -23,7 +23,7 @@ class ShellRoute extends MyRoute<ShellValue> {
   ) shellBuilder;
 
   final ShellController controller;
-  List<MyRoute> onTop;
+  List<TeaRoute> onTop;
 
   @override
   ShellValue get value => controller.shellValue;
@@ -33,10 +33,10 @@ class ShellRoute extends MyRoute<ShellValue> {
   }
 
   @override
-  MyRoute? get next => _next;
-  MyRoute? _next;
+  TeaRoute? get next => _next;
+  TeaRoute? _next;
   @override
-  set next(MyRoute? next) {
+  set next(TeaRoute? next) {
     final index =
         controller.routes.indexWhere((route) => route.key == next?.key);
 
@@ -57,7 +57,7 @@ class ShellRoute extends MyRoute<ShellValue> {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        final navigator = NestedMyRouter(
+        final navigator = NestedTeaRouter(
           notifier: controller,
           roots: controller.routes,
           key: ValueKey(controller.tabIndex),
@@ -71,6 +71,7 @@ class ShellRoute extends MyRoute<ShellValue> {
       },
     );
   }
+
 }
 
 class ShellValue extends RouteValue {
@@ -107,8 +108,8 @@ class ShellController extends RouterDelegateNotifier {
     required ShellValue shellValue,
   }) : _shellValue = shellValue;
 
-  final List<MyRoute> routes;
-  MyRoute get currRoute => routes[shellValue.tabIndex];
+  final List<TeaRoute> routes;
+  TeaRoute get currRoute => routes[shellValue.tabIndex];
 
   ShellValue _shellValue;
   ShellValue get shellValue => _shellValue;
@@ -139,5 +140,5 @@ class ShellController extends RouterDelegateNotifier {
   }
 
   @override
-  MyRoute<RouteValue> get stackRoot => routes[_shellValue.tabIndex];
+  TeaRoute<RouteValue> get stackRoot => routes[_shellValue.tabIndex];
 }

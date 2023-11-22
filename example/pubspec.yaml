@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_stack_router: 
+  tea_router: 
     path: ..
   riverpod: ^2.4.1
   riverpod_annotation: ^2.1.6

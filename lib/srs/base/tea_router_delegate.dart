@@ -1,20 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/base/my_router.dart';
-import 'package:flutter_stack_router/srs/tree/my_route.dart';
+import 'package:tea_router/srs/base/tea_router.dart';
+import 'package:tea_router/srs/tree/tea_route.dart';
 
 abstract class RouterDelegateNotifier extends ChangeNotifier {
-  MyRoute get stackRoot;
+  TeaRoute get stackRoot;
 }
 
-class MyRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
-  MyRouterDelegate({
+class TeaRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  TeaRouterDelegate({
     required this.router,
     required this.notifier,
   });
 
   final RouterDelegateNotifier notifier;
-  final MyRouter router;
+  final TeaRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class MyRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
       child: AnimatedBuilder(
         animation: notifier,
         builder: (context, child) {
-          final pages = MyRoute.createPages(context, notifier.stackRoot);
-          
+          final pages = TeaRoute.createPages(context, notifier.stackRoot);
+
           return Navigator(
             pages: pages,
             onPopPage: (route, result) {
@@ -38,7 +38,7 @@ class MyRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
 
   @override
   Future<bool> popRoute() async {
-    MyRoute r = notifier.stackRoot;
+    TeaRoute r = notifier.stackRoot;
 
     if (r.next == null) {
       return SynchronousFuture(false);

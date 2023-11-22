@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/base/my_router_delegate.dart';
-import 'package:flutter_stack_router/srs/tree/my_route.dart';
-import 'package:flutter_stack_router/srs/tree/route_value.dart';
-import 'package:flutter_stack_router/srs/base/my_router_controller.dart';
+import 'package:tea_router/srs/base/tea_router_delegate.dart';
+import 'package:tea_router/srs/tree/tea_route.dart';
+import 'package:tea_router/srs/tree/route_value.dart';
+import 'package:tea_router/srs/base/tea_router_controller.dart';
 
-class MyRouter implements RouterConfig<Object> {
-  MyRouter({
+class TeaRouter implements RouterConfig<Object> {
+  TeaRouter({
     required RouteValue initialRoute,
-    required List<MyRoute> routes,
+    required List<TeaRoute> routes,
     BackButtonDispatcher? backButtonDispatcher,
   }) : backButtonDispatcher =
             backButtonDispatcher ?? RootBackButtonDispatcher() {
@@ -15,27 +15,27 @@ class MyRouter implements RouterConfig<Object> {
       r.parent = null;
     }
 
-    controller = MyRouterController(
+    controller = TeaRouterController(
       initialRoute: initialRoute,
       roots: routes,
     );
 
-    routerDelegate = MyRouterDelegate(
+    routerDelegate = TeaRouterDelegate(
       router: this,
       notifier: controller,
     );
   }
 
-  late final MyRouterController controller;
+  late final TeaRouterController controller;
 
-  static MyRouterController of(BuildContext context) {
+  static TeaRouterController of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedMyRouter>()!
         .router
         .controller;
   }
 
-  static MyRouter configOf(BuildContext context) {
+  static TeaRouter configOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedMyRouter>()!
         .router;
@@ -45,7 +45,7 @@ class MyRouter implements RouterConfig<Object> {
   final BackButtonDispatcher backButtonDispatcher;
 
   @override
-  late final MyRouterDelegate routerDelegate;
+  late final TeaRouterDelegate routerDelegate;
 
   @override
   // TODO
@@ -63,7 +63,7 @@ class InheritedMyRouter extends InheritedWidget {
     super.key,
   });
 
-  final MyRouter router;
+  final TeaRouter router;
 
   @override
   bool updateShouldNotify(InheritedMyRouter oldWidget) {

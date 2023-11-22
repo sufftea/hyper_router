@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/srs/tree/route_value.dart';
+import 'package:tea_router/srs/tree/route_value.dart';
 
-abstract class MyRoute<T extends RouteValue> {
-  MyRoute({
+abstract class TeaRoute<T extends RouteValue> {
+  TeaRoute({
     this.children = const [],
   }) {
     for (final child in children) {
@@ -10,13 +10,13 @@ abstract class MyRoute<T extends RouteValue> {
     }
   }
 
-  final List<MyRoute> children;
-  late final MyRoute? parent;
+  final List<TeaRoute> children;
+  late final TeaRoute? parent;
 
   set value(T value);
   T get value;
 
-  MyRoute? next;
+  TeaRoute? next;
 
   Object get key;
 
@@ -26,10 +26,10 @@ abstract class MyRoute<T extends RouteValue> {
     return MaterialPage(child: buildScreen(context));
   }
 
-  static List<Page> createPages(BuildContext context, MyRoute root) {
+  static List<Page> createPages(BuildContext context, TeaRoute root) {
     final pages = <Page>[];
 
-    MyRoute? r = root;
+    TeaRoute? r = root;
     while (r != null) {
       pages.add(r.buildPage(context));
       r = r.next;

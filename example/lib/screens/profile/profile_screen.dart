@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/my_router.dart';
+import 'package:tea_router/tea_router.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

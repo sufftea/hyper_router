@@ -4,9 +4,9 @@ import 'package:example/screens/random/random_screen.dart';
 import 'package:example/screens/search/search_screen.dart';
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:example/screens/shell_tab_bar/shell_tab_bar_screen.dart';
-import 'package:flutter_stack_router/my_router.dart';
+import 'package:tea_router/tea_router.dart';
 
-final router = MyRouter(
+final router = TeaRouter(
   initialRoute: HomeScreen.routeValue,
   routes: [
     ShellRoute(

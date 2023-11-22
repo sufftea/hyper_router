@@ -1,6 +1,6 @@
 import 'package:example/screens/random/random_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_stack_router/my_router.dart';
+import 'package:tea_router/tea_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
               OutlinedButton(
                 onPressed: () {
                   debugPrint('navigating to randomscreen');
-                  MyRouter.of(context).navigate(RandomScreen.routeValue);
+                  TeaRouter.of(context).navigate(RandomScreen.routeValue);
                 },
                 child: const Text('open a screen on top'),
               ),
