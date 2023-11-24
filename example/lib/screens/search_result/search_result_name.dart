@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tea_router/tea_router.dart';
+import 'package:tree_router/tree_router.dart';
 
 class SearchResultScreenData extends RouteValue {
   const SearchResultScreenData(this.query);

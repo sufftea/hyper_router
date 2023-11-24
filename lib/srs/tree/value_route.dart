@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tea_router/srs/tree/route_context.dart';
-import 'package:tea_router/srs/tree/tea_route.dart';
-import 'package:tea_router/srs/tree/route_value.dart';
+import 'package:tree_router/srs/tree/route_context.dart';
+import 'package:tree_router/srs/tree/tree_route.dart';
+import 'package:tree_router/srs/tree/route_value.dart';
 
-class ValueRoute<T extends RouteValue> extends TeaRoute<T> {
+class ValueRoute<T extends RouteValue> extends TreeRoute<T> {
   ValueRoute({
     required this.screenBuilder,
     super.children,

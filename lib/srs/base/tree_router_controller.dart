@@ -1,10 +1,10 @@
-import 'package:tea_router/srs/base/tea_router_delegate.dart';
-import 'package:tea_router/srs/tree/tea_route.dart';
-import 'package:tea_router/srs/tree/route_value.dart';
+import 'package:tree_router/srs/base/tree_router_delegate.dart';
+import 'package:tree_router/srs/tree/tree_route.dart';
+import 'package:tree_router/srs/tree/route_value.dart';
 
-class TeaRouterController extends RouterDelegateNotifier {
-  TeaRouterController({
-    required List<TeaRoute> roots,
+class TreeRouterController extends RouterDelegateNotifier {
+  TreeRouterController({
+    required List<TreeRoute> roots,
     required RouteValue initialRoute,
   }) {
     for (final r in roots) {
@@ -16,13 +16,13 @@ class TeaRouterController extends RouterDelegateNotifier {
     navigate(initialRoute);
   }
 
-  final Map<Object, TeaRoute> _routeMap = {};
+  final Map<Object, TreeRoute> _routeMap = {};
   @override
-  late TeaRoute stackRoot;
+  late TreeRoute stackRoot;
 
   void navigate(RouteValue target) {
-    TeaRoute? r = _routeMap[target.key];
-    TeaRoute? prevR;
+    TreeRoute? r = _routeMap[target.key];
+    TreeRoute? prevR;
     RouteValue? v = target;
     while (r != null) {
       r.next = prevR;
@@ -43,10 +43,14 @@ class TeaRouterController extends RouterDelegateNotifier {
 
     notifyListeners();
   }
+
+  void pop() {
+    
+  }
 }
 
-extension _MyRouteX<T extends RouteValue> on TeaRoute<T> {
-  void forEach(void Function(TeaRoute r) action) {
+extension _MyRouteX<T extends RouteValue> on TreeRoute<T> {
+  void forEach(void Function(TreeRoute r) action) {
     action(this);
     for (final child in children) {
       child.forEach(action);

@@ -5,9 +5,9 @@ import 'package:example/screens/random/random_screen.dart';
 import 'package:example/screens/search/search_screen.dart';
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:example/screens/shell_tab_bar/shell_tab_bar_screen.dart';
-import 'package:tea_router/tea_router.dart';
+import 'package:tree_router/tree_router.dart';
 
-final router = TeaRouter(
+final router = TreeRouter(
   initialRoute: HomeScreen.routeValue,
   routes: [
     ShellRoute(

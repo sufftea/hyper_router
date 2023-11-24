@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:tea_router/srs/base/tea_router_delegate.dart';
-import 'package:tea_router/srs/base/nested_tea_router.dart';
-import 'package:tea_router/srs/tree/route_context.dart';
-import 'package:tea_router/srs/tree/tea_route.dart';
-import 'package:tea_router/srs/tree/route_value.dart';
-import 'package:tea_router/tea_router.dart';
+import 'package:tree_router/srs/base/tree_router_delegate.dart';
+import 'package:tree_router/tree_router.dart';
 
-class ShellRoute extends TeaRoute<ShellValue> {
+class ShellRoute extends TreeRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
-    required List<TeaRoute> tabs,
+    required List<TreeRoute> tabs,
     this.onTop = const [],
   })  : controller = ShellController(
           routes: tabs,
@@ -25,7 +21,7 @@ class ShellRoute extends TeaRoute<ShellValue> {
   ) shellBuilder;
 
   final ShellController controller;
-  List<TeaRoute> onTop;
+  List<TreeRoute> onTop;
 
   @override
   ShellValue get value => controller.shellValue;
@@ -35,10 +31,10 @@ class ShellRoute extends TeaRoute<ShellValue> {
   }
 
   @override
-  TeaRoute? get next => _next;
-  TeaRoute? _next;
+  TreeRoute? get next => _next;
+  TreeRoute? _next;
   @override
-  set next(TeaRoute? next) {
+  set next(TreeRoute? next) {
     final index =
         controller.routes.indexWhere((route) => route.key == next?.key);
 
@@ -59,7 +55,7 @@ class ShellRoute extends TeaRoute<ShellValue> {
   @override
   List<Page> createPages(BuildContext context) {
     final b = ChildBackButtonDispatcher(
-        TeaRouter.configOf(context).backButtonDispatcher);
+        TreeRouter.configOf(context).backButtonDispatcher);
     if (next == null) {
       b.takePriority();
     }
@@ -77,7 +73,7 @@ class ShellRoute extends TeaRoute<ShellValue> {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
-        final navigator = NestedTeaRouter(
+        final navigator = NestedRouter(
           notifier: controller,
           roots: controller.routes,
           backButtonDispatcher: backButtonDispatcher,
@@ -135,8 +131,8 @@ class ShellController extends RouterDelegateNotifier {
     required ShellValue shellValue,
   }) : _shellValue = shellValue;
 
-  final List<TeaRoute> routes;
-  TeaRoute get currRoute => routes[shellValue.tabIndex];
+  final List<TreeRoute> routes;
+  TreeRoute get currRoute => routes[shellValue.tabIndex];
 
   ShellValue _shellValue;
   ShellValue get shellValue => _shellValue;
@@ -163,5 +159,5 @@ class ShellController extends RouterDelegateNotifier {
   int get tabIndex => _shellValue.tabIndex;
 
   @override
-  TeaRoute<RouteValue> get stackRoot => routes[_shellValue.tabIndex];
+  TreeRoute<RouteValue> get stackRoot => routes[_shellValue.tabIndex];
 }

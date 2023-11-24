@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tea_router/tea_router.dart';
+import 'package:tree_router/tree_router.dart';
 
 class RandomScreen extends StatelessWidget {
   const RandomScreen({super.key});
@@ -11,8 +11,25 @@ class RandomScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: Colors.green.shade200,
-        child: const Center(
-          child: Text('something random'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      width: 200,
+                      height: 200,
+                      color: Colors.green,
+                    );
+                  },
+                );
+              },
+              child: const Text('test...'),
+            ),
+          ],
         ),
       ),
     );

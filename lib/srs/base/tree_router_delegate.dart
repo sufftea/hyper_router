@@ -1,21 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tea_router/srs/base/tea_router.dart';
-import 'package:tea_router/srs/tree/route_context.dart';
-import 'package:tea_router/srs/tree/tea_route.dart';
+import 'package:tree_router/srs/base/tree_router.dart';
+import 'package:tree_router/srs/tree/tree_route.dart';
 
 abstract class RouterDelegateNotifier extends ChangeNotifier {
-  TeaRoute get stackRoot;
+  TreeRoute get stackRoot;
 }
 
-class TeaRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
-  TeaRouterDelegate({
+class TreeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  TreeRouterDelegate({
     required this.router,
     required this.notifier,
   });
 
   final RouterDelegateNotifier notifier;
-  final TeaRouter router;
+  final TreeRouter router;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +38,7 @@ class TeaRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
 
   @override
   Future<bool> popRoute() async {
-    TeaRoute r = notifier.stackRoot;
+    TreeRoute r = notifier.stackRoot;
 
     if (r.next == null) {
       return SynchronousFuture(false);

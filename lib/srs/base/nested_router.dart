@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tea_router/srs/base/tea_router.dart';
-import 'package:tea_router/srs/base/tea_router_delegate.dart';
-import 'package:tea_router/srs/tree/tea_route.dart';
+import 'package:tree_router/srs/base/tree_router.dart';
+import 'package:tree_router/srs/base/tree_router_delegate.dart';
+import 'package:tree_router/srs/tree/tree_route.dart';
 
-class NestedTeaRouter extends StatelessWidget {
-  const NestedTeaRouter({
-    required List<TeaRoute> roots,
+class NestedRouter extends StatelessWidget {
+  const NestedRouter({
+    required List<TreeRoute> roots,
     required this.notifier,
     required this.backButtonDispatcher,
     super.key,
@@ -17,9 +17,9 @@ class NestedTeaRouter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final router = TeaRouter.configOf(context);
+    final router = TreeRouter.configOf(context);
 
-    final delegate = TeaRouterDelegate(
+    final delegate = TreeRouterDelegate(
       router: router,
       notifier: notifier,
     );

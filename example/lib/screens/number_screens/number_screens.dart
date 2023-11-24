@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tea_router/tea_router.dart';
+import 'package:tree_router/tree_router.dart';
 
 class OneScreen extends StatelessWidget {
   const OneScreen({super.key});
@@ -18,6 +18,7 @@ class OneScreen extends StatelessWidget {
     );
   }
 }
+
 class TwoScreen extends StatelessWidget {
   const TwoScreen({super.key});
 
@@ -35,6 +36,7 @@ class TwoScreen extends StatelessWidget {
     );
   }
 }
+
 class ThreeScreen extends StatelessWidget {
   const ThreeScreen({super.key});
 
@@ -45,8 +47,13 @@ class ThreeScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         color: Colors.deepPurple.shade200,
-        child: const Center(
-          child: Text('Three'),
+        child: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('pop me'),
+          ),
         ),
       ),
     );
