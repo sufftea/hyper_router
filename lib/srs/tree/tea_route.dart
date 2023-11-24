@@ -16,25 +16,10 @@ abstract class TeaRoute<T extends RouteValue> {
   set value(T value);
   T get value;
 
+  /// The route that should be displayed above this one.
   TeaRoute? next;
 
   Object get key;
 
-  Widget buildScreen(BuildContext context);
-
-  Page buildPage(BuildContext context) {
-    return MaterialPage(child: buildScreen(context));
-  }
-
-  static List<Page> createPages(BuildContext context, TeaRoute root) {
-    final pages = <Page>[];
-
-    TeaRoute? r = root;
-    while (r != null) {
-      pages.add(r.buildPage(context));
-      r = r.next;
-    }
-
-    return pages;
-  }
+  List<Page> createPages(BuildContext context);
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tea_router/srs/tree/route_context.dart';
 import 'package:tea_router/srs/tree/tea_route.dart';
 import 'package:tea_router/srs/tree/route_value.dart';
 
@@ -14,7 +15,6 @@ class ValueRoute<T extends RouteValue> extends TeaRoute<T> {
   final Page Function(BuildContext context, Widget child)? pageBuilder;
   final Widget Function(BuildContext context, T value) screenBuilder;
 
-
   @override
   T get value => _value ?? (throw 'todo: default value not provided');
   T? _value;
@@ -27,27 +27,22 @@ class ValueRoute<T extends RouteValue> extends TeaRoute<T> {
   Object get key => T;
 
   @override
-  Widget buildScreen(BuildContext context) {
+  List<Page> createPages(BuildContext context) {
+        return [
+      _buildPage(context),
+      ...next?.createPages(context) ?? [],
+    ];
+  }
+
+  Widget _buildScreen(BuildContext context) {
     return screenBuilder(context, value);
   }
 
-  @override
-  Page buildPage(BuildContext context) {
-    return pageBuilder?.call(context, buildScreen(context)) ??
-        super.buildPage(context);
+  Page _buildPage(BuildContext context) {
+    if (pageBuilder != null) {
+      return pageBuilder!.call(context, _buildScreen(context));
+    }
+
+    return MaterialPage(child: _buildScreen(context));
   }
-
-  
-
-  // @override
-  // void activate(RouteValue? value, MyRoute? next) {
-  //   value ??= _currValue;
-
-  //   if (value == null || value.key != key || value is! T) {
-  //     throw "todo: value type mismatch";
-  //   }
-
-  //   _currValue = value;
-  //   this.next = next;
-  // }
 }

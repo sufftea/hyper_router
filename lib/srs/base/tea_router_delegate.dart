@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tea_router/srs/base/tea_router.dart';
+import 'package:tea_router/srs/tree/route_context.dart';
 import 'package:tea_router/srs/tree/tea_route.dart';
 
 abstract class RouterDelegateNotifier extends ChangeNotifier {
@@ -23,7 +24,7 @@ class TeaRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
       child: AnimatedBuilder(
         animation: notifier,
         builder: (context, child) {
-          final pages = TeaRoute.createPages(context, notifier.stackRoot);
+          final pages = notifier.stackRoot.createPages(context);
 
           return Navigator(
             pages: pages,

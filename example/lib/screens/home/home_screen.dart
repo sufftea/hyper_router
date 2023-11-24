@@ -1,3 +1,4 @@
+import 'package:example/screens/number_screens/number_screens.dart';
 import 'package:example/screens/random/random_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:tea_router/tea_router.dart';
@@ -23,6 +24,12 @@ class HomeScreen extends StatelessWidget {
                   TeaRouter.of(context).navigate(RandomScreen.routeValue);
                 },
                 child: const Text('open a screen on top'),
+              ),
+              OutlinedButton(
+                onPressed: () {
+                  TeaRouter.of(context).navigate(TwoScreen.routeName);
+                },
+                child: const Text('another shell route'),
               ),
             ],
           ),

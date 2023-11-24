@@ -7,9 +7,12 @@ class NestedTeaRouter extends StatelessWidget {
   const NestedTeaRouter({
     required List<TeaRoute> roots,
     required this.notifier,
+    required this.backButtonDispatcher,
     super.key,
   });
 
+  /// Needs to be created and activated (`takePriority`) outside!!!
+  final BackButtonDispatcher backButtonDispatcher;
   final RouterDelegateNotifier notifier;
 
   @override
@@ -23,6 +26,7 @@ class NestedTeaRouter extends StatelessWidget {
 
     return Router(
       routerDelegate: delegate,
+      backButtonDispatcher: backButtonDispatcher,
     );
   }
 }

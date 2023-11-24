@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:tea_router/srs/base/tea_router_delegate.dart';
 import 'package:tea_router/srs/base/nested_tea_router.dart';
+import 'package:tea_router/srs/tree/route_context.dart';
 import 'package:tea_router/srs/tree/tea_route.dart';
 import 'package:tea_router/srs/tree/route_value.dart';
+import 'package:tea_router/tea_router.dart';
 
 class ShellRoute extends TeaRoute<ShellValue> {
   ShellRoute({
@@ -41,9 +43,11 @@ class ShellRoute extends TeaRoute<ShellValue> {
         controller.routes.indexWhere((route) => route.key == next?.key);
 
     if (index != -1) {
-      controller.setTabIndex(index);
+      controller.setTabIndex(index, preserveState: true);
     } else if (onTop.where((route) => route.key == next?.key).isNotEmpty) {
       _next = next;
+    } else if (next == null) {
+      _next = null;
     } else {
       throw 'todo';
     }
@@ -53,13 +57,30 @@ class ShellRoute extends TeaRoute<ShellValue> {
   Object get key => controller.shellValue.key;
 
   @override
-  Widget buildScreen(BuildContext context) {
+  List<Page> createPages(BuildContext context) {
+    final b = ChildBackButtonDispatcher(
+        TeaRouter.configOf(context).backButtonDispatcher);
+    if (next == null) {
+      b.takePriority();
+    }
+
+    return [
+      _buildPage(context, b),
+      ...next?.createPages(context) ?? [],
+    ];
+  }
+
+  Widget _buildScreen(
+    BuildContext context,
+    BackButtonDispatcher backButtonDispatcher,
+  ) {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
         final navigator = NestedTeaRouter(
           notifier: controller,
           roots: controller.routes,
+          backButtonDispatcher: backButtonDispatcher,
           key: ValueKey(controller.tabIndex),
         );
 
@@ -72,6 +93,12 @@ class ShellRoute extends TeaRoute<ShellValue> {
     );
   }
 
+  Page _buildPage(
+    BuildContext context,
+    BackButtonDispatcher backButtonDispatcher,
+  ) {
+    return MaterialPage(child: _buildScreen(context, backButtonDispatcher));
+  }
 }
 
 class ShellValue extends RouteValue {
@@ -115,29 +142,25 @@ class ShellController extends RouterDelegateNotifier {
   ShellValue get shellValue => _shellValue;
 
   /// [preserveState] behaviour:
-  ///   `null` (default): preserves state when switching tabs,
-  /// TODO
+  ///   `true`: subroutes within each tab are preserved
+  ///   `false`: resets each tab to the first route.
+  ///   `null` (default): preserves state when switching tabs; resets to the first
+  ///     route when activating the same tab again.
   void setTabIndex(int index, {bool? preserveState}) {
+    final oldIndex = shellValue.tabIndex;
+
     _shellValue = shellValue.copyWith(
       tabIndex: index,
     );
-    // if (!preserveState) {
-    //   tabRoute.next = null;
-    // }
+
+    if (!(preserveState ?? index != oldIndex)) {
+      currRoute.next = null;
+    }
+
     notifyListeners();
   }
 
   int get tabIndex => _shellValue.tabIndex;
-
-  void setTabValue(RouteValue value) {
-    final index = routes.indexWhere((route) => route.key == value.key);
-
-    if (index == -1) {
-      throw 'todo';
-    }
-
-    setTabIndex(index);
-  }
 
   @override
   TeaRoute<RouteValue> get stackRoot => routes[_shellValue.tabIndex];
