@@ -1,54 +1,45 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tree_router/srs/base/root_tree_router_controller.dart';
 import 'package:tree_router/srs/base/tree_router.dart';
-import 'package:tree_router/srs/tree/tree_route.dart';
-
-abstract class RouterDelegateNotifier extends ChangeNotifier {
-  TreeRoute get stackRoot;
-}
 
 class TreeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
   TreeRouterDelegate({
-    required this.router,
-    required this.notifier,
+    required this.rootController,
+    required this.routerConfig,
   });
 
-  final RouterDelegateNotifier notifier;
-  final TreeRouter router;
+  final RootTreeRouterController rootController;
+  final TreeRouter routerConfig;
+  List<Page> _pages = [];
 
   @override
   Widget build(BuildContext context) {
-    return InheritedMyRouter(
-      router: router,
-      child: AnimatedBuilder(
-        animation: notifier,
-        builder: (context, child) {
-          final pages = notifier.stackRoot.createPages(context);
+    return InheritedTreeRouter(
+      router: routerConfig,
+      child: InheritedRouterController(
+        controller: rootController,
+        child: AnimatedBuilder(
+          animation: rootController,
+          builder: (context, child) {
+            _pages = rootController.createPages(context);
 
-          return Navigator(
-            pages: pages,
-            onPopPage: (route, result) {
-              return true;
-            },
-          );
-        },
+            return Navigator(
+              pages: _pages,
+              onPopPage: (route, result) {
+                rootController.pop();
+                return true;
+              },
+            );
+          },
+        ),
       ),
     );
   }
 
   @override
   Future<bool> popRoute() async {
-    TreeRoute r = notifier.stackRoot;
-
-    if (r.next == null) {
-      return SynchronousFuture(false);
-    }
-
-    while (r.next!.next != null) {
-      r = r.next!;
-    }
-
-    r.next = null;
+    rootController.pop();
 
     return SynchronousFuture(true);
   }

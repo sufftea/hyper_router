@@ -16,9 +16,9 @@ class NamedRoute extends ValueRoute<RouteName> {
     required this.name,
     super.children,
     super.pageBuilder,
-    super.defaultValue,
   }) : super(
           screenBuilder: (context, value) => screenBuilder(context),
+          defaultValue: name,
         );
 
   final RouteName name;
@@ -26,8 +26,4 @@ class NamedRoute extends ValueRoute<RouteName> {
   @override
   Object get key => name.key;
 
-  @override
-  RouteName get value => name;
-  @override
-  set value(RouteName value) {}
 }

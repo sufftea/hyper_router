@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tree_router/srs/base/tree_router_controller.dart';
 import 'package:tree_router/srs/base/tree_router_delegate.dart';
 import 'package:tree_router/srs/tree/tree_route.dart';
 import 'package:tree_router/srs/tree/route_value.dart';
-import 'package:tree_router/srs/base/tree_router_controller.dart';
+import 'package:tree_router/srs/base/root_tree_router_controller.dart';
 
 class TreeRouter implements RouterConfig<Object> {
   TreeRouter({
@@ -15,29 +16,35 @@ class TreeRouter implements RouterConfig<Object> {
       r.parent = null;
     }
 
-    controller = TreeRouterController(
+    controller = RootTreeRouterController(
       initialRoute: initialRoute,
       roots: routes,
     );
 
     routerDelegate = TreeRouterDelegate(
-      router: this,
-      notifier: controller,
+      routerConfig: this,
+      rootController: controller,
     );
   }
 
-  late final TreeRouterController controller;
+  late final RootTreeRouterController controller;
 
-  static TreeRouterController of(BuildContext context) {
+  static RootTreeRouterController of(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedMyRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedTreeRouter>()!
         .router
+        .controller;
+  }
+
+  static TreeRouterControllerMixin controllerOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<InheritedRouterController>()!
         .controller;
   }
 
   static TreeRouter configOf(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedMyRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedTreeRouter>()!
         .router;
   }
 
@@ -56,8 +63,8 @@ class TreeRouter implements RouterConfig<Object> {
   final RouteInformationProvider? routeInformationProvider = null;
 }
 
-class InheritedMyRouter extends InheritedWidget {
-  const InheritedMyRouter({
+class InheritedTreeRouter extends InheritedWidget {
+  const InheritedTreeRouter({
     required this.router,
     required super.child,
     super.key,
@@ -66,7 +73,22 @@ class InheritedMyRouter extends InheritedWidget {
   final TreeRouter router;
 
   @override
-  bool updateShouldNotify(InheritedMyRouter oldWidget) {
+  bool updateShouldNotify(InheritedTreeRouter oldWidget) {
     return oldWidget.router != router;
+  }
+}
+
+class InheritedRouterController extends InheritedWidget {
+  const InheritedRouterController({
+    required this.controller,
+    required super.child,
+    super.key,
+  });
+
+  final TreeRouterControllerMixin controller;
+
+  @override
+  bool updateShouldNotify(InheritedRouterController oldWidget) {
+    return oldWidget.controller != controller;
   }
 }

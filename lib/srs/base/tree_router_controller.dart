@@ -1,59 +1,49 @@
-import 'package:tree_router/srs/base/tree_router_delegate.dart';
-import 'package:tree_router/srs/tree/tree_route.dart';
+import 'package:flutter/material.dart';
 import 'package:tree_router/srs/tree/route_value.dart';
+import 'package:tree_router/srs/tree/tree_route.dart';
 
-class TreeRouterController extends RouterDelegateNotifier {
-  TreeRouterController({
-    required List<TreeRoute> roots,
-    required RouteValue initialRoute,
-  }) {
-    for (final r in roots) {
-      r.forEach((r) {
-        _routeMap[r.key] = r;
-      });
-    }
+mixin TreeRouterControllerMixin {
+  TreeRouterControllerMixin? get parent;
+  TreeRouterControllerMixin? _next;
 
-    navigate(initialRoute);
+  PageBuilder? root;
+
+  List<Page> createPages(BuildContext context) {
+    return root?.createPages(context) ?? [];
   }
 
-  final Map<Object, TreeRoute> _routeMap = {};
-  @override
-  late TreeRoute stackRoot;
-
-  void navigate(RouteValue target) {
-    TreeRoute? r = _routeMap[target.key];
-    TreeRoute? prevR;
-    RouteValue? v = target;
-    while (r != null) {
-      r.next = prevR;
-
-      if (v != null) {
-        if (v.key != r.key) {
-          throw 'todo';
-        }
-        r.value = v;
-      }
-
-      prevR = r;
-      r = r.parent;
-      v = null;
+  RouteValue? popInternal() {
+    if (_next?.popInternal() case final value?) {
+      return value;
     }
 
-    stackRoot = prevR!;
+    if (root case final root?) {
+      return root.popped()?.value;
+    }
 
-    notifyListeners();
+    return null;
   }
 
-  void pop() {
-    
+  void takePriority() {
+    _next = null;
+    parent?.deferTo(this);
+  }
+
+  void deferTo(TreeRouterControllerMixin next) {
+    _next = next;
   }
 }
 
-extension _MyRouteX<T extends RouteValue> on TreeRoute<T> {
-  void forEach(void Function(TreeRoute r) action) {
-    action(this);
-    for (final child in children) {
-      child.forEach(action);
+extension _PageBuilderX on PageBuilder {
+  PageBuilder? popped() {
+    if (next case final next?) {
+      if (next.isTop) {
+        return this;
+      }
+
+      return next.popped();
     }
+
+    return null;
   }
 }

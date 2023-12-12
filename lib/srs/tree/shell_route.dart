@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tree_router/srs/base/tree_router_controller.dart';
 
-import 'package:tree_router/srs/base/tree_router_delegate.dart';
 import 'package:tree_router/tree_router.dart';
 
 class ShellRoute extends TreeRoute<ShellValue> {
@@ -9,8 +9,11 @@ class ShellRoute extends TreeRoute<ShellValue> {
     required List<TreeRoute> tabs,
     this.onTop = const [],
   })  : controller = ShellController(
-          routes: tabs,
-          shellValue: ShellValue(key: UniqueKey(), tabIndex: 0),
+          shellValue: ShellValue(
+            key: UniqueKey(),
+            tabIndex: 0,
+            tabs: tabs.map((e) => e.createBuilder()).toList(),
+          ),
         ),
         super(children: tabs + onTop);
 
@@ -24,76 +27,64 @@ class ShellRoute extends TreeRoute<ShellValue> {
   List<TreeRoute> onTop;
 
   @override
-  ShellValue get value => controller.shellValue;
-  @override
-  set value(ShellValue value) {
-    controller._shellValue = value;
-  }
+  Object get key => controller.value.key;
 
   @override
-  TreeRoute? get next => _next;
-  TreeRoute? _next;
-  @override
-  set next(TreeRoute? next) {
-    final index =
-        controller.routes.indexWhere((route) => route.key == next?.key);
+  PageBuilder createBuilder({PageBuilder? next, ShellValue? value}) {
+    if (onTop.where((route) => route.key == next?.value.key).isNotEmpty) {
+      value = value ?? controller.value;
 
-    if (index != -1) {
-      controller.setTabIndex(index, preserveState: true);
-    } else if (onTop.where((route) => route.key == next?.key).isNotEmpty) {
-      _next = next;
-    } else if (next == null) {
-      _next = null;
-    } else {
-      throw 'todo';
-    }
-  }
-
-  @override
-  Object get key => controller.shellValue.key;
-
-  @override
-  List<Page> createPages(BuildContext context) {
-    final b = ChildBackButtonDispatcher(
-        TreeRouter.configOf(context).backButtonDispatcher);
-    if (next == null) {
-      b.takePriority();
-    }
-
-    return [
-      _buildPage(context, b),
-      ...next?.createPages(context) ?? [],
-    ];
-  }
-
-  Widget _buildScreen(
-    BuildContext context,
-    BackButtonDispatcher backButtonDispatcher,
-  ) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (context, child) {
-        final navigator = NestedRouter(
-          notifier: controller,
-          roots: controller.routes,
-          backButtonDispatcher: backButtonDispatcher,
-          key: ValueKey(controller.tabIndex),
-        );
-
-        return shellBuilder(
+      return PageBuilder(
+        next: next,
+        value: value,
+        buildPage: (context) => _buildPage(
           context,
-          controller,
-          navigator,
-        );
-      },
-    );
+          value!,
+        ),
+      );
+    } else {
+      if (value == null && next != null) {
+        // Navigating to a specific page, changing the selected tab implicitly 
+        // (as opposed to calling `setTabIndex` on the controller)
+        value = controller.value.withSelected(next);
+      }
+
+      if (value == null) {
+        throw 'todo';
+      }
+
+      return PageBuilder(
+        next: null,
+        value: value,
+        buildPage: (context) => _buildPage(context, value!),
+      );
+    }
   }
 
-  Page _buildPage(
-    BuildContext context,
-    BackButtonDispatcher backButtonDispatcher,
-  ) {
-    return MaterialPage(child: _buildScreen(context, backButtonDispatcher));
+  Page _buildPage(BuildContext context, ShellValue value) {
+    final rootController = TreeRouter.of(context);
+    controller._activate(value, rootController);
+
+    final parentController = TreeRouter.controllerOf(context);
+    parentController.deferTo(controller);
+
+    return MaterialPage(
+      child: shellBuilder(
+        context,
+        controller,
+        InheritedRouterController(
+          controller: controller,
+          child: Builder(
+            builder: (context) {
+              return NestedRouter(
+                pages: controller.createPages(context),
+                key: ValueKey(controller.tabIndex),
+              );
+            }
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -101,41 +92,55 @@ class ShellValue extends RouteValue {
   ShellValue({
     required this.tabIndex,
     required this.key,
-    this.tabValues = const [],
+    this.tabs = const [],
   });
 
-  final List<RouteValue> tabValues;
+  final List<PageBuilder> tabs;
   final int tabIndex;
 
-  RouteValue get tabValue => tabValues[tabIndex];
+  PageBuilder get currTab => tabs[tabIndex];
 
   @override
   final Object key;
 
+  ShellValue withSelected(PageBuilder next) {
+    return copyWith(
+      tabIndex: tabs.indexWhere((tab) => tab.value.key == next.value.key),
+      tabs: tabs.map((e) => e.value.key == next.value.key ? next : e).toList(),
+    );
+  }
+
   ShellValue copyWith({
-    List<RouteValue>? tabValues,
+    List<PageBuilder>? tabs,
     int? tabIndex,
     Object? key,
   }) {
     return ShellValue(
-      tabValues: tabValues ?? this.tabValues,
+      tabs: tabs ?? this.tabs,
       tabIndex: tabIndex ?? this.tabIndex,
       key: key ?? this.key,
     );
   }
 }
 
-class ShellController extends RouterDelegateNotifier {
+class ShellController with TreeRouterControllerMixin {
   ShellController({
-    required this.routes,
     required ShellValue shellValue,
-  }) : _shellValue = shellValue;
+  }) : _value = shellValue;
 
-  final List<TreeRoute> routes;
-  TreeRoute get currRoute => routes[shellValue.tabIndex];
+  int get tabIndex => value.tabIndex;
 
-  ShellValue _shellValue;
-  ShellValue get shellValue => _shellValue;
+  ShellValue get value => _value;
+  ShellValue _value;
+
+  RootTreeRouterController? _rootController;
+
+  @override
+  PageBuilder? get root => value.tabs[value.tabIndex];
+
+  @override
+  TreeRouterControllerMixin? get parent => _parent!;
+  TreeRouterControllerMixin? _parent;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved
@@ -143,21 +148,21 @@ class ShellController extends RouterDelegateNotifier {
   ///   `null` (default): preserves state when switching tabs; resets to the first
   ///     route when activating the same tab again.
   void setTabIndex(int index, {bool? preserveState}) {
-    final oldIndex = shellValue.tabIndex;
+    final oldIndex = value.tabIndex;
 
-    _shellValue = shellValue.copyWith(
+    var newValue = value.copyWith(
       tabIndex: index,
     );
 
     if (!(preserveState ?? index != oldIndex)) {
-      currRoute.next = null;
+      newValue = newValue.withSelected(newValue.tabs[index].asTop());
     }
 
-    notifyListeners();
+    _rootController!.navigate(newValue);
   }
 
-  int get tabIndex => _shellValue.tabIndex;
-
-  @override
-  TreeRoute<RouteValue> get stackRoot => routes[_shellValue.tabIndex];
+  void _activate(ShellValue value, RootTreeRouterController controller) {
+    _rootController = controller;
+    _value = value;
+  }
 }

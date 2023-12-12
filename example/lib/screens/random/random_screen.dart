@@ -16,6 +16,8 @@ class RandomScreen extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
+                // Navigator.of(context).push(route);
+
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -23,6 +25,14 @@ class RandomScreen extends StatelessWidget {
                       width: 200,
                       height: 200,
                       color: Colors.green,
+                      child: Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('pop'),
+                        ),
+                      ),
                     );
                   },
                 );

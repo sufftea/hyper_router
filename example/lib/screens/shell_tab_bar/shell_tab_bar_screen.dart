@@ -13,8 +13,6 @@ class ShellTabBarScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('rebuilding shell screen. index: ${controller.tabIndex}');
-
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
