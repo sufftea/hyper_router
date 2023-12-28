@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  TreeRouter.of(context).navigate(TwoScreen.routeName);
+                  TreeRouter.of(context).navigate(SomeScreen.routeName2);
                 },
                 child: const Text('another shell route'),
               ),

@@ -31,16 +31,16 @@ final router = TreeRouter(
                 },
                 tabs: [
                   NamedRoute(
-                    screenBuilder: (context) => const OneScreen(),
-                    name: OneScreen.routeName,
+                    screenBuilder: (context) => const SomeScreen(),
+                    name: SomeScreen.routeName1,
                   ),
                   NamedRoute(
-                    screenBuilder: (context) => const TwoScreen(),
-                    name: TwoScreen.routeName,
+                    screenBuilder: (context) => const SomeScreen(),
+                    name: SomeScreen.routeName2,
                   ),
                   NamedRoute(
-                    screenBuilder: (context) => const ThreeScreen(),
-                    name: ThreeScreen.routeName,
+                    screenBuilder: (context) => const PopMeScreen(),
+                    name: PopMeScreen.routeName,
                   ),
                 ],
               ),
@@ -52,6 +52,14 @@ final router = TreeRouter(
             ValueRoute<SearchResultScreenData>(
               screenBuilder: (context, value) =>
                   SearchResultScreen(data: value),
+              children: [
+                NamedRoute(
+                  screenBuilder: (context) {
+                    return const SomeScreen();
+                  },
+                  name: SomeScreen.routeName3,
+                ),
+              ],
             ),
           ],
         ),

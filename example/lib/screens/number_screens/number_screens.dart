@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tree_router/tree_router.dart';
 
-class OneScreen extends StatelessWidget {
-  const OneScreen({super.key});
+class SomeScreen extends StatelessWidget {
+  const SomeScreen({super.key});
 
-  static const routeName = RouteName('one');
+  static const routeName1 = RouteName('1');
+  static const routeName2 = RouteName('2');
+  static const routeName3 = RouteName('3');
 
   @override
   Widget build(BuildContext context) {
@@ -19,28 +21,10 @@ class OneScreen extends StatelessWidget {
   }
 }
 
-class TwoScreen extends StatelessWidget {
-  const TwoScreen({super.key});
+class PopMeScreen extends StatelessWidget {
+  const PopMeScreen({super.key});
 
-  static const routeName = RouteName('two');
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.pink.shade200,
-        child: const Center(
-          child: Text('Two'),
-        ),
-      ),
-    );
-  }
-}
-
-class ThreeScreen extends StatelessWidget {
-  const ThreeScreen({super.key});
-
-  static const routeName = RouteName('Three');
+  static const routeName = RouteName('pop_screen');
 
   @override
   Widget build(BuildContext context) {

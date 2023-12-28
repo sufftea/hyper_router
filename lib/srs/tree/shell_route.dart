@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tree_router/srs/base/tree_router_controller.dart';
 
 import 'package:tree_router/tree_router.dart';
+
+typedef ShellBuilder = Widget Function(
+  BuildContext context,
+  ShellController controller,
+  Widget child,
+);
 
 class ShellRoute extends TreeRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
-    required List<TreeRoute> tabs,
+    required this.tabs,
     this.onTop = const [],
-  })  : controller = ShellController(
-          shellValue: ShellValue(
-            key: UniqueKey(),
-            tabIndex: 0,
-            tabs: tabs.map((e) => e.createBuilder()).toList(),
-          ),
-        ),
-        super(children: tabs + onTop);
+  }) : super(children: tabs + onTop);
 
   final Widget Function(
     BuildContext context,
@@ -23,67 +21,151 @@ class ShellRoute extends TreeRoute<ShellValue> {
     Widget child,
   ) shellBuilder;
 
-  final ShellController controller;
-  List<TreeRoute> onTop;
+  final List<TreeRoute> tabs;
+  final List<TreeRoute> onTop;
 
   @override
-  Object get key => controller.value.key;
+  final Object key = UniqueKey();
 
   @override
   PageBuilder createBuilder({PageBuilder? next, ShellValue? value}) {
-    if (onTop.where((route) => route.key == next?.value.key).isNotEmpty) {
-      value = value ?? controller.value;
+    return ShellPageBuilder.createFrom(
+      shellBuilder: shellBuilder,
+      next: next,
+      oldValue: value,
+      tabs: tabs.map((e) => e.createBuilder()).toList(),
+      key: key,
+    );
+  }
+}
 
-      return PageBuilder(
-        next: next,
-        value: value,
-        buildPage: (context) => _buildPage(
-          context,
-          value!,
-        ),
-      );
-    } else {
-      if (value == null && next != null) {
-        // Navigating to a specific page, changing the selected tab implicitly 
-        // (as opposed to calling `setTabIndex` on the controller)
-        value = controller.value.withSelected(next);
-      }
+class ShellPageBuilder extends PageBuilder<ShellValue> {
+  ShellPageBuilder({
+    required this.shellBuilder,
+    required this.value,
+    required this.onTop,
+  });
 
-      if (value == null) {
-        throw 'todo';
-      }
+  factory ShellPageBuilder.createFrom({
+    required ShellBuilder shellBuilder,
+    required PageBuilder? next,
+    required ShellValue? oldValue,
+    required List<PageBuilder> tabs,
+    required Object key,
+  }) {
+    final ShellValue value;
+    final PageBuilder? onTop;
 
-      return PageBuilder(
-        next: null,
-        value: value,
-        buildPage: (context) => _buildPage(context, value!),
-      );
+    switch ((oldValue, next)) {
+      case (final v?, final n?):
+        final withSelected = v.withSelected(n);
+
+        if (withSelected == null) {
+          onTop = next;
+          value = v;
+        } else {
+          value = withSelected;
+          onTop = null;
+        }
+      case (null, final n?):
+        final index = tabs.indexWhere((e) => e.key == n.key);
+
+        if (index == -1) {
+          value = ShellValue(
+            tabIndex: 0,
+            key: key,
+            tabs: tabs,
+          );
+          onTop = n;
+        } else {
+          value = ShellValue(
+            tabIndex: index,
+            key: key,
+            tabs: tabs,
+          );
+          onTop = null;
+        }
+      case (final v?, null):
+        value = v;
+        onTop = null;
+      case (null, null):
+        value = ShellValue(
+          tabIndex: 0,
+          key: key,
+          tabs: tabs,
+        );
+        onTop = null;
+      default:
+        throw UnimplementedError();
     }
+
+    return ShellPageBuilder(
+      shellBuilder: shellBuilder,
+      onTop: onTop,
+      value: value,
+    );
   }
 
-  Page _buildPage(BuildContext context, ShellValue value) {
+  final ShellBuilder shellBuilder;
+
+  @override
+  PageBuilder<RouteValue>? get next => onTop ?? value.currTab;
+  final PageBuilder? onTop;
+
+  @override
+  final ShellValue value;
+
+  @override
+  List<Page> createPages(BuildContext context) {
     final rootController = TreeRouter.of(context);
-    controller._activate(value, rootController);
+    final controller = ShellController(
+      value: value,
+      rootController: rootController,
+    );
 
-    final parentController = TreeRouter.controllerOf(context);
-    parentController.deferTo(controller);
-
-    return MaterialPage(
+    final page = MaterialPage(
       child: shellBuilder(
         context,
         controller,
-        InheritedRouterController(
-          controller: controller,
-          child: Builder(
-            builder: (context) {
-              return NestedRouter(
-                pages: controller.createPages(context),
-                key: ValueKey(controller.tabIndex),
-              );
-            }
-          ),
+        NestedRouter(
+          pages: value.currTab.createPages(context),
+          key: ValueKey(controller.tabIndex),
         ),
       ),
+    );
+
+    return [
+      page,
+      if (onTop != null) ...onTop!.createPages(context),
+    ];
+  }
+
+  @override
+  PageBuilder<RouteValue>? pop() {
+    if (onTop case final onTop?) {
+      final popped = onTop.pop();
+
+      return ShellPageBuilder.createFrom(
+        shellBuilder: shellBuilder,
+        next: popped,
+        oldValue: value,
+        tabs: value.tabs,
+        key: key,
+      );
+    }
+
+    final popped = value.currTab.pop();
+
+    if (popped == null) {
+      return null;
+    }
+
+    return ShellPageBuilder.createFrom(
+      shellBuilder: shellBuilder,
+      next: popped,
+      oldValue: value,
+      tabs: value.tabs,
+      key: key,
     );
   }
 }
@@ -92,7 +174,7 @@ class ShellValue extends RouteValue {
   ShellValue({
     required this.tabIndex,
     required this.key,
-    this.tabs = const [],
+    required this.tabs,
   });
 
   final List<PageBuilder> tabs;
@@ -103,11 +185,21 @@ class ShellValue extends RouteValue {
   @override
   final Object key;
 
-  ShellValue withSelected(PageBuilder next) {
+  ShellValue? withSelected(PageBuilder next) {
+    final index = tabs.indexWhere((tab) => tab.value.key == next.value.key);
+
+    if (index == -1) {
+      return null;
+    }
+
     return copyWith(
-      tabIndex: tabs.indexWhere((tab) => tab.value.key == next.value.key),
+      tabIndex: index,
       tabs: tabs.map((e) => e.value.key == next.value.key ? next : e).toList(),
     );
+  }
+
+  bool containsTab(Object key) {
+    return tabs.any((tab) => tab.value.key == key);
   }
 
   ShellValue copyWith({
@@ -123,24 +215,18 @@ class ShellValue extends RouteValue {
   }
 }
 
-class ShellController with TreeRouterControllerMixin {
+class ShellController {
   ShellController({
-    required ShellValue shellValue,
-  }) : _value = shellValue;
+    required this.value,
+    required this.rootController,
+  });
 
+  final ShellValue value;
   int get tabIndex => value.tabIndex;
 
-  ShellValue get value => _value;
-  ShellValue _value;
+  PageBuilder get root => value.tabs[value.tabIndex];
 
-  RootTreeRouterController? _rootController;
-
-  @override
-  PageBuilder? get root => value.tabs[value.tabIndex];
-
-  @override
-  TreeRouterControllerMixin? get parent => _parent!;
-  TreeRouterControllerMixin? _parent;
+  final RootTreeRouterController rootController;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved
@@ -150,19 +236,16 @@ class ShellController with TreeRouterControllerMixin {
   void setTabIndex(int index, {bool? preserveState}) {
     final oldIndex = value.tabIndex;
 
-    var newValue = value.copyWith(
-      tabIndex: index,
-    );
+    final target = switch (preserveState ?? index != oldIndex) {
+      true => value.tabs[index].last().value,
+      false => value.tabs[index].value,
+    };
 
-    if (!(preserveState ?? index != oldIndex)) {
-      newValue = newValue.withSelected(newValue.tabs[index].asTop());
-    }
+    final values = <RouteValue>{};
+    value.tabs[index].forEach((builder) {
+      values.add(builder.value);
+    });
 
-    _rootController!.navigate(newValue);
-  }
-
-  void _activate(ShellValue value, RootTreeRouterController controller) {
-    _rootController = controller;
-    _value = value;
+    rootController.navigate(target, values);
   }
 }

@@ -10,11 +10,12 @@ class ValueRoute<T extends RouteValue> extends TreeRoute<T> {
     this.pageBuilder,
   });
 
-  /// E.g. you can use [CustomPageBuilder] for a custom transition
+  /// you can use this to customize transition
   final Page Function(BuildContext context, Widget child)? pageBuilder;
   final Widget Function(BuildContext context, T value) screenBuilder;
 
   final T? defaultValue;
+  
 
   @override
   Object get key => T;
@@ -27,7 +28,7 @@ class ValueRoute<T extends RouteValue> extends TreeRoute<T> {
       throw 'todo';
     }
 
-    return PageBuilder(
+    return ValuePageBuilder(
       buildPage: (context) => _buildPage(context, value!),
       next: next,
       value: value,
@@ -42,5 +43,42 @@ class ValueRoute<T extends RouteValue> extends TreeRoute<T> {
     }
 
     return MaterialPage(child: screen);
+  }
+}
+
+class ValuePageBuilder extends PageBuilder {
+  ValuePageBuilder({
+    required this.next,
+    required this.value,
+    required this.buildPage,
+  });
+
+  final Page Function(BuildContext context) buildPage;
+
+  @override
+  final PageBuilder<RouteValue>? next;
+
+  @override
+  final RouteValue value;
+
+  @override
+  List<Page> createPages(BuildContext context) {
+    return [
+      buildPage(context),
+      ...next?.createPages(context) ?? [],
+    ];
+  }
+
+  @override
+  PageBuilder<RouteValue>? pop() {
+    if (next case final next?) {
+      return ValuePageBuilder(
+        next: next.pop(),
+        value: value,
+        buildPage: buildPage,
+      );
+    } else {
+      return null;
+    }
   }
 }

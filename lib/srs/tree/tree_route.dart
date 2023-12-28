@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import 'package:tree_router/srs/tree/route_value.dart';
@@ -23,32 +22,40 @@ abstract class TreeRoute<T extends RouteValue> {
   });
 }
 
-class PageBuilder {
-  PageBuilder({
-    required this.next,
-    required this.buildPage,
-    required this.value,
-  });
+abstract class PageBuilder<T extends RouteValue> {
+  // PageBuilder({
+  //   required this.next,
+  //   required this.value,
+  // });
 
-  final PageBuilder? next;
-  final Page Function(BuildContext context) buildPage;
-  final RouteValue value;
+  PageBuilder? get next;
+  T get value;
+  Object get key => value.key;
 
   bool get isTop => next == null;
 
-  List<Page> createPages(BuildContext context) {
-    return [
-      buildPage(context),
-      ...next?.createPages(context) ?? [],
-    ];
+  List<Page> createPages(BuildContext context);
+
+  PageBuilder last() {
+    PageBuilder curr = this;
+
+    while (curr.next != null) {
+      curr = curr.next!;
+    }
+
+    return curr;
   }
 
-  PageBuilder asTop() {
-    return PageBuilder(
-      next: null,
-      buildPage: buildPage,
-      value: value,
-    );
+  PageBuilder? pop();
+}
+
+extension PageBuilderX on PageBuilder {
+  void forEach(void Function(PageBuilder builder) action) {
+    PageBuilder? curr = this;
+    while (curr != null) {
+      action(curr);
+      curr = curr.next;
+    }
   }
 }
 
@@ -62,17 +69,17 @@ extension TreeRouteX<T extends RouteValue> on TreeRoute<T> {
 
   PageBuilder createBuilderRec({
     PageBuilder? next,
-    T? value,
+    required Map<Object, RouteValue> values,
   }) {
     final myBuilder = createBuilder(
       next: next,
-      value: value,
+      value: values[key] as T?,
     );
 
     if (parent case final parent?) {
       return parent.createBuilderRec(
         next: myBuilder,
-        value: null,
+        values: values,
       );
     } else {
       return myBuilder;

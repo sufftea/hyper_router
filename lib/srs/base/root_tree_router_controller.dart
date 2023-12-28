@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tree_router/srs/base/tree_router_controller.dart';
 import 'package:tree_router/srs/tree/tree_route.dart';
 import 'package:tree_router/srs/tree/route_value.dart';
 
-class RootTreeRouterController extends ChangeNotifier
-    with TreeRouterControllerMixin {
+class RootTreeRouterController extends ChangeNotifier {
   RootTreeRouterController({
     required List<TreeRoute> roots,
     required RouteValue initialRoute,
@@ -19,32 +17,56 @@ class RootTreeRouterController extends ChangeNotifier
     navigate(initialRoute);
   }
 
+  PageBuilder? root;
+
   final Map<Object, TreeRoute> _routeMap = {};
 
-  void navigate(RouteValue target) {
+  void navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
     final TreeRoute? targetRoute = _routeMap[target.key];
 
     if (targetRoute == null) {
       throw 'todo';
     }
 
-    root = targetRoute.createBuilderRec(
-      value: target,
-    );
+    final valuesMap = <Object, RouteValue>{
+      for (final v in values) v.key: v,
+    };
+    root?.forEach((builder) {
+      valuesMap[builder.value.key] = builder.value;
+    });
+    valuesMap[target.key] = target;
+
+    root = targetRoute.createBuilderRec(values: valuesMap);
 
     notifyListeners();
   }
 
   void pop() {
-    final target = popInternal();
-
-    if (target == null) {
-      SystemNavigator.pop();
+    if (root?.pop() case final popped?) {
+      root = popped;
     } else {
-      navigate(target);
+      SystemNavigator.pop();
     }
+
+    notifyListeners();
   }
 
+  List<Page> createPages(BuildContext context) {
+    return root!.createPages(context);
+  }
+}
+
+class InheritedRouterController extends InheritedWidget {
+  const InheritedRouterController({
+    required this.controller,
+    required super.child,
+    super.key,
+  });
+
+  final RootTreeRouterController controller;
+
   @override
-  TreeRouterControllerMixin? get parent => null;
+  bool updateShouldNotify(InheritedRouterController oldWidget) {
+    return oldWidget.controller != controller;
+  }
 }

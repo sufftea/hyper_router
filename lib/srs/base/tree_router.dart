@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tree_router/srs/base/tree_router_controller.dart';
 import 'package:tree_router/srs/base/tree_router_delegate.dart';
 import 'package:tree_router/srs/tree/tree_route.dart';
 import 'package:tree_router/srs/tree/route_value.dart';
@@ -36,12 +35,6 @@ class TreeRouter implements RouterConfig<Object> {
         .controller;
   }
 
-  static TreeRouterControllerMixin controllerOf(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<InheritedRouterController>()!
-        .controller;
-  }
-
   static TreeRouter configOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedTreeRouter>()!
@@ -75,20 +68,5 @@ class InheritedTreeRouter extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedTreeRouter oldWidget) {
     return oldWidget.router != router;
-  }
-}
-
-class InheritedRouterController extends InheritedWidget {
-  const InheritedRouterController({
-    required this.controller,
-    required super.child,
-    super.key,
-  });
-
-  final TreeRouterControllerMixin controller;
-
-  @override
-  bool updateShouldNotify(InheritedRouterController oldWidget) {
-    return oldWidget.controller != controller;
   }
 }

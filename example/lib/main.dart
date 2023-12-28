@@ -14,11 +14,12 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: ThemeData.from(
-          useMaterial3: true,
-          colorScheme: const ColorScheme.light(),
-          textTheme: Theme.of(context).textTheme.apply(
-                fontSizeFactor: 1.5,
-              )).copyWith(),
+        useMaterial3: true,
+        colorScheme: const ColorScheme.light(),
+        textTheme: Theme.of(context).textTheme.apply(
+              fontSizeFactor: 1.5,
+            ),
+      ).copyWith(),
       routerConfig: router,
     );
   }
