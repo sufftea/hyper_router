@@ -127,9 +127,13 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
       child: shellBuilder(
         context,
         controller,
-        NestedRouter(
-          pages: value.currTab.createPages(context),
-          key: ValueKey(controller.tabIndex),
+        Builder(
+          builder: (context) {
+            return NestedRouter(
+              pages: value.currTab.createPages(context),
+              key: ValueKey(controller.tabIndex),
+            );
+          }
         ),
       ),
     );

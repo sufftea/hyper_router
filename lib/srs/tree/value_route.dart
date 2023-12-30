@@ -29,13 +29,13 @@ class ValueRoute<T extends RouteValue> extends TreeRoute<T> {
     }
 
     return ValuePageBuilder(
-      buildPage: (context) => _buildPage(context, value!),
+      buildPage: (context) => buildPage(context, value!),
       next: next,
       value: value,
     );
   }
 
-  Page _buildPage(BuildContext context, T value) {
+  Page buildPage(BuildContext context, T value) {
     final screen = screenBuilder(context, value);
 
     if (pageBuilder != null) {
