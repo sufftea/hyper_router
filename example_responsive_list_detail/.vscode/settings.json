@@ -1,0 +1,8 @@
+{
+  "search.exclude": {
+    "flutter_tree_router/**": true
+  },
+  "files.exclude": {
+    // "flutter_tree_router/**": true
+  }  
+}

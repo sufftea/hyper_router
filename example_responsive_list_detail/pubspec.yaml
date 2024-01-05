@@ -1,0 +1,25 @@
+name: responsive_list_detail
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.1.2 <4.0.0'
+
+dependencies:
+  flex_color_scheme: ^7.3.1
+  flutter:
+    sdk: flutter
+
+  flutter_riverpod: ^2.4.9
+  google_fonts: ^6.1.0
+  tree_router:
+    path: ..
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
