@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:tree_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/tree/route_value.dart';
 
-abstract class TreeRoute<T extends RouteValue> {
-  TreeRoute({
+abstract class Froute<T extends RouteValue> {
+  Froute({
     this.children = const [],
   }) {
     for (final child in children) {
@@ -11,8 +11,8 @@ abstract class TreeRoute<T extends RouteValue> {
     }
   }
 
-  final List<TreeRoute> children;
-  late final TreeRoute? parent;
+  final List<Froute> children;
+  late final Froute? parent;
 
   Object get key;
 
@@ -59,8 +59,8 @@ extension PageBuilderX on PageBuilder {
   }
 }
 
-extension TreeRouteX<T extends RouteValue> on TreeRoute<T> {
-  void forEach(void Function(TreeRoute r) action) {
+extension TreeRouteX<T extends RouteValue> on Froute<T> {
+  void forEach(void Function(Froute r) action) {
     action(this);
     for (final child in children) {
       child.forEach(action);

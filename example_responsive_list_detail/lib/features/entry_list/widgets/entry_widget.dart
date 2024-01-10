@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fractal_router/fractal_router.dart';
 import 'package:responsive_list_detail/features/entry_details/entry_details_screen.dart';
 import 'package:responsive_list_detail/features/entry_list/data/email.dart';
-import 'package:tree_router/srs/base/tree_router.dart';
 
 class EntryWidget extends StatelessWidget {
   const EntryWidget({
@@ -16,8 +16,8 @@ class EntryWidget extends StatelessWidget {
     final theme = Theme.of(context).colorScheme;
 
     return InkWell(
-      onTap: () {
-        TreeRouter.of(context).navigate(EmailRouteData(data));
+      onTap: () {        
+        context.frouter.navigate(EmailRouteData(data));
       },
       child: Padding(
         padding: const EdgeInsets.all(16),

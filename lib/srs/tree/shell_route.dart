@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 typedef ShellBuilder = Widget Function(
   BuildContext context,
@@ -8,7 +8,7 @@ typedef ShellBuilder = Widget Function(
   Widget child,
 );
 
-class ShellRoute extends TreeRoute<ShellValue> {
+class ShellRoute extends Froute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
     required this.tabs,
@@ -21,8 +21,8 @@ class ShellRoute extends TreeRoute<ShellValue> {
     Widget child,
   ) shellBuilder;
 
-  final List<TreeRoute> tabs;
-  final List<TreeRoute> onTop;
+  final List<Froute> tabs;
+  final List<Froute> onTop;
 
   @override
   final Object key = UniqueKey();
@@ -117,7 +117,7 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
 
   @override
   List<Page> createPages(BuildContext context) {
-    final rootController = TreeRouter.of(context);
+    final rootController = FractalRouter.of(context);
     final controller = ShellController(
       value: value,
       rootController: rootController,
@@ -230,7 +230,7 @@ class ShellController {
 
   PageBuilder get root => value.tabs[value.tabIndex];
 
-  final RootTreeRouterController rootController;
+  final FractalController rootController;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved

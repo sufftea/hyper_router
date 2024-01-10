@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tree_router/srs/tree/tree_route.dart';
-import 'package:tree_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/tree/froute.dart';
+import 'package:fractal_router/srs/tree/route_value.dart';
 
-class RootTreeRouterController extends ChangeNotifier {
-  RootTreeRouterController({
-    required List<TreeRoute> roots,
+class FractalController extends ChangeNotifier {
+  FractalController({
+    required List<Froute> roots,
     required RouteValue initialRoute,
   }) {
     for (final r in roots) {
@@ -19,10 +19,10 @@ class RootTreeRouterController extends ChangeNotifier {
 
   PageBuilder? root;
 
-  final Map<Object, TreeRoute> _routeMap = {};
+  final Map<Object, Froute> _routeMap = {};
 
   void navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
-    final TreeRoute? targetRoute = _routeMap[target.key];
+    final Froute? targetRoute = _routeMap[target.key];
 
     if (targetRoute == null) {
       throw 'todo';
@@ -56,17 +56,17 @@ class RootTreeRouterController extends ChangeNotifier {
   }
 }
 
-class InheritedRouterController extends InheritedWidget {
-  const InheritedRouterController({
+class InheritedFractalController extends InheritedWidget {
+  const InheritedFractalController({
     required this.controller,
     required super.child,
     super.key,
   });
 
-  final RootTreeRouterController controller;
+  final FractalController controller;
 
   @override
-  bool updateShouldNotify(InheritedRouterController oldWidget) {
+  bool updateShouldNotify(InheritedFractalController oldWidget) {
     return oldWidget.controller != controller;
   }
 }

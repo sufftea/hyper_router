@@ -1,7 +1,7 @@
 import 'package:example/screens/number_screens/number_screens.dart';
 import 'package:example/screens/random/random_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -21,13 +21,13 @@ class HomeScreen extends StatelessWidget {
               OutlinedButton(
                 onPressed: () {
                   debugPrint('navigating to randomscreen');
-                  TreeRouter.of(context).navigate(RandomScreen.routeValue);
+                  FractalRouter.of(context).navigate(RandomScreen.routeValue);
                 },
                 child: const Text('open a screen on top'),
               ),
               OutlinedButton(
                 onPressed: () {
-                  TreeRouter.of(context).navigate(SomeScreen.routeName2);
+                  FractalRouter.of(context).navigate(SomeScreen.routeName2);
                 },
                 child: const Text('another shell route'),
               ),

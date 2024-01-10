@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_list_detail/features/entry_list/data/email.dart';
 import 'package:responsive_list_detail/features/entry_list/widgets/entry_widget.dart';
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 class EmailListScreen extends StatelessWidget {
   const EmailListScreen({super.key});

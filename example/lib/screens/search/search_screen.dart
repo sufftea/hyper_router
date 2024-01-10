@@ -1,6 +1,6 @@
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:flutter/material.dart';
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
@@ -23,7 +23,7 @@ class SearchScreen extends StatelessWidget {
               ),
               OutlinedButton(
                 onPressed: () {
-                  TreeRouter.of(context).navigate(SearchResultScreenData(
+                  FractalRouter.of(context).navigate(SearchResultScreenData(
                     textController.text,
                   ));
                 },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tree_router/srs/base/tree_router.dart';
+import 'package:fractal_router/srs/base/fractal_router.dart';
 
 class NestedRouter extends StatelessWidget {
   const NestedRouter({
@@ -14,7 +14,7 @@ class NestedRouter extends StatelessWidget {
     return Navigator(
       pages: pages,
       onPopPage: (route, result) {
-        TreeRouter.of(context).pop();
+        FractalRouter.of(context).pop();
         return false;
       },
     );

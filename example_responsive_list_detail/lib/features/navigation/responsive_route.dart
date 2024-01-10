@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 class ResponsiveRoute extends NamedRoute {
   ResponsiveRoute({

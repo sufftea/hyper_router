@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tree_router/srs/tree/tree_route.dart';
-import 'package:tree_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/tree/froute.dart';
+import 'package:fractal_router/srs/tree/route_value.dart';
 
-class ValueRoute<T extends RouteValue> extends TreeRoute<T> {
+class ValueRoute<T extends RouteValue> extends Froute<T> {
   ValueRoute({
     required this.screenBuilder,
     super.children,

@@ -1,33 +1,33 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tree_router/srs/base/root_tree_router_controller.dart';
-import 'package:tree_router/srs/base/tree_router.dart';
+import 'package:fractal_router/srs/base/fractal_controller.dart';
+import 'package:fractal_router/srs/base/fractal_router.dart';
 
-class TreeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
-  TreeRouterDelegate({
-    required this.rootController,
+class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  FractalRouterDelegate({
+    required this.controller,
     required this.routerConfig,
   });
 
-  final RootTreeRouterController rootController;
-  final TreeRouter routerConfig;
+  final FractalController controller;
+  final FractalRouter routerConfig;
   List<Page> _pages = [];
 
   @override
   Widget build(BuildContext context) {
-    return InheritedTreeRouter(
+    return InheritedFractalRouter(
       router: routerConfig,
-      child: InheritedRouterController(
-        controller: rootController,
+      child: InheritedFractalController(
+        controller: controller,
         child: AnimatedBuilder(
-          animation: rootController,
+          animation: controller,
           builder: (context, child) {
-            _pages = rootController.createPages(context);
+            _pages = controller.createPages(context);
 
             return Navigator(
               pages: _pages,
               onPopPage: (route, result) {
-                rootController.pop();
+                controller.pop();
                 return true;
               },
             );
@@ -39,7 +39,7 @@ class TreeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
 
   @override
   Future<bool> popRoute() async {
-    rootController.pop();
+    controller.pop();
 
     return SynchronousFuture(true);
   }

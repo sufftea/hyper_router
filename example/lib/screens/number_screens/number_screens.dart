@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 class SomeScreen extends StatelessWidget {
   const SomeScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:example/screens/number_screens/number_screens.dart';
 import 'package:flutter/material.dart';
-import 'package:tree_router/tree_router.dart';
+import 'package:fractal_router/fractal_router.dart';
 
 class SearchResultScreenData extends RouteValue {
   const SearchResultScreenData(this.query);
@@ -28,7 +28,7 @@ class SearchResultScreen extends StatelessWidget {
             Text('Serch query: ${data.query}'),
             ElevatedButton(
               onPressed: () {
-                TreeRouter.of(context).navigate(SomeScreen.routeName3);
+                FractalRouter.of(context).navigate(SomeScreen.routeName3);
               },
               child: const Text('open another screen'),
             ),
