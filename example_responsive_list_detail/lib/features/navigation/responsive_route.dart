@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fractal_router/srs/base/nested_navigator.dart';
 import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
 import 'package:fractal_router/fractal_router.dart';
 
@@ -67,7 +68,7 @@ class ResponsivePageBuilder extends ValuePageBuilder {
                         vertical: 16,
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: NestedRouter(
+                      child: NestedNavigator(
                         pages: [
                           const MaterialPage(
                             child: Scaffold(

@@ -1,34 +1,34 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/fractal_controller.dart';
+import 'package:fractal_router/srs/base/controller.dart';
 import 'package:fractal_router/srs/base/fractal_router.dart';
+import 'package:fractal_router/srs/base/nested_navigator.dart';
 
 class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
   FractalRouterDelegate({
-    required this.controller,
+    required this.rootController,
     required this.routerConfig,
   });
 
-  final FractalController controller;
+  final RootFractalController rootController;
   final FractalRouter routerConfig;
-  List<Page> _pages = [];
 
   @override
   Widget build(BuildContext context) {
     return InheritedFractalRouter(
       router: routerConfig,
-      child: InheritedFractalController(
-        controller: controller,
+      rootController: rootController,
+      child: InheritedNavigatorNode(
+        node: rootController.rootNavigatorNode,
         child: AnimatedBuilder(
-          animation: controller,
+          animation: rootController,
           builder: (context, child) {
-            _pages = controller.createPages(context);
-
             return Navigator(
-              pages: _pages,
+              pages: rootController.createPages(context),
+              key: rootController.rootNavigatorNode.key,
               onPopPage: (route, result) {
-                controller.pop();
-                return true;
+                rootController.popInternalState();
+                return false;
               },
             );
           },
@@ -39,24 +39,11 @@ class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
 
   @override
   Future<bool> popRoute() async {
-    controller.pop();
-
-    return SynchronousFuture(true);
+    return SynchronousFuture(rootController.pop());
   }
 
   @override
   Future<void> setNewRoutePath(Object configuration) {
     throw UnimplementedError();
   }
-
-  // @override
-  // Future<void> setNewRoutePath(RouteStack configuration) {
-  //   controller.stack = configuration;
-  //   return SynchronousFuture(null);
-  // }
-
-  // @override
-  // Future<void> setInitialRoutePath(RouteStack configuration) {
-  //   return setNewRoutePath(configuration);
-  // }
 }

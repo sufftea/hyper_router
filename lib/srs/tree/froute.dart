@@ -23,11 +23,6 @@ abstract class Froute<T extends RouteValue> {
 }
 
 abstract class PageBuilder<T extends RouteValue> {
-  // PageBuilder({
-  //   required this.next,
-  //   required this.value,
-  // });
-
   PageBuilder? get next;
   T get value;
   Object get key => value.key;

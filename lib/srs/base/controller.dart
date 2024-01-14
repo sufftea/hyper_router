@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fractal_router/srs/base/nested_navigator.dart';
 import 'package:fractal_router/srs/tree/froute.dart';
 import 'package:fractal_router/srs/tree/route_value.dart';
 
-class FractalController extends ChangeNotifier {
-  FractalController({
+class RootFractalController extends ChangeNotifier {
+  RootFractalController({
     required List<Froute> roots,
     required RouteValue initialRoute,
+    required RootBackButtonDispatcher dispatcher,
   }) {
     for (final r in roots) {
       r.forEach((r) {
@@ -18,6 +20,8 @@ class FractalController extends ChangeNotifier {
   }
 
   PageBuilder? root;
+
+  final rootNavigatorNode = NavigatorNode(GlobalKey<NavigatorState>());
 
   final Map<Object, Froute> _routeMap = {};
 
@@ -41,7 +45,11 @@ class FractalController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void pop() {
+  bool pop() {
+    return rootNavigatorNode.pop();
+  }
+
+  void popInternalState() {
     if (root?.pop() case final popped?) {
       root = popped;
     } else {
@@ -53,20 +61,5 @@ class FractalController extends ChangeNotifier {
 
   List<Page> createPages(BuildContext context) {
     return root!.createPages(context);
-  }
-}
-
-class InheritedFractalController extends InheritedWidget {
-  const InheritedFractalController({
-    required this.controller,
-    required super.child,
-    super.key,
-  });
-
-  final FractalController controller;
-
-  @override
-  bool updateShouldNotify(InheritedFractalController oldWidget) {
-    return oldWidget.controller != controller;
   }
 }
