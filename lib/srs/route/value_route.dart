@@ -63,8 +63,12 @@ class ValuePageBuilder extends PageBuilder {
 
   @override
   List<Page> createPages(BuildContext context) {
+    final page = buildPage(context);
+
+    
+
     return [
-      buildPage(context),
+      page,
       ...next?.createPages(context) ?? [],
     ];
   }
