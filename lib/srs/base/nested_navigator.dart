@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/fractal_router.dart';
+import 'package:fractal_router/srs/base/router.dart';
 
 class NestedNavigator extends StatefulWidget {
   const NestedNavigator({
@@ -34,7 +34,7 @@ class _NestedNavigatorState extends State<NestedNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    final rootController = FractalRouter.of(context);
+    final rootController = FractalRouter.rootOf(context);
 
     return InheritedNavigatorNode(
       node: node,
@@ -42,7 +42,7 @@ class _NestedNavigatorState extends State<NestedNavigator> {
         pages: widget.pages,
         key: node.key,
         onPopPage: (route, result) {
-          rootController.popInternalState();
+          rootController.popRoute();
           return false;
         },
       ),

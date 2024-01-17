@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/tree/froute.dart';
-import 'package:fractal_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/route/froute.dart';
+import 'package:fractal_router/srs/value/route_value.dart';
 
 class ValueRoute<T extends RouteValue> extends Froute<T> {
   ValueRoute({

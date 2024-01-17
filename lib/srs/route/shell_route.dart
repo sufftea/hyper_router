@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:fractal_router/fractal_router.dart';
 import 'package:fractal_router/srs/base/nested_navigator.dart';
+import 'package:fractal_router/srs/base/router.dart';
 
 typedef ShellBuilder = Widget Function(
   BuildContext context,
@@ -121,7 +122,7 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
     final controller = FractalRouter.of(context);
     final shellController = ShellController(
       value: value,
-      rootController: controller,
+      controller: controller,
     );
 
     final page = MaterialPage(
@@ -223,7 +224,7 @@ class ShellValue extends RouteValue {
 class ShellController {
   ShellController({
     required this.value,
-    required this.rootController,
+    required this.controller,
   });
 
   final ShellValue value;
@@ -231,7 +232,7 @@ class ShellController {
 
   PageBuilder get root => value.tabs[value.tabIndex];
 
-  final RootFractalController rootController;
+  final FractalController controller;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved
@@ -251,6 +252,6 @@ class ShellController {
       values.add(builder.value);
     });
 
-    rootController.navigate(target, values);
+    controller.navigate(target, values);
   }
 }

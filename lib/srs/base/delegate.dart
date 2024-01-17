@@ -1,17 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fractal_router/srs/base/controller.dart';
-import 'package:fractal_router/srs/base/fractal_router.dart';
 import 'package:fractal_router/srs/base/nested_navigator.dart';
+import 'package:fractal_router/srs/base/router.dart';
 
 class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
   FractalRouterDelegate({
     required this.rootController,
     required this.routerConfig,
+    required this.redirect,
   });
 
-  final RootFractalController rootController;
+  final FractalRoot rootController;
   final FractalRouter routerConfig;
+  final RedirectCallback redirect;
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +25,20 @@ class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
         child: AnimatedBuilder(
           animation: rootController,
           builder: (context, child) {
-            return Navigator(
-              pages: rootController.createPages(context),
-              key: rootController.rootNavigatorNode.key,
-              onPopPage: (route, result) {
-                rootController.popInternalState();
-                return false;
-              },
-            );
+            if (redirect(context, rootController.stack) case final target?) {
+              rootController.navigateSilent(target);
+            }
+            
+            return Builder(builder: (context) {
+              return Navigator(
+                pages: rootController.createPages(context),
+                key: rootController.rootNavigatorNode.key,
+                onPopPage: (route, result) {
+                  rootController.popRoute();
+                  return false;
+                },
+              );
+            });
           },
         ),
       ),

@@ -1,31 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:fractal_router/srs/base/delegate.dart';
-import 'package:fractal_router/srs/tree/froute.dart';
-import 'package:fractal_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/route/froute.dart';
+import 'package:fractal_router/srs/value/route_value.dart';
 import 'package:fractal_router/srs/base/controller.dart';
+
+typedef RedirectCallback = RouteValue? Function(
+  BuildContext context,
+  PageBuilder stack,
+);
+RouteValue? _defaultRedirect(BuildContext context, PageBuilder _) => null;
 
 class FractalRouter implements RouterConfig<Object> {
   FractalRouter({
     required RouteValue initialRoute,
     required List<Froute> routes,
+    RedirectCallback? redirect,
   }) {
     for (final r in routes) {
       r.parent = null;
     }
 
-    final controller = RootFractalController(
+    final controller = FractalRoot(
       initialRoute: initialRoute,
       roots: routes,
-      dispatcher: backButtonDispatcher,
     );
 
     routerDelegate = FractalRouterDelegate(
       routerConfig: this,
       rootController: controller,
+      redirect: redirect ?? _defaultRedirect,
     );
   }
 
-  static RootFractalController of(BuildContext context) {
+  static FractalController of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .rootController;
+  }
+
+  static FractalRoot rootOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .rootController;
@@ -62,7 +75,7 @@ class InheritedFractalRouter extends InheritedWidget {
   });
 
   final FractalRouter router;
-  final RootFractalController rootController;
+  final FractalRoot rootController;
 
   @override
   bool updateShouldNotify(InheritedFractalRouter oldWidget) {

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fractal_router/srs/base/nested_navigator.dart';
-import 'package:fractal_router/srs/tree/froute.dart';
-import 'package:fractal_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/route/froute.dart';
+import 'package:fractal_router/srs/value/route_value.dart';
 
-class RootFractalController extends ChangeNotifier {
-  RootFractalController({
+abstract class FractalController {
+  void navigate(RouteValue target, [Set<RouteValue> values = const {}]);
+  bool pop();
+}
+
+class FractalRoot extends ChangeNotifier implements FractalController {
+  FractalRoot({
     required List<Froute> roots,
     required RouteValue initialRoute,
-    required RootBackButtonDispatcher dispatcher,
   }) {
     for (final r in roots) {
       r.forEach((r) {
@@ -19,13 +23,35 @@ class RootFractalController extends ChangeNotifier {
     navigate(initialRoute);
   }
 
-  PageBuilder? root;
-
   final rootNavigatorNode = NavigatorNode(GlobalKey<NavigatorState>());
+
+  PageBuilder? _stack;
+  PageBuilder get stack => _stack!;
+  set stack(PageBuilder s) {
+    _stack = s;
+    notifyListeners();
+  }
 
   final Map<Object, Froute> _routeMap = {};
 
+  @override
   void navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
+    stack = createStack(target, values);
+  }
+
+  void navigateSilent(RouteValue target) {
+    _stack = createStack(target);
+  }
+
+  @override
+  bool pop() {
+    return rootNavigatorNode.pop();
+  }
+
+  PageBuilder createStack(
+    RouteValue target, [
+    Set<RouteValue> values = const {},
+  ]) {
     final Froute? targetRoute = _routeMap[target.key];
 
     if (targetRoute == null) {
@@ -35,31 +61,23 @@ class RootFractalController extends ChangeNotifier {
     final valuesMap = <Object, RouteValue>{
       for (final v in values) v.key: v,
     };
-    root?.forEach((builder) {
+    _stack?.forEach((builder) {
       valuesMap[builder.value.key] = builder.value;
     });
     valuesMap[target.key] = target;
 
-    root = targetRoute.createBuilderRec(values: valuesMap);
-
-    notifyListeners();
+    return targetRoute.createBuilderRec(values: valuesMap);
   }
 
-  bool pop() {
-    return rootNavigatorNode.pop();
-  }
-
-  void popInternalState() {
-    if (root?.pop() case final popped?) {
-      root = popped;
+  void popRoute() {
+    if (stack.pop() case final popped?) {
+      stack = popped;
     } else {
       SystemNavigator.pop();
     }
-
-    notifyListeners();
   }
 
   List<Page> createPages(BuildContext context) {
-    return root!.createPages(context);
+    return stack.createPages(context);
   }
 }

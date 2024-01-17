@@ -1,5 +1,6 @@
-import 'package:example/navigation/navigation.dart';
+import 'package:example/navigation/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final navKey = GlobalKey<NavigatorState>();
 
@@ -12,15 +13,17 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: ThemeData.from(
-        useMaterial3: true,
-        colorScheme: const ColorScheme.light(),
-        textTheme: Theme.of(context).textTheme.apply(
-              fontSizeFactor: 1.5,
-            ),
-      ).copyWith(),
-      routerConfig: router,
+    return ProviderScope(
+      child: MaterialApp.router(
+        theme: ThemeData.from(
+          useMaterial3: true,
+          colorScheme: const ColorScheme.light(),
+          textTheme: Theme.of(context).textTheme.apply(
+                fontSizeFactor: 1.5,
+              ),
+        ).copyWith(),
+        routerConfig: router,
+      ),
     );
   }
 }

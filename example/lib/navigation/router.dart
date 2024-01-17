@@ -5,10 +5,25 @@ import 'package:example/screens/random/random_screen.dart';
 import 'package:example/screens/search/search_screen.dart';
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:example/screens/shell_tab_bar/shell_tab_bar_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fractal_router/fractal_router.dart';
+
+final authStateProvider = StateProvider((ref) => false);
 
 final router = FractalRouter(
   initialRoute: HomeScreen.routeValue,
+  redirect: (context, stack) {
+    final target = stack.last();
+
+    final authenticated =
+        ProviderScope.containerOf(context).read(authStateProvider);
+
+    if (target.key == LogOutScreen.routeName.key && !authenticated) {
+      return SearchScreen.routeValue;
+    }
+
+    return null;
+  },
   routes: [
     ShellRoute(
       shellBuilder: (context, controller, child) {
@@ -31,8 +46,8 @@ final router = FractalRouter(
                 },
                 tabs: [
                   NamedRoute(
-                    screenBuilder: (context) => const SomeScreen(),
-                    name: SomeScreen.routeName1,
+                    screenBuilder: (context) => const LogOutScreen(),
+                    name: LogOutScreen.routeName,
                   ),
                   NamedRoute(
                     screenBuilder: (context) => const SomeScreen(),

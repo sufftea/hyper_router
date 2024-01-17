@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/tree/value_route.dart';
-import 'package:fractal_router/srs/tree/route_value.dart';
+import 'package:fractal_router/srs/route/value_route.dart';
+import 'package:fractal_router/srs/value/route_value.dart';
 
 class RouteName extends RouteValue {
   const RouteName(this.name);

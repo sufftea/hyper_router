@@ -1,4 +1,6 @@
+import 'package:example/navigation/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fractal_router/fractal_router.dart';
 
 class SomeScreen extends StatelessWidget {
@@ -14,7 +16,39 @@ class SomeScreen extends StatelessWidget {
       body: Container(
         color: Colors.deepOrange.shade200,
         child: const Center(
-          child: Text('One'),
+          child: Text('something'),
+        ),
+      ),
+    );
+  }
+}
+
+class LogOutScreen extends StatelessWidget {
+  const LogOutScreen({super.key});
+
+  static const routeName = RouteName('logout');
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: Colors.indigo.shade200,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Consumer(
+                builder: (context, ref, child) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      ref.watch(authStateProvider.notifier).state = false;
+                    },
+                    child: const Text('logout'),
+                  );
+                }
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -36,7 +70,7 @@ class PopMeScreen extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text('pop me'),
+            child: const Text('pop'),
           ),
         ),
       ),
