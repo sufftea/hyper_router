@@ -40,9 +40,22 @@ class MainApp extends StatelessWidget {
   }
 
   ThemeData _createTheme() {
-    return FlexColorScheme.light(
+    final theme = FlexColorScheme.light(
       useMaterial3: true,
       scheme: FlexScheme.ebonyClay,
     ).toTheme;
+
+    return theme.copyWith(
+      cardTheme: CardTheme(
+        margin: const EdgeInsets.all(8),
+        color: theme.colorScheme.surfaceVariant,
+        clipBehavior: Clip.antiAlias,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide.none,
+          borderRadius: BorderRadius.circular(24),
+        ),
+      ),
+    );
   }
 }

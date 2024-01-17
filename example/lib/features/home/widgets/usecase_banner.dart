@@ -1,38 +1,35 @@
-import 'package:example/features/utils/theme_x.dart';
+import 'package:example/features/utils/context_x.dart';
 import 'package:flutter/material.dart';
 
 class UsecaseBanner extends StatelessWidget {
   const UsecaseBanner({
     required this.header,
     required this.caption,
+    required this.image,
     super.key,
   });
 
   final String header;
   final String caption;
+  final String image;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(16),
-      color: context.col.surfaceVariant,
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        side: BorderSide.none,
-        borderRadius: BorderRadius.circular(24),
-      ),
       child: SizedBox(
-        width: 384,
+        height: 300,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: 256,
+            Expanded(
               child: Container(
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: Colors.green.shade300,
                   borderRadius: BorderRadius.circular(24),
+                ),
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
