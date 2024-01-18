@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fractal_router/fractal_router.dart';
 import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
-import 'package:fractal_router/srs/tree/shell_route.dart';
 
 class NavRailShell extends StatelessWidget {
   const NavRailShell({

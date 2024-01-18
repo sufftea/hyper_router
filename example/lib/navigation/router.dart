@@ -5,18 +5,16 @@ import 'package:example/screens/random/random_screen.dart';
 import 'package:example/screens/search/search_screen.dart';
 import 'package:example/screens/search_result/search_result_name.dart';
 import 'package:example/screens/shell_tab_bar/shell_tab_bar_screen.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:fractal_router/fractal_router.dart';
-
-final authStateProvider = StateProvider((ref) => false);
+import 'package:provider/provider.dart';
 
 final router = FractalRouter(
   initialRoute: HomeScreen.routeValue,
   redirect: (context, stack) {
     final target = stack.last();
 
-    final authenticated =
-        ProviderScope.containerOf(context).read(authStateProvider);
+    final authenticated = Provider.of<ValueNotifier<bool>>(context).value;
 
     if (target.key == LogOutScreen.routeName.key && !authenticated) {
       return SearchScreen.routeValue;

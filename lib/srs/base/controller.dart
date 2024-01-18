@@ -13,13 +13,8 @@ class FractalRoot extends ChangeNotifier implements FractalController {
   FractalRoot({
     required List<Froute> roots,
     required RouteValue initialRoute,
+    required this.routeMap,
   }) {
-    for (final r in roots) {
-      r.forEach((r) {
-        _routeMap[r.key] = r;
-      });
-    }
-
     navigate(initialRoute);
   }
 
@@ -32,7 +27,7 @@ class FractalRoot extends ChangeNotifier implements FractalController {
     notifyListeners();
   }
 
-  final Map<Object, Froute> _routeMap = {};
+  final Map<Object, Froute> routeMap;
 
   @override
   void navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
@@ -52,7 +47,7 @@ class FractalRoot extends ChangeNotifier implements FractalController {
     RouteValue target, [
     Set<RouteValue> values = const {},
   ]) {
-    final Froute? targetRoute = _routeMap[target.key];
+    final Froute? targetRoute = routeMap[target.key];
 
     if (targetRoute == null) {
       throw 'todo';

@@ -20,27 +20,38 @@ class FractalRouter implements RouterConfig<Object> {
       r.parent = null;
     }
 
-    final controller = FractalRoot(
+    final routeMap = <Object, Froute>{};
+    for (final r in routes) {
+      r.forEach((r) {
+        routeMap[r.key] = r;
+      });
+    }
+
+    rootController = FractalRoot(
       initialRoute: initialRoute,
       roots: routes,
+      routeMap: routeMap,
     );
 
     routerDelegate = FractalRouterDelegate(
       routerConfig: this,
-      rootController: controller,
       redirect: redirect ?? _defaultRedirect,
     );
   }
 
+  late final FractalRoot rootController;
+
   static FractalController of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .router
         .rootController;
   }
 
   static FractalRoot rootOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .router
         .rootController;
   }
 
@@ -69,17 +80,14 @@ class FractalRouter implements RouterConfig<Object> {
 class InheritedFractalRouter extends InheritedWidget {
   const InheritedFractalRouter({
     required this.router,
-    required this.rootController,
     required super.child,
     super.key,
   });
 
   final FractalRouter router;
-  final FractalRoot rootController;
 
   @override
   bool updateShouldNotify(InheritedFractalRouter oldWidget) {
-    return oldWidget.router != router ||
-        oldWidget.rootController != rootController;
+    return oldWidget.router != router;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:example/navigation/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:provider/provider.dart';
 
 final navKey = GlobalKey<NavigatorState>();
 
@@ -13,7 +13,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      create: (context) => ValueNotifier(true),
       child: MaterialApp.router(
         theme: ThemeData.from(
           useMaterial3: true,

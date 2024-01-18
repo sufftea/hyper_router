@@ -9,11 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_riverpod: ^2.4.9
+  # flutter_riverpod: ^2.4.9
   fractal_router: 
     path: ..
-  riverpod: ^2.4.1
-  riverpod_annotation: ^2.1.6
+  provider: ^6.1.1
+  # riverpod: ^2.4.1
+  # riverpod_annotation: ^2.1.6
 
 dev_dependencies:
   flutter_test:

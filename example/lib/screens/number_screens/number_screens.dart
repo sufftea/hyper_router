@@ -1,7 +1,6 @@
-import 'package:example/navigation/router.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fractal_router/fractal_router.dart';
+import 'package:provider/provider.dart';
 
 class SomeScreen extends StatelessWidget {
   const SomeScreen({super.key});
@@ -37,15 +36,12 @@ class LogOutScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Consumer(
-                builder: (context, ref, child) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      ref.watch(authStateProvider.notifier).state = false;
-                    },
-                    child: const Text('logout'),
-                  );
-                }
+              ElevatedButton(
+                onPressed: () {
+                  final auth = context.read<ValueNotifier<bool>>();
+                  auth.value = false;
+                },
+                child: const Text('logout'),
               ),
             ],
           ),
