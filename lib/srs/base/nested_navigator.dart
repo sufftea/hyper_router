@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fractal_router/srs/base/controller.dart';
 import 'package:fractal_router/srs/base/router.dart';
 
 class NestedNavigator extends StatefulWidget {
@@ -42,7 +43,7 @@ class _NestedNavigatorState extends State<NestedNavigator> {
         pages: widget.pages,
         key: node.key,
         onPopPage: (route, result) {
-          rootController.popRoute();
+          rootController.popRoute(result);
           return false;
         },
       ),
@@ -71,25 +72,25 @@ class NavigatorNode {
     _children.remove(child);
   }
 
-  bool pop() {
-    return _pop() == _NavigatorNodePop.popped;
+  bool pop<T>(T? result) {
+    return _pop(result) == _NavigatorNodePop.popped;
   }
 
-  _NavigatorNodePop _pop() {
+  _NavigatorNodePop _pop<T>(T? result) {
     final navState = key.currentState;
 
     if (navState != null &&
         navState.mounted &&
         (ModalRoute.of(navState.context)?.isCurrent ?? true)) {
       for (final child in _children.reversed) {
-        switch (child._pop()) {
+        switch (child._pop(result)) {
           case _NavigatorNodePop.unavailable:
             continue;
           case _NavigatorNodePop.popped:
             return _NavigatorNodePop.popped;
           case _NavigatorNodePop.passedUp:
             if (navState.canPop()) {
-              navState.pop();
+              navState.pop(result);
               return _NavigatorNodePop.popped;
             } else {
               return _NavigatorNodePop.passedUp;
@@ -98,7 +99,7 @@ class NavigatorNode {
       }
 
       if (navState.canPop()) {
-        navState.pop();
+        navState.pop(result);
         return _NavigatorNodePop.popped;
       } else {
         return _NavigatorNodePop.passedUp;

@@ -5,9 +5,9 @@ import 'package:fractal_router/srs/value/route_value.dart';
 class ValueRoute<T extends RouteValue> extends Froute<T> {
   ValueRoute({
     required this.screenBuilder,
-    super.children,
     this.defaultValue,
     this.pageBuilder,
+    super.children,
   });
 
   /// you can use this to customize transition

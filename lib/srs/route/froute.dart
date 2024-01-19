@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:fractal_router/srs/value/route_value.dart';
@@ -26,6 +28,7 @@ abstract class PageBuilder<T extends RouteValue> {
   PageBuilder? get next;
   T get value;
   Object get key => value.key;
+  final popCompleter = Completer();
 
   bool get isTop => next == null;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fractal_router/srs/base/controller.dart';
 import 'package:fractal_router/srs/base/nested_navigator.dart';
 import 'package:fractal_router/srs/base/root_navigation_stack.dart';
 import 'package:fractal_router/srs/base/router.dart';
@@ -29,7 +30,7 @@ class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
               pages: pages,
               key: rootController.rootNavigatorNode.key,
               onPopPage: (route, result) {
-                rootController.popRoute();
+                rootController.popRoute(result);
                 return false;
               },
             );

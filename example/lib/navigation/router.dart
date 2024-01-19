@@ -83,10 +83,67 @@ final router = FractalRouter(
       ],
       onTop: [
         NamedRoute(
-          screenBuilder: (context) => const RandomScreen(),
-          name: RandomScreen.routeValue,
+          screenBuilder: (context) => PlaceholderScreen(
+            name: '1',
+            buttons: [
+              ElevatedButton(
+                onPressed: () async {
+                  final result = await context.frouter.push(PlaceholderScreen.name2);
+                  debugPrint('pop result: $result');
+                },
+                child: const Text('push dialog'),
+              ),
+            ],
+          ),
+          name: PlaceholderScreen.name1,
+          children: [
+            NamedRoute(
+              screenBuilder: (context) => PlaceholderScreen(
+                name: '2',
+                buttons: [
+                  ElevatedButton(
+                    onPressed: () {
+                      context.frouter.pop('12345');
+                    },
+                    child: const Text('pop'),
+                  ),
+                ],
+              ),
+              name: PlaceholderScreen.name2,
+            ),
+          ],
         ),
       ],
     ),
   ],
 );
+
+class PlaceholderScreen extends StatelessWidget {
+  const PlaceholderScreen({
+    required this.name,
+    required this.buttons,
+    super.key,
+  });
+
+  static const name1 = RouteName('1');
+  static const name2 = RouteName('2');
+  static const name3 = RouteName('3');
+
+  final String name;
+  final List<Widget> buttons;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(name),
+            ...buttons,
+          ],
+        ),
+      ),
+    );
+  }
+}

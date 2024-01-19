@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:fractal_router/fractal_router.dart';
+import 'package:fractal_router/srs/base/controller.dart';
 import 'package:fractal_router/srs/base/nested_navigator.dart';
-import 'package:fractal_router/srs/base/router.dart';
 
 typedef ShellBuilder = Widget Function(
   BuildContext context,
@@ -129,14 +131,12 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
       child: shellBuilder(
         context,
         shellController,
-        Builder(
-          builder: (context) {
-            return NestedNavigator(
-              pages: value.currTab.createPages(context),
-              key: ValueKey(shellController.tabIndex),
-            );
-          }
-        ),
+        Builder(builder: (context) {
+          return NestedNavigator(
+            pages: value.currTab.createPages(context),
+            key: ValueKey(shellController.tabIndex),
+          );
+        }),
       ),
     );
 

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fractal_router/srs/base/controller.dart';
 import 'package:fractal_router/srs/base/delegate.dart';
 import 'package:fractal_router/srs/route/froute.dart';
 import 'package:fractal_router/srs/value/route_value.dart';
-import 'package:fractal_router/srs/base/controller.dart';
+import 'package:fractal_router/srs/base/root_controller.dart';
 
 typedef RedirectCallback = RouteValue? Function(
   BuildContext context,
@@ -27,7 +28,7 @@ class FractalRouter implements RouterConfig<Object> {
       });
     }
 
-    rootController = FractalRoot(
+    rootController = RootController(
       initialRoute: initialRoute,
       roots: routes,
       routeMap: routeMap,
@@ -39,7 +40,7 @@ class FractalRouter implements RouterConfig<Object> {
     );
   }
 
-  late final FractalRoot rootController;
+  late final RootController rootController;
 
   static FractalController of(BuildContext context) {
     return context
@@ -48,7 +49,7 @@ class FractalRouter implements RouterConfig<Object> {
         .rootController;
   }
 
-  static FractalRoot rootOf(BuildContext context) {
+  static RootController rootOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .router

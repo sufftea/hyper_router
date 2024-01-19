@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/controller.dart';
+import 'package:fractal_router/srs/base/root_controller.dart';
 import 'package:fractal_router/srs/base/router.dart';
 import 'package:fractal_router/srs/route/froute.dart';
 
@@ -13,7 +13,7 @@ class RootNavigationStack extends StatelessWidget {
 
   final Widget Function(BuildContext context, List<Page> pages) builder;
   final RedirectCallback redirect;
-  final FractalRoot rootController;
+  final RootController rootController;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _RedirectWatcher extends StatefulWidget {
 
   final Widget Function(BuildContext context, List<Page> pages) builder;
   final RedirectCallback redirect;
-  final FractalRoot rootController;
+  final RootController rootController;
 
   @override
   State<_RedirectWatcher> createState() => _RedirectWatcherState();

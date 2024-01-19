@@ -1,5 +1,5 @@
+import 'package:example/navigation/router.dart';
 import 'package:example/screens/number_screens/number_screens.dart';
-import 'package:example/screens/random/random_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fractal_router/fractal_router.dart';
 
@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
               OutlinedButton(
                 onPressed: () {
                   debugPrint('navigating to randomscreen');
-                  FractalRouter.of(context).navigate(RandomScreen.routeValue);
+                  FractalRouter.of(context).navigate(PlaceholderScreen.name1);
                 },
                 child: const Text('open a screen on top'),
               ),
