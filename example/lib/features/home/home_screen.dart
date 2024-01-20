@@ -26,24 +26,22 @@ class HomeScreen extends StatelessWidget {
               Card(
                 margin: const EdgeInsets.all(16),
                 child: SizedBox(
-                  height: 192,
+                  height: 256,
                   child: Stack(
                     children: [
                       Positioned.fill(
                         child: Image.asset(
-                          'assets/home/header.jpg',
+                          'assets/home/header.jpeg',
                           fit: BoxFit.cover,
                         ),
-                      ),
-                      Container(
-                        color: Colors.white.withOpacity(0.5),
                       ),
                       Positioned.fill(
                         child: Center(
                           child: Text(
-                            'Flutter Fractal',
+                            'Snowflake',
                             textAlign: TextAlign.center,
                             style: TextStyle(
+                              // color: Color.fromARGB(255, 9, 18, 56),
                               fontSize: switch (context.width) {
                                 > mediumWidth => 96,
                                 > compactWidth => 64,
@@ -136,8 +134,7 @@ Lets you subscribe to the context.'''),
       return Column(
         children: items
             .batch(rowCount)
-            .map((e) => SizedBox(
-                  height: 384,
+            .map((e) => IntrinsicHeight(
                   child: Row(
                     children: e.map((e) => Expanded(child: e)).toList(),
                   ),
