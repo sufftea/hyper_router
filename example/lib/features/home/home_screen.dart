@@ -1,3 +1,4 @@
+import 'package:example/features/home/widgets/header.dart';
 import 'package:example/features/home/widgets/usecase_banner.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
@@ -17,61 +18,25 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ConstrainedBox(
-        constraints: const BoxConstraints(minWidth: 400),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Card(
-                margin: const EdgeInsets.all(16),
-                child: SizedBox(
-                  height: 256,
-                  child: Stack(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const HomeHeader(),
+            Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: expandedWidth),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
                     children: [
-                      Positioned.fill(
-                        child: Image.asset(
-                          'assets/home/header.jpeg',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned.fill(
-                        child: Center(
-                          child: Text(
-                            'Snowflake',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              // color: Color.fromARGB(255, 9, 18, 56),
-                              fontSize: switch (context.width) {
-                                > mediumWidth => 96,
-                                > compactWidth => 64,
-                                _ => 48,
-                              },
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        ),
-                      ),
+                      buildWrap(),
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints.loose(const Size.fromWidth(1300)),
-                    child: Column(
-                      children: [
-                        buildWrap(),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
