@@ -1,17 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/controller.dart';
-import 'package:fractal_router/srs/base/nested_navigator.dart';
-import 'package:fractal_router/srs/base/root_navigation_stack.dart';
-import 'package:fractal_router/srs/base/router.dart';
+import 'package:snowflake_route/srs/base/nested_navigator.dart';
+import 'package:snowflake_route/srs/base/root_navigation_stack.dart';
+import 'package:snowflake_route/srs/base/snowflake.dart';
 
-class FractalRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
-  FractalRouterDelegate({
+class FlakeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
+  FlakeRouterDelegate({
     required this.routerConfig,
     required this.redirect,
   });
 
-  final FractalRouter routerConfig;
+  final Snowflake routerConfig;
   final RedirectCallback redirect;
 
   @override

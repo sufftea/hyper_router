@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/nested_navigator.dart';
+import 'package:snowflake_route/srs/base/nested_navigator.dart';
 import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 
 class ResponsiveRoute extends NamedRoute {
   ResponsiveRoute({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
 
 class NavRailShell extends StatelessWidget {

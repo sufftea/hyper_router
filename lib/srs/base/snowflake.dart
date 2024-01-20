@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/controller.dart';
-import 'package:fractal_router/srs/base/delegate.dart';
-import 'package:fractal_router/srs/route/froute.dart';
-import 'package:fractal_router/srs/value/route_value.dart';
-import 'package:fractal_router/srs/base/root_controller.dart';
+import 'package:snowflake_route/srs/base/flake_controller.dart';
+import 'package:snowflake_route/srs/base/delegate.dart';
+import 'package:snowflake_route/srs/route/flake_route.dart';
+import 'package:snowflake_route/srs/value/route_value.dart';
+import 'package:snowflake_route/srs/base/root_controller.dart';
 
 typedef RedirectCallback = RouteValue? Function(
   BuildContext context,
@@ -11,17 +11,17 @@ typedef RedirectCallback = RouteValue? Function(
 );
 RouteValue? _defaultRedirect(BuildContext context, PageBuilder _) => null;
 
-class FractalRouter implements RouterConfig<Object> {
-  FractalRouter({
+class Snowflake implements RouterConfig<Object> {
+  Snowflake({
     required RouteValue initialRoute,
-    required List<Froute> routes,
+    required List<FlakeRoute> routes,
     RedirectCallback? redirect,
   }) {
     for (final r in routes) {
       r.parent = null;
     }
 
-    final routeMap = <Object, Froute>{};
+    final routeMap = <Object, FlakeRoute>{};
     for (final r in routes) {
       r.forEach((r) {
         routeMap[r.key] = r;
@@ -34,7 +34,7 @@ class FractalRouter implements RouterConfig<Object> {
       routeMap: routeMap,
     );
 
-    routerDelegate = FractalRouterDelegate(
+    routerDelegate = FlakeRouterDelegate(
       routerConfig: this,
       redirect: redirect ?? _defaultRedirect,
     );
@@ -42,7 +42,7 @@ class FractalRouter implements RouterConfig<Object> {
 
   late final RootController rootController;
 
-  static FractalController of(BuildContext context) {
+  static FlakeController of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .router
@@ -56,7 +56,7 @@ class FractalRouter implements RouterConfig<Object> {
         .rootController;
   }
 
-  static FractalRouter configOf(BuildContext context) {
+  static Snowflake configOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .router;
@@ -67,7 +67,7 @@ class FractalRouter implements RouterConfig<Object> {
       RootBackButtonDispatcher();
 
   @override
-  late final FractalRouterDelegate routerDelegate;
+  late final FlakeRouterDelegate routerDelegate;
 
   @override
   // TODO
@@ -85,7 +85,7 @@ class InheritedFractalRouter extends InheritedWidget {
     super.key,
   });
 
-  final FractalRouter router;
+  final Snowflake router;
 
   @override
   bool updateShouldNotify(InheritedFractalRouter oldWidget) {

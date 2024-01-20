@@ -1,8 +1,10 @@
 import 'package:example/features/home/home_screen.dart';
 import 'package:example/features/tabs/tabs_shell.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/srs/base/snowflake.dart';
+import 'package:snowflake_route/srs/route/named_route.dart';
+import 'package:snowflake_route/srs/route/shell_route.dart';
 
-final router = FractalRouter(
+final router = Snowflake(
   initialRoute: HomeScreen.routeName,
   routes: [
     ShellRoute(

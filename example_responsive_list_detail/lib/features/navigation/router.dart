@@ -3,7 +3,7 @@ import 'package:responsive_list_detail/features/entry_list/entry_list_screen.dar
 import 'package:responsive_list_detail/features/navi_rail/nav_rail_shell.dart';
 import 'package:responsive_list_detail/features/navigation/responsive_route.dart';
 import 'package:responsive_list_detail/features/utils/placeholder_screens.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 
 final router = FractalRouter(
   initialRoute: EmailListScreen.name,

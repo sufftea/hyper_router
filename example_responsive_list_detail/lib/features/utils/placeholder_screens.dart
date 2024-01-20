@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 
 class PlaceholderScreen extends StatelessWidget {
   const PlaceholderScreen({super.key});

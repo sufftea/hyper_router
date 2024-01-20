@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:fractal_router/srs/value/route_value.dart';
+import 'package:snowflake_route/srs/value/route_value.dart';
 
-abstract class Froute<T extends RouteValue> {
-  Froute({
+abstract class FlakeRoute<T extends RouteValue> {
+  FlakeRoute({
     this.children = const [],
   }) {
     for (final child in children) {
@@ -13,8 +13,8 @@ abstract class Froute<T extends RouteValue> {
     }
   }
 
-  final List<Froute> children;
-  late final Froute? parent;
+  final List<FlakeRoute> children;
+  late final FlakeRoute? parent;
 
   Object get key;
 
@@ -57,8 +57,8 @@ extension PageBuilderX on PageBuilder {
   }
 }
 
-extension TreeRouteX<T extends RouteValue> on Froute<T> {
-  void forEach(void Function(Froute r) action) {
+extension TreeRouteX<T extends RouteValue> on FlakeRoute<T> {
+  void forEach(void Function(FlakeRoute r) action) {
     action(this);
     for (final child in children) {
       child.forEach(action);

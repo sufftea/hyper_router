@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_list_detail/features/entry_list/data/email.dart';
 import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 
 class EmailRouteData extends RouteValue {
   EmailRouteData(this.email);

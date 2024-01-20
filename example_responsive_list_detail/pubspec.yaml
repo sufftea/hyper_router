@@ -13,7 +13,7 @@ dependencies:
 
   flutter_riverpod: ^2.4.9
   google_fonts: ^6.1.0
-  fractal_router:
+  snowflake_route:
     path: ..
 
 dev_dependencies:

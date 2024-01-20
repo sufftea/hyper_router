@@ -1,10 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
-import 'package:fractal_router/fractal_router.dart';
-import 'package:fractal_router/srs/base/controller.dart';
-import 'package:fractal_router/srs/base/nested_navigator.dart';
+import 'package:snowflake_route/snowflake_route.dart';
+import 'package:snowflake_route/srs/base/flake_controller.dart';
+import 'package:snowflake_route/srs/base/nested_navigator.dart';
 
 typedef ShellBuilder = Widget Function(
   BuildContext context,
@@ -12,7 +10,7 @@ typedef ShellBuilder = Widget Function(
   Widget child,
 );
 
-class ShellRoute extends Froute<ShellValue> {
+class ShellRoute extends FlakeRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
     required this.tabs,
@@ -25,8 +23,8 @@ class ShellRoute extends Froute<ShellValue> {
     Widget child,
   ) shellBuilder;
 
-  final List<Froute> tabs;
-  final List<Froute> onTop;
+  final List<FlakeRoute> tabs;
+  final List<FlakeRoute> onTop;
 
   @override
   final Object key = UniqueKey();
@@ -121,7 +119,7 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
 
   @override
   List<Page> createPages(BuildContext context) {
-    final controller = FractalRouter.of(context);
+    final controller = Snowflake.of(context);
     final shellController = ShellController(
       value: value,
       controller: controller,
@@ -232,7 +230,7 @@ class ShellController {
 
   PageBuilder get root => value.tabs[value.tabIndex];
 
-  final FractalController controller;
+  final FlakeController controller;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved

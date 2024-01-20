@@ -107,7 +107,7 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  fractal_router:
+  snowflake_route:
     dependency: "direct main"
     description:
       path: ".."

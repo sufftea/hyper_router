@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/base/controller.dart';
-import 'package:fractal_router/srs/base/router.dart';
+import 'package:snowflake_route/srs/base/snowflake.dart';
 
 class NestedNavigator extends StatefulWidget {
   const NestedNavigator({
@@ -35,7 +34,7 @@ class _NestedNavigatorState extends State<NestedNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    final rootController = FractalRouter.rootOf(context);
+    final rootController = Snowflake.rootOf(context);
 
     return InheritedNavigatorNode(
       node: node,

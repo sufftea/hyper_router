@@ -1,6 +1,6 @@
 import 'package:example/features/tabs/navigation_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/srs/route/shell_route.dart';
 
 class TabsShell extends StatelessWidget {
   const TabsShell({

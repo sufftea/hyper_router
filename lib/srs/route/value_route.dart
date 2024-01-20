@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fractal_router/srs/route/froute.dart';
-import 'package:fractal_router/srs/value/route_value.dart';
+import 'package:snowflake_route/srs/route/flake_route.dart';
+import 'package:snowflake_route/srs/value/route_value.dart';
 
-class ValueRoute<T extends RouteValue> extends Froute<T> {
+class ValueRoute<T extends RouteValue> extends FlakeRoute<T> {
   ValueRoute({
     required this.screenBuilder,
     this.defaultValue,
@@ -10,7 +10,6 @@ class ValueRoute<T extends RouteValue> extends Froute<T> {
     super.children,
   });
 
-  /// you can use this to customize transition
   final Page Function(BuildContext context, Widget child)? pageBuilder;
   final Widget Function(BuildContext context, T value) screenBuilder;
 

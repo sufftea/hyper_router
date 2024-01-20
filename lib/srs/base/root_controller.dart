@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fractal_router/srs/base/controller.dart';
-import 'package:fractal_router/srs/base/nested_navigator.dart';
-import 'package:fractal_router/srs/route/froute.dart';
-import 'package:fractal_router/srs/value/route_value.dart';
+import 'package:snowflake_route/srs/base/flake_controller.dart';
+import 'package:snowflake_route/srs/base/nested_navigator.dart';
+import 'package:snowflake_route/srs/route/flake_route.dart';
+import 'package:snowflake_route/srs/value/route_value.dart';
 
-class RootController extends ChangeNotifier implements FractalController {
+class RootController extends ChangeNotifier implements FlakeController {
   RootController({
-    required List<Froute> roots,
+    required List<FlakeRoute> roots,
     required RouteValue initialRoute,
     required this.routeMap,
   }) {
@@ -23,7 +23,7 @@ class RootController extends ChangeNotifier implements FractalController {
     notifyListeners();
   }
 
-  final Map<Object, Froute> routeMap;
+  final Map<Object, FlakeRoute> routeMap;
 
   @override
   void navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
@@ -64,7 +64,7 @@ class RootController extends ChangeNotifier implements FractalController {
     RouteValue target, [
     Set<RouteValue> values = const {},
   ]) {
-    final Froute? targetRoute = routeMap[target.key];
+    final FlakeRoute? targetRoute = routeMap[target.key];
 
     if (targetRoute == null) {
       throw 'todo';

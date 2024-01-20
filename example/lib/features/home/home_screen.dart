@@ -2,7 +2,7 @@ import 'package:example/features/home/widgets/usecase_banner.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:fractal_router/fractal_router.dart';
+import 'package:snowflake_route/srs/value/route_name.dart';
 
 const headerCaption = '''Declarative 
 Type-safe

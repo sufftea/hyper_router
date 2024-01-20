@@ -1,4 +1,4 @@
-import 'package:fractal_router/srs/value/route_value.dart';
+import 'package:snowflake_route/srs/value/route_value.dart';
 
 class RouteName extends RouteValue {
   const RouteName(this.name);
