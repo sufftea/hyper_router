@@ -1,9 +1,9 @@
+import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
 import 'package:example/features/home/widgets/usecase_banner.dart';
-import 'package:example/features/utils/context_x.dart';
-import 'package:example/features/utils/screen_sizes.dart';
+import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/value/route_name.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 
 const headerCaption = '''Declarative 
 Type-safe
@@ -23,17 +23,11 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const HomeHeader(),
-            Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: expandedWidth),
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      buildWrap(),
-                    ],
-                  ),
-                ),
+            LimitWidth(
+              child: Column(
+                children: [
+                  buildWrap(),
+                ],
               ),
             ),
           ],
@@ -45,52 +39,39 @@ class HomeScreen extends StatelessWidget {
   Widget buildWrap() {
     return LayoutBuilder(builder: (context, cons) {
       final items = [
-        Card(
-          color: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            side: BorderSide(color: context.col.secondaryContainer, width: 2),
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: const Padding(
-            padding: EdgeInsets.all(32),
-            child: Center(
-              child: Text(
-                headerCaption,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-        const UsecaseBanner(
+        UsecaseBanner(
+          onPressed: () {
+            context.flake.navigate(ProductListScreen.routeName);
+          },
           image: 'assets/home/typesafe.jpeg',
-          header: 'Value-based navigation',
-          caption: '''Pass type-safe parameters to the routes. 
-No codegen and minimum boilerplate.''',
+          title: 'Value-based navigation',
+          caption: 'Pass the Product object to the details screen',
         ),
-        const UsecaseBanner(
+        UsecaseBanner(
+          onPressed: () {},
           image: 'assets/home/nested.jpeg',
-          header: 'Nested routes',
-          caption:
-              'Can create nested routes, like one with bottom navigation bar.',
+          title: 'Nested routes',
+          caption: 'A screen with a navigation bar',
         ),
-        const UsecaseBanner(
+        UsecaseBanner(
+          onPressed: () {},
+          image: 'assets/home/dialog.jpeg',
+          title: 'Return value from a route',
+          caption: 'Show input dialog and return the value',
+        ),
+        UsecaseBanner(
+          onPressed: () {},
+          image: 'assets/home/guards.jpeg',
+          title: 'Guards',
+          caption: '''Redirect to the login page if not logged in. 
+Lets you subscribe to the context.''',
+        ),
+        UsecaseBanner(
+          onPressed: () {},
           image: 'assets/home/extensible.jpeg',
-          header: 'Extensible',
+          title: 'Extensible',
           caption: 'You can extend built in classes for specialized use-cases.',
         ),
-        const UsecaseBanner(
-          image: 'assets/home/dialog.jpeg',
-          header: 'Return value from a route',
-          caption: '...',
-        ),
-        const UsecaseBanner(
-            image: 'assets/home/guards.jpeg',
-            header: 'Guards',
-            caption: '''Redirect to login page if not logged in. 
-Lets you subscribe to the context.'''),
       ];
 
       const oneItem = 350.0;

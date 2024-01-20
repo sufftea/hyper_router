@@ -1,9 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:example/features/guide/guide_screen.dart';
-import 'package:example/features/home/home_screen.dart';
-import 'package:example/features/internals/internal_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
 
 class NavigationTab {
   NavigationTab({
@@ -36,30 +31,3 @@ class NavigationTab {
     );
   }
 }
-
-final tabs = [
-  NavigationTab(
-    icon: const Icon(Icons.local_florist_outlined),
-    selectedIcon: const Icon(Icons.local_florist),
-    label: "Home",
-    onClick: (BuildContext context) {
-      context.flake.navigate(HomeScreen.routeName);
-    },
-  ),
-  NavigationTab(
-    icon: const Icon(Icons.developer_mode),
-    selectedIcon: const Icon(Icons.developer_mode),
-    label: "Guide",
-    onClick: (BuildContext context) {
-      context.flake.navigate(GuideScreen.routeName);
-    },
-  ),
-  NavigationTab(
-    icon: const Icon(Icons.settings_applications_outlined),
-    selectedIcon: const Icon(Icons.settings_applications),
-    label: "Insides",
-    onClick: (BuildContext context) {
-      context.flake.navigate(InsideScreen.routeName);
-    },
-  ),
-];

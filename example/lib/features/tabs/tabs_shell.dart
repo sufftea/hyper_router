@@ -1,8 +1,10 @@
+import 'package:example/features/guide/guide_screen.dart';
+import 'package:example/features/internals/internal_screen.dart';
 import 'package:example/features/tabs/navigation_tab.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/route/shell_route.dart';
+import 'package:snowflake_route/snowflake_route.dart';
 
 class TabsShell extends StatelessWidget {
   const TabsShell({
@@ -16,13 +18,43 @@ class TabsShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tabs = [
+      NavigationTab(
+        icon: const Icon(Icons.local_florist_outlined),
+        selectedIcon: const Icon(Icons.local_florist),
+        label: "Home",
+        onClick: (BuildContext context) {
+          // TODO: implement this into the router
+          controller.setTabIndex(0);
+        },
+      ),
+      NavigationTab(
+        icon: const Icon(Icons.developer_mode),
+        selectedIcon: const Icon(Icons.developer_mode),
+        label: "Guide",
+        onClick: (BuildContext context) {
+          context.flake.navigate(GuideScreen.routeName);
+        },
+      ),
+      NavigationTab(
+        icon: const Icon(Icons.settings_applications_outlined),
+        selectedIcon: const Icon(Icons.settings_applications),
+        label: "Insides",
+        onClick: (BuildContext context) {
+          context.flake.navigate(InsideScreen.routeName);
+        },
+      ),
+    ];
+
     return switch (context.width) {
       < mediumWidth => _ShellWithAppBar(
           controller: controller,
+          tabs: tabs,
           child: child,
         ),
       _ => _ShellWithNavRail(
           controller: controller,
+          tabs: tabs,
           child: child,
         ),
     };
@@ -33,10 +65,12 @@ class _ShellWithNavRail extends StatelessWidget {
   const _ShellWithNavRail({
     required this.child,
     required this.controller,
+    required this.tabs,
   });
 
   final Widget child;
   final ShellController controller;
+  final List<NavigationTab> tabs;
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +109,12 @@ class _ShellWithAppBar extends StatelessWidget {
   _ShellWithAppBar({
     required this.controller,
     required this.child,
+    required this.tabs,
   });
 
   final ShellController controller;
   final Widget child;
+  final List<NavigationTab> tabs;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
