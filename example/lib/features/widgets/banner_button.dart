@@ -32,6 +32,10 @@ class BannerButton extends StatelessWidget {
           ),
           foregroundColor: materialMatch(all: context.col.onSurfaceVariant),
           splashFactory: InkSparkle.splashFactory,
+          elevation: materialMatch(
+            all: 0,
+            hovered: 5,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

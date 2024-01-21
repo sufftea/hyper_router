@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class LimitWidth extends StatelessWidget {
   const LimitWidth({
     required this.child,
+    this.maxWidth = expandedWidth,
     super.key,
   });
 
   final Widget child;
+  final double maxWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class LimitWidth extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: expandedWidth),
+          constraints: BoxConstraints(maxWidth: maxWidth),
           child: child,
         ),
       ),

@@ -1,3 +1,4 @@
+import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
 import 'package:example/features/home/widgets/usecase_banner.dart';
@@ -60,7 +61,9 @@ class HomeScreen extends StatelessWidget {
           caption: 'Show input dialog and return the value',
         ),
         UsecaseBanner(
-          onPressed: () {},
+          onPressed: () {
+            context.flake.navigate(AuthwalledScreen.routeName);
+          },
           image: 'assets/home/guards.jpeg',
           title: 'Guards',
           caption: '''Redirect to the login page if not logged in. 

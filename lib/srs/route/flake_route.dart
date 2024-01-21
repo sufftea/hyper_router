@@ -34,6 +34,8 @@ abstract class PageBuilder<T extends RouteValue> {
 
   List<Page> createPages(BuildContext context);
 
+  PageBuilder? pop();
+
   PageBuilder last() {
     PageBuilder curr = this;
 
@@ -44,7 +46,15 @@ abstract class PageBuilder<T extends RouteValue> {
     return curr;
   }
 
-  PageBuilder? pop();
+  bool containsNode(Object key) {
+    if (this.key == key) {
+      return true;
+    } else if (next case final next?) {
+      return next.containsNode(key);
+    }
+
+    return false;
+  }
 }
 
 extension PageBuilderX on PageBuilder {
