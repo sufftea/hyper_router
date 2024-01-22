@@ -6,8 +6,8 @@ import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:snowflake_route/snowflake_route.dart';
 
-class TabsShell extends StatelessWidget {
-  const TabsShell({
+class MainTabsShell extends StatelessWidget {
+  const MainTabsShell({
     required this.controller,
     required this.child,
     super.key,

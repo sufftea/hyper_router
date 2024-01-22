@@ -1,5 +1,6 @@
 import 'package:example/features/demos/dialog/dialog_examples_screen.dart';
 import 'package:example/features/demos/guard/authwalled_screen.dart';
+import 'package:example/features/demos/nested_routes/inbox_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
 import 'package:example/features/home/widgets/usecase_banner.dart';
@@ -46,7 +47,9 @@ class HomeScreen extends StatelessWidget {
           caption: 'Pass the Product object to the details screen',
         ),
         UsecaseBanner(
-          onPressed: () {},
+          onPressed: () {
+            context.flake.navigate(InboxScreen.routeName);
+          },
           image: 'assets/home/nested.jpeg',
           title: 'Nested routes',
           caption: 'A screen with a navigation bar',

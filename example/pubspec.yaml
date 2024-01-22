@@ -31,3 +31,4 @@ flutter:
     - assets/home/
     - assets/value_based/
     - assets/guard/
+    - assets/nested/
