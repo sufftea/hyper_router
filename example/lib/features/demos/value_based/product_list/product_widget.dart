@@ -18,7 +18,7 @@ class ProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 256),
-      child: BannerButton(
+      child: VerticalBannerButton(
         onPressed: () {
           context.flake.navigate(ProductRouteValue(product));
         },

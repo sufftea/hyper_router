@@ -28,7 +28,7 @@ class MainApp extends StatelessWidget {
   ThemeData _createTheme() {
     final theme = FlexColorScheme.light(
       useMaterial3: true,
-      scheme: FlexScheme.deepBlue,
+      scheme: FlexScheme.aquaBlue,
     ).toTheme;
 
     return theme.copyWith(

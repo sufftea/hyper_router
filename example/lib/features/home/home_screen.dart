@@ -1,5 +1,4 @@
 import 'package:example/features/demos/dialog/dialog_examples_screen.dart';
-import 'package:example/features/demos/dialog/text_dialog.dart';
 import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
@@ -8,10 +7,6 @@ import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:snowflake_route/snowflake_route.dart';
 
-const headerCaption = '''Declarative 
-Type-safe
-Codegen-free
-Minimum boilerplate''';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -82,16 +77,24 @@ Lets you subscribe to the context.''',
       ];
 
       const oneItem = 350.0;
-      final rowCount = cons.maxWidth ~/ oneItem;
+      final rowCount = switch (cons.maxWidth ~/ oneItem) {
+        < 1 => 1,
+        final count => count,
+      };
 
       return Column(
         children: items
             .batch(rowCount)
-            .map((e) => IntrinsicHeight(
+            .map(
+              (e) => IntrinsicHeight(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 128),
                   child: Row(
                     children: e.map((e) => Expanded(child: e)).toList(),
                   ),
-                ))
+                ),
+              ),
+            )
             .toList(),
       );
     });

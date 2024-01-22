@@ -17,12 +17,15 @@ class UsecaseBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BannerButton(
+    return HorizontalBannerButton(
       onPressed: onPressed,
       title: title,
-      caption: Text(
-        caption,
-        style: const TextStyle(fontSize: 16),
+      caption: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(
+          caption,
+          style: const TextStyle(fontSize: 16),
+        ),
       ),
       image: image,
     );

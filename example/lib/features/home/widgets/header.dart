@@ -76,7 +76,7 @@ class HomeHeader extends StatelessWidget {
                         child: Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text('Highly extensible'),
+                          child: Text('Extensible'),
                         ),
                       ),
                       Card(
