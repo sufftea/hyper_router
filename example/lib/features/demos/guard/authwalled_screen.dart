@@ -24,6 +24,7 @@ class AuthwalledScreen extends StatelessWidget {
             },
             icon: const Icon(Icons.logout),
           ),
+          const SizedBox(width: 32),
         ],
       ),
       body: Center(

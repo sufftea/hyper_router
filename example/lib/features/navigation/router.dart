@@ -1,3 +1,5 @@
+import 'package:example/features/demos/dialog/dialog_examples_screen.dart';
+import 'package:example/features/demos/dialog/dialog_screen.dart';
 import 'package:example/features/demos/guard/auth_screen.dart';
 import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/guard/create_post_screen.dart';
@@ -53,6 +55,16 @@ final router = Snowflake(
             ),
             ValueRoute<AuthRouteValue>(
               screenBuilder: (context, value) => AuthScreen(value: value),
+            ),
+            NamedRoute(
+              screenBuilder: (context) => const DialogExamplesScreen(),
+              name: DialogExamplesScreen.routeName,
+              children: [
+                NamedRoute(
+                  screenBuilder: (context) => const DialogScreen(),
+                  name: DialogScreen.routeName,
+                ),
+              ],
             ),
           ],
         ),

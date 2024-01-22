@@ -71,7 +71,8 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
         }
       case (null, final n?):
         final index = tabs.indexWhere((e) => e.key == n.key);
-
+        tabs[index] = n;
+        
         if (index == -1) {
           value = ShellValue(
             tabIndex: 0,

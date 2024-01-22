@@ -1,3 +1,5 @@
+import 'package:example/features/demos/dialog/dialog_examples_screen.dart';
+import 'package:example/features/demos/dialog/text_dialog.dart';
 import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
@@ -55,7 +57,9 @@ class HomeScreen extends StatelessWidget {
           caption: 'A screen with a navigation bar',
         ),
         UsecaseBanner(
-          onPressed: () {},
+          onPressed: () async {
+            context.flake.navigate(DialogExamplesScreen.routeName);
+          },
           image: 'assets/home/dialog.jpeg',
           title: 'Return value from a route',
           caption: 'Show input dialog and return the value',
@@ -72,7 +76,7 @@ Lets you subscribe to the context.''',
         UsecaseBanner(
           onPressed: () {},
           image: 'assets/home/extensible.jpeg',
-          title: 'Extensible',
+          title: 'Custom routes',
           caption: 'You can extend built in classes for specialized use-cases.',
         ),
       ];

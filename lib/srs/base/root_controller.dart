@@ -51,7 +51,12 @@ class RootController extends ChangeNotifier implements FlakeController {
       throw 'todo';
     }
 
-    stack = targetRoute.createBuilderRec(values: {});
+    final values = {target.key: target};
+    _stack?.forEach((builder) {
+      values[builder.value.key] = builder.value;
+    });
+
+    stack = targetRoute.createBuilderRec(values: values);
 
     return stack.last().popCompleter.future;
   }
