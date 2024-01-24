@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class NamedRoute extends ValueRoute<RouteName> {
   NamedRoute({

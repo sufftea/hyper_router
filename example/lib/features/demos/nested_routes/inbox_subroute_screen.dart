@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class InboxSubrouteScreen extends StatelessWidget {
   const InboxSubrouteScreen({super.key});
@@ -12,7 +12,7 @@ class InboxSubrouteScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.flake.pop();
+            context.star.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),

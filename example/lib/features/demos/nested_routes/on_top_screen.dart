@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class OverScreen extends StatelessWidget {
   const OverScreen({super.key});
@@ -13,7 +13,7 @@ class OverScreen extends StatelessWidget {
         automaticallyImplyLeading: true,
         leading: IconButton(
           onPressed: () {
-            context.flake.pop();
+            context.star.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),

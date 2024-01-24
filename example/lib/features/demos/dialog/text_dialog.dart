@@ -1,6 +1,6 @@
 import 'package:example/features/utils/material_match.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class TextDialog extends StatefulWidget {
   const TextDialog({super.key});
@@ -43,7 +43,7 @@ class _TextDialogState extends State<TextDialog> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      context.flake.pop(textController.text);
+                      context.star.pop(textController.text);
           
                       // This would also work:
                       // Navigator.of(context).pop(textController.text);

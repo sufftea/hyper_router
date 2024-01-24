@@ -1,7 +1,7 @@
 import 'package:example/features/demos/guard/create_post_screen.dart';
 import 'package:example/features/demos/guard/log_out_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class AuthwalledScreen extends StatelessWidget {
   const AuthwalledScreen({super.key});
@@ -58,7 +58,7 @@ class AuthwalledScreen extends StatelessWidget {
               const SizedBox(height: 16),
               OutlinedButton(
                 onPressed: () {
-                  context.flake.navigate(CreatePostScreen.routeName);
+                  context.star.navigate(CreatePostScreen.routeName);
                 },
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,

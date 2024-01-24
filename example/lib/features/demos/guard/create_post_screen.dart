@@ -4,7 +4,7 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/material_match.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class CreatePostScreen extends StatelessWidget {
   const CreatePostScreen({super.key});

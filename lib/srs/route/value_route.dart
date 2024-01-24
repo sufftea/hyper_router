@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/route/flake_route.dart';
-import 'package:snowflake_route/srs/value/route_value.dart';
+import 'package:star/srs/route/star_route.dart';
+import 'package:star/srs/value/route_value.dart';
 
-class ValueRoute<T extends RouteValue> extends FlakeRoute<T> {
+class ValueRoute<T extends RouteValue> extends StarRoute<T> {
   ValueRoute({
     required this.screenBuilder,
     this.defaultValue,
@@ -20,14 +20,14 @@ class ValueRoute<T extends RouteValue> extends FlakeRoute<T> {
   Object get key => T;
 
   @override
-  PageBuilder createBuilder({PageBuilder? next, T? value}) {
+  RouteNode createNode({RouteNode? next, T? value}) {
     value ??= defaultValue;
 
     if (value == null) {
       throw 'todo';
     }
 
-    return ValuePageBuilder(
+    return ValueNode(
       buildPage: (context) => buildPage(context, value!),
       next: next,
       value: value,
@@ -45,8 +45,8 @@ class ValueRoute<T extends RouteValue> extends FlakeRoute<T> {
   }
 }
 
-class ValuePageBuilder extends PageBuilder {
-  ValuePageBuilder({
+class ValueNode extends RouteNode {
+  ValueNode({
     required this.next,
     required this.value,
     required this.buildPage,
@@ -55,7 +55,7 @@ class ValuePageBuilder extends PageBuilder {
   final Page Function(BuildContext context) buildPage;
 
   @override
-  final PageBuilder<RouteValue>? next;
+  final RouteNode<RouteValue>? next;
 
   @override
   final RouteValue value;
@@ -64,8 +64,6 @@ class ValuePageBuilder extends PageBuilder {
   List<Page> createPages(BuildContext context) {
     final page = buildPage(context);
 
-    
-
     return [
       page,
       ...next?.createPages(context) ?? [],
@@ -73,9 +71,9 @@ class ValuePageBuilder extends PageBuilder {
   }
 
   @override
-  PageBuilder<RouteValue>? pop() {
+  RouteNode<RouteValue>? pop() {
     if (next case final next?) {
-      return ValuePageBuilder(
+      return ValueNode(
         next: next.pop(),
         value: value,
         buildPage: buildPage,

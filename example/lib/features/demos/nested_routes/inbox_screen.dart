@@ -2,7 +2,7 @@ import 'package:example/features/demos/nested_routes/inbox_subroute_screen.dart'
 import 'package:example/features/demos/nested_routes/on_top_screen.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({super.key});
@@ -15,7 +15,7 @@ class InboxScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.flake.pop();
+            context.star.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -44,13 +44,13 @@ class InboxScreen extends StatelessWidget {
             const SizedBox(height: 16),
             TextButton(
               onPressed: () {
-                context.flake.navigate(InboxSubrouteScreen.routeName);
+                context.star.navigate(InboxSubrouteScreen.routeName);
               },
               child: const Text('Open subroute'),
             ),
             TextButton(
               onPressed: () {
-                context.flake.navigate(OverScreen.routeName);
+                context.star.navigate(OverScreen.routeName);
               },
               child: const Text('Open route on top of the shell'),
             ),

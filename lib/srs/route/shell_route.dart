@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:snowflake_route/snowflake_route.dart';
-import 'package:snowflake_route/srs/base/flake_controller.dart';
-import 'package:snowflake_route/srs/base/nested_navigator.dart';
+import 'package:star/star.dart';
+import 'package:star/srs/base/star_controller.dart';
+import 'package:star/srs/base/nested_navigator.dart';
 
 typedef ShellBuilder = Widget Function(
   BuildContext context,
@@ -10,7 +10,7 @@ typedef ShellBuilder = Widget Function(
   Widget child,
 );
 
-class ShellRoute extends FlakeRoute<ShellValue> {
+class ShellRoute extends StarRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
     required this.tabs,
@@ -23,40 +23,40 @@ class ShellRoute extends FlakeRoute<ShellValue> {
     Widget child,
   ) shellBuilder;
 
-  final List<FlakeRoute> tabs;
-  final List<FlakeRoute> onTop;
+  final List<StarRoute> tabs;
+  final List<StarRoute> onTop;
 
   @override
   final Object key = UniqueKey();
 
   @override
-  PageBuilder createBuilder({PageBuilder? next, ShellValue? value}) {
-    return ShellPageBuilder.createFrom(
+  RouteNode createNode({RouteNode? next, ShellValue? value}) {
+    return ShellNode.createFrom(
       shellBuilder: shellBuilder,
       next: next,
       oldValue: value,
-      tabs: tabs.map((e) => e.createBuilder()).toList(),
+      tabs: tabs.map((e) => e.createNode()).toList(),
       key: key,
     );
   }
 }
 
-class ShellPageBuilder extends PageBuilder<ShellValue> {
-  ShellPageBuilder({
+class ShellNode extends RouteNode<ShellValue> {
+  ShellNode({
     required this.shellBuilder,
     required this.value,
     required this.onTop,
   });
 
-  factory ShellPageBuilder.createFrom({
+  factory ShellNode.createFrom({
     required ShellBuilder shellBuilder,
-    required PageBuilder? next,
+    required RouteNode? next,
     required ShellValue? oldValue,
-    required List<PageBuilder> tabs,
+    required List<RouteNode> tabs,
     required Object key,
   }) {
     final ShellValue value;
-    final PageBuilder? onTop;
+    final RouteNode? onTop;
 
     switch ((oldValue, next)) {
       case (final v?, final n?):
@@ -102,7 +102,7 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
         throw UnimplementedError();
     }
 
-    return ShellPageBuilder(
+    return ShellNode(
       shellBuilder: shellBuilder,
       onTop: onTop,
       value: value,
@@ -112,15 +112,15 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
   final ShellBuilder shellBuilder;
 
   @override
-  PageBuilder<RouteValue>? get next => onTop ?? value.currTab;
-  final PageBuilder? onTop;
+  RouteNode<RouteValue>? get next => onTop ?? value.currTab;
+  final RouteNode? onTop;
 
   @override
   final ShellValue value;
 
   @override
   List<Page> createPages(BuildContext context) {
-    final controller = Snowflake.of(context);
+    final controller = Star.of(context);
     final shellController = ShellController(
       value: value,
       controller: controller,
@@ -146,11 +146,11 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
   }
 
   @override
-  PageBuilder<RouteValue>? pop() {
+  RouteNode<RouteValue>? pop() {
     if (onTop case final onTop?) {
       final popped = onTop.pop();
 
-      return ShellPageBuilder.createFrom(
+      return ShellNode.createFrom(
         shellBuilder: shellBuilder,
         next: popped,
         oldValue: value,
@@ -165,7 +165,7 @@ class ShellPageBuilder extends PageBuilder<ShellValue> {
       return null;
     }
 
-    return ShellPageBuilder.createFrom(
+    return ShellNode.createFrom(
       shellBuilder: shellBuilder,
       next: popped,
       oldValue: value,
@@ -182,15 +182,15 @@ class ShellValue extends RouteValue {
     required this.tabs,
   });
 
-  final List<PageBuilder> tabs;
+  final List<RouteNode> tabs;
   final int tabIndex;
 
-  PageBuilder get currTab => tabs[tabIndex];
+  RouteNode get currTab => tabs[tabIndex];
 
   @override
   final Object key;
 
-  ShellValue? withSelected(PageBuilder next) {
+  ShellValue? withSelected(RouteNode next) {
     final index = tabs.indexWhere((tab) => tab.value.key == next.value.key);
 
     if (index == -1) {
@@ -208,7 +208,7 @@ class ShellValue extends RouteValue {
   }
 
   ShellValue copyWith({
-    List<PageBuilder>? tabs,
+    List<RouteNode>? tabs,
     int? tabIndex,
     Object? key,
   }) {
@@ -229,9 +229,9 @@ class ShellController {
   final ShellValue value;
   int get tabIndex => value.tabIndex;
 
-  PageBuilder get root => value.tabs[value.tabIndex];
+  RouteNode get root => value.tabs[value.tabIndex];
 
-  final FlakeController controller;
+  final StarController controller;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved

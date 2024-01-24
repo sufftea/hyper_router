@@ -2,7 +2,7 @@ import 'package:example/features/demos/custom_route/email.dart';
 import 'package:example/features/demos/custom_route/email_detail_screen.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class EmailListScreen extends StatelessWidget {
   const EmailListScreen({super.key});
@@ -15,7 +15,7 @@ class EmailListScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.flake.pop();
+            context.star.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -44,7 +44,7 @@ class EmailEntryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.flake.navigate(EmailDetailRouteValue(email));
+        context.star.navigate(EmailDetailRouteValue(email));
       },
       splashFactory: InkSparkle.splashFactory,
       child: Padding(

@@ -1,6 +1,6 @@
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class DocsScreen extends StatelessWidget {
   const DocsScreen({super.key});
@@ -13,7 +13,7 @@ class DocsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.flake.pop();
+            context.star.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),

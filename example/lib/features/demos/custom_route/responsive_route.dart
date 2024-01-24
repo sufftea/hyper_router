@@ -1,8 +1,8 @@
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/base/nested_navigator.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/srs/base/nested_navigator.dart';
+import 'package:star/star.dart';
 
 class ResponsiveRoute extends NamedRoute {
   ResponsiveRoute({
@@ -12,11 +12,11 @@ class ResponsiveRoute extends NamedRoute {
   });
 
   @override
-  PageBuilder<RouteValue> createBuilder({
-    PageBuilder<RouteValue>? next,
+  RouteNode<RouteValue> createNode({
+    RouteNode<RouteValue>? next,
     RouteName? value,
   }) {
-    return ResponsivePageBuilder(
+    return ResponsiveNode(
       next: next,
       value: name,
       buildPage: (context) => buildPage(context, name),
@@ -25,8 +25,8 @@ class ResponsiveRoute extends NamedRoute {
   }
 }
 
-class ResponsivePageBuilder extends ValuePageBuilder {
-  ResponsivePageBuilder({
+class ResponsiveNode extends ValueNode {
+  ResponsiveNode({
     required super.buildPage,
     required super.next,
     required super.value,
@@ -88,12 +88,12 @@ class ResponsivePageBuilder extends ValuePageBuilder {
   }
 
   @override
-  PageBuilder<RouteValue>? pop() {
+  RouteNode<RouteValue>? pop() {
     if (next == null) {
       return null;
     }
 
-    return ResponsivePageBuilder(
+    return ResponsiveNode(
       buildPage: buildPage,
       next: next?.pop(),
       value: value,

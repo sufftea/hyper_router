@@ -4,7 +4,7 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class ProductRouteValue extends RouteValue {
   const ProductRouteValue(this.product);

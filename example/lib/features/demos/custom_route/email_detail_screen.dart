@@ -4,7 +4,7 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class EmailDetailRouteValue extends RouteValue {
   const EmailDetailRouteValue(this.email);
@@ -25,7 +25,7 @@ class EmailDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.flake.pop();
+            context.star.pop();
           },
           icon: switch (context.width) {
             < mediumWidth => const Icon(Icons.arrow_back),

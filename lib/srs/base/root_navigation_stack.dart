@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/base/root_controller.dart';
-import 'package:snowflake_route/srs/base/snowflake.dart';
-import 'package:snowflake_route/srs/route/flake_route.dart';
+import 'package:star/srs/base/root_star_controller.dart';
+import 'package:star/srs/base/star.dart';
+import 'package:star/srs/route/star_route.dart';
 
 class RootNavigationStack extends StatelessWidget {
   const RootNavigationStack({
@@ -13,7 +13,7 @@ class RootNavigationStack extends StatelessWidget {
 
   final Widget Function(BuildContext context, List<Page> pages) builder;
   final RedirectCallback redirect;
-  final RootController rootController;
+  final RootStarController rootController;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class _RedirectWatcher extends StatefulWidget {
 
   final Widget Function(BuildContext context, List<Page> pages) builder;
   final RedirectCallback redirect;
-  final RootController rootController;
+  final RootStarController rootController;
 
   @override
   State<_RedirectWatcher> createState() => _RedirectWatcherState();
@@ -83,7 +83,7 @@ class _InheritedStack extends InheritedWidget {
     required super.child,
   });
 
-  final PageBuilder stack;
+  final RouteNode stack;
 
   @override
   bool updateShouldNotify(_InheritedStack oldWidget) {

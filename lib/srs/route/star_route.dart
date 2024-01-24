@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:snowflake_route/srs/value/route_value.dart';
+import 'package:star/srs/value/route_value.dart';
 
-abstract class FlakeRoute<T extends RouteValue> {
-  FlakeRoute({
+abstract class StarRoute<T extends RouteValue> {
+  StarRoute({
     this.children = const [],
   }) {
     for (final child in children) {
@@ -13,19 +13,19 @@ abstract class FlakeRoute<T extends RouteValue> {
     }
   }
 
-  final List<FlakeRoute> children;
-  late final FlakeRoute? parent;
+  final List<StarRoute> children;
+  late final StarRoute? parent;
 
   Object get key;
 
-  PageBuilder createBuilder({
-    PageBuilder? next,
+  RouteNode createNode({
+    RouteNode? next,
     T? value,
   });
 }
 
-abstract class PageBuilder<T extends RouteValue> {
-  PageBuilder? get next;
+abstract class RouteNode<T extends RouteValue> {
+  RouteNode? get next;
   T get value;
   Object get key => value.key;
   final popCompleter = Completer();
@@ -34,10 +34,10 @@ abstract class PageBuilder<T extends RouteValue> {
 
   List<Page> createPages(BuildContext context);
 
-  PageBuilder? pop();
+  RouteNode? pop();
 
-  PageBuilder last() {
-    PageBuilder curr = this;
+  RouteNode last() {
+    RouteNode curr = this;
 
     while (curr.next != null) {
       curr = curr.next!;
@@ -57,9 +57,9 @@ abstract class PageBuilder<T extends RouteValue> {
   }
 }
 
-extension PageBuilderX on PageBuilder {
-  void forEach(void Function(PageBuilder builder) action) {
-    PageBuilder? curr = this;
+extension RouteNodeX on RouteNode {
+  void forEach(void Function(RouteNode builder) action) {
+    RouteNode? curr = this;
     while (curr != null) {
       action(curr);
       curr = curr.next;
@@ -67,30 +67,30 @@ extension PageBuilderX on PageBuilder {
   }
 }
 
-extension TreeRouteX<T extends RouteValue> on FlakeRoute<T> {
-  void forEach(void Function(FlakeRoute r) action) {
+extension TreeRouteX<T extends RouteValue> on StarRoute<T> {
+  void forEach(void Function(StarRoute r) action) {
     action(this);
     for (final child in children) {
       child.forEach(action);
     }
   }
 
-  PageBuilder createBuilderRec({
-    PageBuilder? next,
+  RouteNode createNodeRec({
+    RouteNode? next,
     required Map<Object, RouteValue> values,
   }) {
-    final myBuilder = createBuilder(
+    final node = createNode(
       next: next,
       value: values[key] as T?,
     );
 
     if (parent case final parent?) {
-      return parent.createBuilderRec(
-        next: myBuilder,
+      return parent.createNodeRec(
+        next: node,
         values: values,
       );
     } else {
-      return myBuilder;
+      return node;
     }
   }
 }

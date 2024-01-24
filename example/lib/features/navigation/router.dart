@@ -20,9 +20,9 @@ import 'package:example/features/home/home_screen.dart';
 import 'package:example/features/internals/internal_screen.dart';
 import 'package:example/features/tabs/main_tabs_shell.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
-final router = Snowflake(
+final router = Star(
   initialRoute: HomeScreen.routeName,
   redirect: (context, stack) {
     if (stack.containsNode(AuthwalledScreen.routeName.key)) {

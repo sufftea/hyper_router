@@ -128,7 +128,12 @@ class HorizontalBannerButton extends StatelessWidget {
               ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(32),
+                padding: const EdgeInsets.only(
+                  left: 16,
+                  right: 32,
+                  top: 32,
+                  bottom: 32,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,

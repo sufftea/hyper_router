@@ -26,7 +26,10 @@ class UsecaseBanner extends StatelessWidget {
         padding: const EdgeInsets.only(top: 8),
         child: Text(
           caption,
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w200,
+          ),
         ),
       ),
       image: minimized ? null : image,

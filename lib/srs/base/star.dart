@@ -1,34 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/base/flake_controller.dart';
-import 'package:snowflake_route/srs/base/delegate.dart';
-import 'package:snowflake_route/srs/route/flake_route.dart';
-import 'package:snowflake_route/srs/value/route_value.dart';
-import 'package:snowflake_route/srs/base/root_controller.dart';
+import 'package:star/srs/base/star_controller.dart';
+import 'package:star/srs/base/delegate.dart';
+import 'package:star/srs/route/star_route.dart';
+import 'package:star/srs/value/route_value.dart';
+import 'package:star/srs/base/root_star_controller.dart';
 
 typedef RedirectCallback = RouteValue? Function(
   BuildContext context,
-  PageBuilder stack,
+  RouteNode stack,
 );
-RouteValue? _defaultRedirect(BuildContext context, PageBuilder _) => null;
+RouteValue? _defaultRedirect(BuildContext context, RouteNode _) => null;
 
-class Snowflake implements RouterConfig<Object> {
-  Snowflake({
+class Star implements RouterConfig<Object> {
+  Star({
     required RouteValue initialRoute,
-    required List<FlakeRoute> routes,
+    required List<StarRoute> routes,
     RedirectCallback? redirect,
   }) {
     for (final r in routes) {
       r.parent = null;
     }
 
-    final routeMap = <Object, FlakeRoute>{};
+    final routeMap = <Object, StarRoute>{};
     for (final r in routes) {
       r.forEach((r) {
         routeMap[r.key] = r;
       });
     }
 
-    rootController = RootController(
+    rootController = RootStarController(
       initialRoute: initialRoute,
       roots: routes,
       routeMap: routeMap,
@@ -40,23 +40,23 @@ class Snowflake implements RouterConfig<Object> {
     );
   }
 
-  late final RootController rootController;
+  late final RootStarController rootController;
 
-  static FlakeController of(BuildContext context) {
+  static StarController of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .router
         .rootController;
   }
 
-  static RootController rootOf(BuildContext context) {
+  static RootStarController rootOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .router
         .rootController;
   }
 
-  static Snowflake configOf(BuildContext context) {
+  static Star configOf(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
         .router;
@@ -85,7 +85,7 @@ class InheritedFractalRouter extends InheritedWidget {
     super.key,
   });
 
-  final Snowflake router;
+  final Star router;
 
   @override
   bool updateShouldNotify(InheritedFractalRouter oldWidget) {

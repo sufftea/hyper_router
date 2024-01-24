@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/srs/base/nested_navigator.dart';
-import 'package:snowflake_route/srs/base/root_navigation_stack.dart';
-import 'package:snowflake_route/srs/base/snowflake.dart';
+import 'package:star/srs/base/nested_navigator.dart';
+import 'package:star/srs/base/root_navigation_stack.dart';
+import 'package:star/srs/base/star.dart';
 
 class FlakeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
   FlakeRouterDelegate({
@@ -10,7 +10,7 @@ class FlakeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
     required this.redirect,
   });
 
-  final Snowflake routerConfig;
+  final Star routerConfig;
   final RedirectCallback redirect;
 
   @override

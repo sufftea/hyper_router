@@ -8,7 +8,7 @@ import 'package:example/features/home/widgets/usecase_banner.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,16 +41,16 @@ class HomeScreen extends StatelessWidget {
       final items = [
         UsecaseBanner(
           onPressed: () {
-            context.flake.navigate(ProductListScreen.routeName);
+            context.star.navigate(ProductListScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/typesafe.jpeg',
           title: 'Value-based navigation',
-          caption: 'Pass the Product object to the details screen',
+          caption: 'Pass an object to another screen',
         ),
         UsecaseBanner(
           onPressed: () {
-            context.flake.navigate(InboxScreen.routeName);
+            context.star.navigate(InboxScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/nested.jpeg',
@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
         ),
         UsecaseBanner(
           onPressed: () async {
-            context.flake.navigate(DialogExamplesScreen.routeName);
+            context.star.navigate(DialogExamplesScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/dialog.jpeg',
@@ -68,17 +68,17 @@ class HomeScreen extends StatelessWidget {
         ),
         UsecaseBanner(
           onPressed: () {
-            context.flake.navigate(AuthwalledScreen.routeName);
+            context.star.navigate(AuthwalledScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/guards.jpeg',
           title: 'Guards',
           caption: '''Redirect to the login page if not logged in. 
-Lets you subscribe to the context.''',
+Can subscribe to the context.''',
         ),
         UsecaseBanner(
           onPressed: () {
-            context.flake.navigate(EmailListScreen.routeName);
+            context.star.navigate(EmailListScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/extensible.jpeg',

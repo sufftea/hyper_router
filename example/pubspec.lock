@@ -408,13 +408,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  snowflake_route:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.1"
   source_gen:
     dependency: transitive
     description:
@@ -447,6 +440,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
+  star:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   state_notifier:
     dependency: transitive
     description:

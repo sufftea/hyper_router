@@ -4,7 +4,7 @@ import 'package:example/features/tabs/navigation_tab.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:snowflake_route/snowflake_route.dart';
+import 'package:star/star.dart';
 
 class MainTabsShell extends StatelessWidget {
   const MainTabsShell({
@@ -33,7 +33,7 @@ class MainTabsShell extends StatelessWidget {
         selectedIcon: const Icon(Icons.developer_mode),
         label: "Guide",
         onClick: (BuildContext context) {
-          context.flake.navigate(GuideScreen.routeName);
+          context.star.navigate(GuideScreen.routeName);
         },
       ),
       NavigationTab(
@@ -41,7 +41,7 @@ class MainTabsShell extends StatelessWidget {
         selectedIcon: const Icon(Icons.settings_applications),
         label: "Insides",
         onClick: (BuildContext context) {
-          context.flake.navigate(InsideScreen.routeName);
+          context.star.navigate(InsideScreen.routeName);
         },
       ),
     ];
