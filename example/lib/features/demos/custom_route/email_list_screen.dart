@@ -1,24 +1,52 @@
+import 'package:example/features/demos/custom_route/email.dart';
+import 'package:example/features/demos/custom_route/email_detail_screen.dart';
+import 'package:example/features/utils/context_x.dart';
 import 'package:flutter/material.dart';
 import 'package:snowflake_route/snowflake_route.dart';
-import 'package:responsive_list_detail/features/entry_details/entry_details_screen.dart';
-import 'package:responsive_list_detail/features/entry_list/data/email.dart';
 
-class EntryWidget extends StatelessWidget {
-  const EntryWidget({
-    required this.data,
-    super.key,
-  });
+class EmailListScreen extends StatelessWidget {
+  const EmailListScreen({super.key});
 
-  final Email data;
+  static const routeName = RouteName('contacts');
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context).colorScheme;
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            context.flake.pop();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: emails.length,
+        itemBuilder: (context, index) {
+          return EmailEntryWidget(
+            email: emails[index],
+          );
+        },
+      ),
+    );
+  }
+}
 
+class EmailEntryWidget extends StatelessWidget {
+  const EmailEntryWidget({
+    required this.email,
+    super.key,
+  });
+
+  final Email email;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {        
-        context.frouter.navigate(EmailRouteData(data));
+      onTap: () {
+        context.flake.navigate(EmailDetailRouteValue(email));
       },
+      splashFactory: InkSparkle.splashFactory,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,16 +61,16 @@ class EntryWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        data.userName,
+                        email.userName,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
                       const Text(
                         '10 minutes ago',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -50,7 +78,7 @@ class EntryWidget extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {},
-                  color: theme.onSurfaceVariant,
+                  color: context.col.onSurfaceVariant,
                   style: const ButtonStyle(
                     side: MaterialStatePropertyAll(BorderSide(
                       width: 0.5,
@@ -62,17 +90,17 @@ class EntryWidget extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              data.title,
+              email.title,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
             ),
             Text(
-              data.content,
+              email.content,
               overflow: TextOverflow.ellipsis,
               maxLines: 4,
-              style: const TextStyle(fontSize: 14),
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),

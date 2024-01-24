@@ -26,9 +26,9 @@ class MainApp extends StatelessWidget {
   }
 
   ThemeData _createTheme() {
-    final theme = FlexColorScheme.light(
+    final theme = FlexColorScheme.dark(
       useMaterial3: true,
-      scheme: FlexScheme.aquaBlue,
+      scheme: FlexScheme.deepPurple,
     ).toTheme;
 
     return theme.copyWith(
@@ -39,7 +39,7 @@ class MainApp extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           side: BorderSide.none,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(32),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -60,6 +60,9 @@ class MainApp extends StatelessWidget {
           padding: materialMatch(all: const EdgeInsets.all(24)),
           splashFactory: InkSparkle.splashFactory,
         ),
+      ),
+      iconButtonTheme: const IconButtonThemeData(
+        style: ButtonStyle(splashFactory: InkSparkle.splashFactory),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: ButtonStyle(

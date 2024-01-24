@@ -85,7 +85,7 @@ class HorizontalBannerButton extends StatelessWidget {
 
   final String title;
   final Widget? caption;
-  final String image;
+  final String? image;
   final VoidCallback onPressed;
 
   @override
@@ -112,22 +112,23 @@ class HorizontalBannerButton extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 128,
-              width: 128,
-              child: Container(
-                clipBehavior: Clip.antiAlias,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(32)),
-                child: Image.asset(
-                  image,
-                  fit: BoxFit.cover,
+            if (image != null)
+              SizedBox(
+                height: 128,
+                width: 128,
+                child: Container(
+                  clipBehavior: Clip.antiAlias,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(32)),
+                  child: Image.asset(
+                    image!,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(32),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.min,
@@ -135,7 +136,7 @@ class HorizontalBannerButton extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

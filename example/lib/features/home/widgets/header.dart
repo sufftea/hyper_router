@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
@@ -18,75 +20,23 @@ class HomeHeader extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 64),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Center(
                   child: Text(
-                    'Snowflake',
+                    'Star',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      // color: Color.fromARGB(255, 9, 18, 56),
                       fontSize: switch (context.width) {
-                        > mediumWidth => 96,
+                        > mediumWidth => 92,
                         > compactWidth => 64,
-                        _ => 48,
+                        _ => 32,
                       },
+                      color: context.col.onInverseSurface,
                       fontWeight: FontWeight.w900,
                     ),
-                  ),
-                ),
-                Theme(
-                  data: context.theme.copyWith(
-                    cardTheme: CardTheme(
-                      elevation: 0,
-                      color: context.col.inverseSurface,
-                    ),
-                    textTheme: context.theme.textTheme.merge(TextTheme(
-                      bodyMedium: TextStyle(
-                          fontSize: 24, color: context.col.onInverseSurface),
-                    )),
-                  ),
-                  child: const Wrap(
-                    alignment: WrapAlignment.center,
-                    children: [
-                      Card(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text('Declarative'),
-                        ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text('Value-based'),
-                        ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text('No codegen'),
-                        ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text('Extensible'),
-                        ),
-                      ),
-                      Card(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text('No boilerplate'),
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ],

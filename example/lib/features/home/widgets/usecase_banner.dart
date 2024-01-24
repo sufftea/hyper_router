@@ -7,6 +7,7 @@ class UsecaseBanner extends StatelessWidget {
     required this.title,
     required this.caption,
     required this.image,
+    required this.minimized,
     super.key,
   });
 
@@ -14,6 +15,7 @@ class UsecaseBanner extends StatelessWidget {
   final String caption;
   final String image;
   final VoidCallback onPressed;
+  final bool minimized;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class UsecaseBanner extends StatelessWidget {
           style: const TextStyle(fontSize: 16),
         ),
       ),
-      image: image,
+      image: minimized ? null : image,
     );
   }
 }

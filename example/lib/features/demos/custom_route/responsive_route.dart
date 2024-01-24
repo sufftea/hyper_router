@@ -1,6 +1,7 @@
+import 'package:example/features/utils/context_x.dart';
+import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:snowflake_route/srs/base/nested_navigator.dart';
-import 'package:responsive_list_detail/features/utils/screen_sizes.dart';
 import 'package:snowflake_route/snowflake_route.dart';
 
 class ResponsiveRoute extends NamedRoute {
@@ -36,50 +37,46 @@ class ResponsivePageBuilder extends ValuePageBuilder {
 
   @override
   List<Page> createPages(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final theme = Theme.of(context).colorScheme;
-
-    return switch (size.width) {
+    return switch (context.width) {
       < mediumWidth => [
-          MaterialPage(child: buildScreen(context)),
+          MaterialPage(
+            child: buildScreen(context),
+          ),
           ...next?.createPages(context) ?? [],
         ],
       _ => [
           MaterialPage(
             child: Container(
-              color: theme.surfaceVariant,
+              color: context.col.background,
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Card(
-                    clipBehavior: Clip.antiAlias,
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 16,
-                    ),
-                    child: SizedBox(
-                      width: 400,
-                      child: buildScreen(context),
-                    ),
+                  SizedBox(
+                    width: 400,
+                    child: buildScreen(context),
+                  ),
+                  VerticalDivider(
+                    color: context.col.onBackground,
+                    thickness: 0.5,
                   ),
                   Expanded(
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 16,
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: NestedNavigator(
-                        pages: [
-                          const MaterialPage(
-                            child: Scaffold(
-                              body: Center(
-                                child: Text('empty'),
+                    child: NestedNavigator(
+                      pages: [
+                        const MaterialPage(
+                          child: Scaffold(
+                            body: Center(
+                              child: Text(
+                                'empty',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
-                          ...next?.createPages(context) ?? [],
-                        ],
-                      ),
+                        ),
+                        ...next?.createPages(context) ?? [],
+                      ],
                     ),
                   ),
                 ],
@@ -92,6 +89,10 @@ class ResponsivePageBuilder extends ValuePageBuilder {
 
   @override
   PageBuilder<RouteValue>? pop() {
+    if (next == null) {
+      return null;
+    }
+
     return ResponsivePageBuilder(
       buildPage: buildPage,
       next: next?.pop(),

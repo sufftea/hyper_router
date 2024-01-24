@@ -1,13 +1,14 @@
+import 'package:example/features/demos/custom_route/email_list_screen.dart';
 import 'package:example/features/demos/dialog/dialog_examples_screen.dart';
 import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
 import 'package:example/features/home/widgets/usecase_banner.dart';
+import 'package:example/features/utils/screen_sizes.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:snowflake_route/snowflake_route.dart';
-
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -42,6 +43,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             context.flake.navigate(ProductListScreen.routeName);
           },
+          minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/typesafe.jpeg',
           title: 'Value-based navigation',
           caption: 'Pass the Product object to the details screen',
@@ -50,6 +52,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             context.flake.navigate(InboxScreen.routeName);
           },
+          minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/nested.jpeg',
           title: 'Nested routes',
           caption: 'A screen with a navigation bar',
@@ -58,6 +61,7 @@ class HomeScreen extends StatelessWidget {
           onPressed: () async {
             context.flake.navigate(DialogExamplesScreen.routeName);
           },
+          minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/dialog.jpeg',
           title: 'Return value from a route',
           caption: 'Show input dialog and return the value',
@@ -66,13 +70,17 @@ class HomeScreen extends StatelessWidget {
           onPressed: () {
             context.flake.navigate(AuthwalledScreen.routeName);
           },
+          minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/guards.jpeg',
           title: 'Guards',
           caption: '''Redirect to the login page if not logged in. 
 Lets you subscribe to the context.''',
         ),
         UsecaseBanner(
-          onPressed: () {},
+          onPressed: () {
+            context.flake.navigate(EmailListScreen.routeName);
+          },
+          minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/extensible.jpeg',
           title: 'Custom routes',
           caption: 'You can extend built in classes for specialized use-cases.',
