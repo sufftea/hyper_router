@@ -26,39 +26,14 @@ class RootStarController extends ChangeNotifier implements StarController {
   final Map<Object, StarRoute> routeMap;
 
   @override
-  void navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
+  Future navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
     stack = createStack(target, values);
+    return stack.last().popCompleter.future;
   }
 
   @override
   bool pop<T>([T? result]) {
     return rootNavigatorNode.pop(result);
-  }
-
-  @override
-  Future push(RouteValue target) {
-    final currRoute = routeMap[stack.last().key];
-
-    if (currRoute == null) {
-      throw 'todo';
-    }
-
-    final targetRoute = currRoute.children
-        .where((element) => element.key == target.key)
-        .firstOrNull;
-
-    if (targetRoute == null) {
-      throw 'todo';
-    }
-
-    final values = {target.key: target};
-    _stack?.forEach((builder) {
-      values[builder.value.key] = builder.value;
-    });
-
-    stack = targetRoute.createNodeRec(values: values);
-
-    return stack.last().popCompleter.future;
   }
 
   void navigateSilent(RouteValue target) {

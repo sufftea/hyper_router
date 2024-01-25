@@ -98,8 +98,7 @@ class _DialogExamplesScreenState extends State<DialogExamplesScreen> {
             const SizedBox(height: 8),
             OutlinedButton(
               onPressed: () async {
-                final result = await context.star.push(DialogScreen.routeName);
-
+                final result = await context.star.navigate(DialogScreen.routeName);
                 showResult(result);
               },
               child: const Text('Open a page'),
