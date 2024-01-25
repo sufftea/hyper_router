@@ -76,14 +76,9 @@ class EmailEntryWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                IconButton(
+                IconButton.outlined(
                   onPressed: () {},
                   color: context.col.onSurfaceVariant,
-                  style: const ButtonStyle(
-                    side: MaterialStatePropertyAll(BorderSide(
-                      width: 0.5,
-                    )),
-                  ),
                   icon: const Icon(Icons.star_outline),
                 ),
               ],
