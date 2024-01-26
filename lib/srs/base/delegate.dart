@@ -41,7 +41,8 @@ class FlakeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
 
   @override
   Future<bool> popRoute() async {
-    return SynchronousFuture(routerConfig.rootController.pop());
+    routerConfig.rootController.pop(); 
+    return SynchronousFuture(true);
   }
 
   @override

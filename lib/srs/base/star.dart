@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/delegate.dart';
+import 'package:star/srs/base/star_error.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/value/route_value.dart';
 import 'package:star/srs/base/root_star_controller.dart';
@@ -15,7 +16,7 @@ class Star implements RouterConfig<Object> {
   Star({
     required RouteValue initialRoute,
     required List<StarRoute> routes,
-    RedirectCallback? redirect,
+    RedirectCallback redirect = _defaultRedirect,
   }) {
     for (final r in routes) {
       r.parent = null;
@@ -24,6 +25,10 @@ class Star implements RouterConfig<Object> {
     final routeMap = <Object, StarRoute>{};
     for (final r in routes) {
       r.forEach((r) {
+        if (routeMap.containsKey(r.key)) {
+          throw StarError('Duplicate key detected: ${r.key}');
+        }
+
         routeMap[r.key] = r;
       });
     }
@@ -36,7 +41,7 @@ class Star implements RouterConfig<Object> {
 
     routerDelegate = FlakeRouterDelegate(
       routerConfig: this,
-      redirect: redirect ?? _defaultRedirect,
+      redirect: redirect,
     );
   }
 

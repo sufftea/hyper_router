@@ -24,15 +24,15 @@ class DemoTabsShell extends StatelessWidget {
         selectedIndex: controller.tabIndex,
         destinations: [
           NavigationDestination(
-            icon: Icon(i == 0 ? Icons.inbox_outlined : Icons.inbox),
+            icon: Icon(i == 0 ? Icons.inbox : Icons.inbox_outlined),
             label: "Inbox",
           ),
           NavigationDestination(
-            icon: Icon(i == 1 ? Icons.description_outlined : Icons.description),
+            icon: Icon(i == 1 ? Icons.description : Icons.description_outlined),
             label: "Docs",
           ),
           NavigationDestination(
-            icon: Icon(i == 2 ? Icons.chat_bubble_outline : Icons.chat_bubble),
+            icon: Icon(i == 2 ? Icons.chat_bubble : Icons.chat_bubble_outline),
             label: "Chat",
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/nested_navigator.dart';
+import 'package:star/srs/base/star_error.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/value/route_value.dart';
 
@@ -32,10 +33,13 @@ class RootStarController extends ChangeNotifier implements StarController {
   }
 
   @override
-  bool pop<T>([T? result]) {
-    return rootNavigatorNode.pop(result);
+  void pop<T>([T? result]) {
+    if (!rootNavigatorNode.pop(result)) {
+      SystemNavigator.pop();
+    }
   }
 
+  /// Updates the stack without notifying listeners
   void navigateSilent(RouteValue target) {
     _stack = createStack(target);
   }
@@ -47,7 +51,8 @@ class RootStarController extends ChangeNotifier implements StarController {
     final StarRoute? targetRoute = routeMap[target.key];
 
     if (targetRoute == null) {
-      throw 'todo';
+      throw StarError(
+          "Route tree doesn't contain route with the provided key: ${target.key}");
     }
 
     final valuesMap = <Object, RouteValue>{

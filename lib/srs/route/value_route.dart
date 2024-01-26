@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star/srs/base/star_error.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/value/route_value.dart';
 
@@ -14,7 +15,6 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
   final Widget Function(BuildContext context, T value) screenBuilder;
 
   final T? defaultValue;
-  
 
   @override
   Object get key => T;
@@ -24,7 +24,7 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
     value ??= defaultValue;
 
     if (value == null) {
-      throw 'todo';
+      throw StarError("No value provided for ValueRoute<$key>");
     }
 
     return ValueNode(
