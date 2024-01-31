@@ -25,7 +25,7 @@ class ResponsiveRoute extends NamedRoute {
   }
 }
 
-class ResponsiveNode extends ValueNode {
+class ResponsiveNode extends NamedNode {
   ResponsiveNode({
     required super.buildPage,
     required super.next,

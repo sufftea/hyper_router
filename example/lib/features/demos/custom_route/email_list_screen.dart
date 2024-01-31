@@ -7,7 +7,7 @@ import 'package:star/star.dart';
 class EmailListScreen extends StatelessWidget {
   const EmailListScreen({super.key});
 
-  static const routeName = RouteName('contacts');
+  static const routeName = RouteName('emails');
 
   @override
   Widget build(BuildContext context) {
