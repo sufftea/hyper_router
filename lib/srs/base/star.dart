@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/delegate.dart';
-import 'package:star/srs/base/star_error.dart';
+import 'package:star/srs/base/exceptions.dart';
+import 'package:star/srs/url/route_information_parser.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/value/route_value.dart';
 import 'package:star/srs/base/root_star_controller.dart';
 
-typedef RedirectCallback = RouteValue? Function(
-  BuildContext context,
-  RouteNode stack,
-);
-RouteValue? _defaultRedirect(BuildContext context, RouteNode _) => null;
+RouteValue? _defaultRedirect(RouteNode _) => null;
 
 class Star implements RouterConfig<Object> {
   Star({
     required RouteValue initialRoute,
-    required List<StarRoute> routes,
-    RedirectCallback redirect = _defaultRedirect,
+    required this.routes,
+    bool enableWeb = false,
+    RouteValue? Function(RouteNode stack) redirect = _defaultRedirect,
   }) {
     for (final r in routes) {
       r.parent = null;
@@ -35,17 +33,29 @@ class Star implements RouterConfig<Object> {
 
     rootController = RootStarController(
       initialRoute: initialRoute,
-      roots: routes,
+      redirect: redirect,
       routeMap: routeMap,
     );
 
-    routerDelegate = FlakeRouterDelegate(
-      routerConfig: this,
-      redirect: redirect,
-    );
+    routerDelegate = StarRouterDelegate(routerConfig: this);
+
+    if (enableWeb) {
+      routeInformationParser = StarRouteInformationParser(roots: routes);
+
+      final u = routeInformationParser!
+          .restoreRouteInformation(rootController.stack)!;
+
+      routeInformationProvider = PlatformRouteInformationProvider(
+        initialRouteInformation: u,
+      );
+    } else {
+      routeInformationParser = null;
+      routeInformationProvider = null;
+    }
   }
 
   late final RootStarController rootController;
+  final List<StarRoute> routes;
 
   static StarController of(BuildContext context) {
     return context
@@ -72,15 +82,13 @@ class Star implements RouterConfig<Object> {
       RootBackButtonDispatcher();
 
   @override
-  late final FlakeRouterDelegate routerDelegate;
+  late final StarRouterDelegate routerDelegate;
 
   @override
-  // TODO
-  final RouteInformationParser<Object>? routeInformationParser = null;
+  late final RouteInformationParser<Object>? routeInformationParser;
 
   @override
-  // TODO
-  final RouteInformationProvider? routeInformationProvider = null;
+  late final RouteInformationProvider? routeInformationProvider;
 }
 
 class InheritedFractalRouter extends InheritedWidget {

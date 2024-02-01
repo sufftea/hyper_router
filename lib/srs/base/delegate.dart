@@ -1,17 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/nested_navigator.dart';
-import 'package:star/srs/base/root_navigation_stack.dart';
 import 'package:star/srs/base/star.dart';
+import 'package:star/srs/route/star_route.dart';
+import 'package:star/srs/value/route_value.dart';
 
-class FlakeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
-  FlakeRouterDelegate({
+class StarRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
+  StarRouterDelegate({
     required this.routerConfig,
-    required this.redirect,
-  });
+  }) {
+    routerConfig.rootController.state.addListener(notifyListeners);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    routerConfig.rootController.state.removeListener(notifyListeners);
+  }
 
   final Star routerConfig;
-  final RedirectCallback redirect;
 
   @override
   Widget build(BuildContext context) {
@@ -21,32 +31,34 @@ class FlakeRouterDelegate extends RouterDelegate<Object> with ChangeNotifier {
       router: routerConfig,
       child: InheritedNavigatorNode(
         node: rootController.rootNavigatorNode,
-        child: RootNavigationStack(
-          redirect: redirect,
-          rootController: rootController,
-          builder: (context, pages) {
-            return Navigator(
-              pages: pages,
-              key: rootController.rootNavigatorNode.key,
-              onPopPage: (route, result) {
-                rootController.popRoute(result);
-                return false;
-              },
-            );
-          },
-        ),
+        child: Builder(builder: (context) {
+          return Navigator(
+            pages: rootController.state.stack.createPages(context),
+            key: rootController.rootNavigatorNode.key,
+            onPopPage: (route, result) {
+              rootController.popRoute(result);
+              return false;
+            },
+          );
+        }),
       ),
     );
   }
 
   @override
   Future<bool> popRoute() async {
-    routerConfig.rootController.pop(); 
+    routerConfig.rootController.pop();
     return SynchronousFuture(true);
   }
 
   @override
-  Future<void> setNewRoutePath(Object configuration) {
-    throw UnimplementedError();
+  RouteNode<RouteValue>? get currentConfiguration =>
+      routerConfig.rootController.stack;
+
+  @override
+  Future<void> setNewRoutePath(RouteNode<RouteValue> configuration) async {
+    routerConfig.rootController.state.updateSilent(configuration);
+
+    return SynchronousFuture(null);
   }
 }

@@ -20,7 +20,7 @@ class ProductWidget extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 256),
       child: VerticalBannerButton(
         onPressed: () {
-          context.star.navigate(ProductRouteValue(product));
+          context.star.navigate(ProductRouteValue(product.id));
         },
         title: product.name,
         image: 'assets/value_based/product.jpeg',

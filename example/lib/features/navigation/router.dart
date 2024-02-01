@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:example/features/demos/custom_route/email.dart';
 import 'package:example/features/demos/custom_route/email_detail_screen.dart';
 import 'package:example/features/demos/custom_route/email_list_screen.dart';
@@ -14,7 +16,6 @@ import 'package:example/features/demos/nested_routes/inbox_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_subroute_screen.dart';
 import 'package:example/features/demos/nested_routes/on_top_screen.dart';
 import 'package:example/features/demos/value_based/product_details/product_details_screen.dart';
-import 'package:example/features/demos/value_based/product_list/product.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/guide/guide_screen.dart';
 import 'package:example/features/home/home_screen.dart';
@@ -25,13 +26,14 @@ import 'package:star/star.dart';
 
 final router = Star(
   initialRoute: HomeScreen.routeName,
-  redirect: (stack) {
-    if (stack.containsNode(AuthwalledScreen.routeName.key)) {
-      return AuthRouteValue(stack.last().value);
-    }
+  enableWeb: true,
+  // redirect: (stack) {
+  //   if (stack.containsNode(AuthwalledScreen.routeName.key)) {
+  //     return AuthRouteValue(stack.last().value);
+  //   }
 
-    return null;
-  },
+  //   return null;
+  // },
   routes: [
     ShellRoute(
       shellBuilder: (context, controller, child) =>
@@ -48,11 +50,10 @@ final router = Star(
                 ValueRoute<ProductRouteValue>(
                   screenBuilder: (context, value) =>
                       ProductDetailsScreen(value: value),
-                  urlParser: JsonUrlParser(
-                    fromJson: (name, queryParams) => name == 'some-product'
-                        ? ProductRouteValue(products.first)
-                        : null,
-                    toJson: (value) => ('some-product', {'id': '12345'}),
+                  urlParser: QueryParamsUrlParser(
+                    encodeSegment: (value) => (value.productId, {}),
+                    decodeSegment: (segment, queryParams) =>
+                        ProductRouteValue(segment),
                   ),
                 ),
               ],
@@ -69,11 +70,9 @@ final router = Star(
             ),
             ValueRoute<AuthRouteValue>(
               screenBuilder: (context, value) => AuthScreen(value: value),
-              urlParser: JsonUrlParser(
-                fromJson: (name, queryParams) => name == 'login'
-                    ? AuthRouteValue(AuthwalledScreen.routeName)
-                    : null,
-                toJson: (value) => ('login', {}),
+              urlParser: QueryParamsUrlParser(
+                decodeSegment: (name, queryParams) => null,
+                encodeSegment: (value) => ('login', {}),
               ),
             ),
             NamedRoute(
@@ -124,17 +123,25 @@ final router = Star(
               children: [
                 ValueRoute<EmailDetailRouteValue>(
                   screenBuilder: (context, value) => EmailDetailScreen(
-                    email: value.email,
+                    value: value,
                   ),
-                  urlParser: JsonUrlParser(
-                    fromJson: (name, queryParams) =>
-                        queryParams.containsKey('id')
-                            ? EmailDetailRouteValue(emails.first)
-                            : null,
-                    toJson: (value) => (
-                      value.email.title.substring(0, 8).replaceAll(' ', '-'),
-                      {'id': '12345'}
+                  urlParser: QueryParamsUrlParser(
+                    encodeSegment: (value) => (
+                      value.title
+                          .substring(0, min(value.title.length, 16))
+                          .replaceAll(' ', '-'),
+                      {'id': value.emailId},
                     ),
+                    decodeSegment: (name, queryParams) {
+                      if (queryParams['id'] case final id?) {
+                        return EmailDetailRouteValue(
+                          emailId: id,
+                          title: name,
+                        );
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
                 ),
               ],

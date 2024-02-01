@@ -11,6 +11,8 @@ class EmailListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final emailList = emails.values.toList();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -21,10 +23,10 @@ class EmailListScreen extends StatelessWidget {
         ),
       ),
       body: ListView.builder(
-        itemCount: emails.length,
+        itemCount: emailList.length,
         itemBuilder: (context, index) {
           return EmailEntryWidget(
-            email: emails[index],
+            email: emailList[index],
           );
         },
       ),
@@ -44,7 +46,10 @@ class EmailEntryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.star.navigate(EmailDetailRouteValue(email));
+        context.star.navigate(EmailDetailRouteValue(
+          emailId: email.id,
+          title: email.title,
+        ));
       },
       splashFactory: InkSparkle.splashFactory,
       child: Padding(

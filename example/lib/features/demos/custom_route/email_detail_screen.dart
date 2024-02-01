@@ -1,26 +1,38 @@
 import 'package:example/features/demos/custom_route/email.dart';
-import 'package:example/features/demos/custom_route/responsive_route.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:star/star.dart';
 
 class EmailDetailRouteValue extends RouteValue {
-  const EmailDetailRouteValue(this.email);
-  final Email email;
+  const EmailDetailRouteValue({
+    required this.emailId,
+    required this.title,
+  });
+  final String emailId;
+  final String title;
 }
 
 class EmailDetailScreen extends StatelessWidget {
-  const EmailDetailScreen({
-    required this.email,
+  EmailDetailScreen({
+    required EmailDetailRouteValue value,
     super.key,
-  });
+  }) : emailId = value.emailId;
 
-  final Email email;
+  final String emailId;
 
   @override
   Widget build(BuildContext context) {
+    final email = emails[emailId];
+
+    if (email == null)  {
+      return const Scaffold(
+        body: Center(
+          child: Text('An error occurred (ಥ﹏ಥ)'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:star/srs/base/exceptions.dart';
+import 'package:star/srs/url/route_information_parser.dart';
 import 'package:star/star.dart';
 
 class NamedRoute extends ValueRoute<RouteName> {
@@ -18,4 +19,86 @@ class NamedRoute extends ValueRoute<RouteName> {
   @override
   Object get key => name.key;
 
+  @override
+  RouteNode<RouteValue> createNode({
+    RouteNode<RouteValue>? next,
+    RouteName? value,
+  }) {
+    return NamedNode(
+      next: next,
+      value: name,
+      buildPage: (context) => buildPage(context, name),
+    );
+  }
+
+  @override
+  RouteNode<RouteValue>? decodeUrl(
+    List<UrlSegmentData> segments,
+  ) {
+    final data = segments.first;
+
+    if (data.segment == name.name) {
+      final next = StarRoute.matchUrl(
+        segments: segments.sublist(1),
+        routes: children,
+      );
+
+      if (next == null && segments.length >= 2) {
+        throw StarException(
+            "Couldn't match a url segment: ${segments[1].segment}");
+      }
+
+      return createNode(
+        next: next,
+        value: name,
+      );
+    }
+
+    return null;
+  }
+}
+
+class NamedNode extends RouteNode<RouteName> {
+  NamedNode({
+    required this.next,
+    required this.value,
+    required this.buildPage,
+  });
+
+  final Page Function(BuildContext context) buildPage;
+
+  @override
+  final RouteNode<RouteValue>? next;
+
+  @override
+  final RouteName value;
+
+  @override
+  List<Page> createPages(BuildContext context) {
+    final page = buildPage(context);
+
+    return [
+      page,
+      ...next?.createPages(context) ?? [],
+    ];
+  }
+
+  @override
+  RouteNode<RouteValue>? pop() {
+    if (next case final next?) {
+      return NamedNode(
+        next: next.pop(),
+        value: value,
+        buildPage: buildPage,
+      );
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Iterable<UrlSegmentData> encodeUrl() {
+    return [UrlSegmentData(segment: value.name)]
+        .followedBy(next?.encodeUrl() ?? []);
+  }
 }

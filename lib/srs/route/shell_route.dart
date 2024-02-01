@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star/srs/url/route_information_parser.dart';
 
 import 'package:star/star.dart';
 import 'package:star/srs/base/star_controller.dart';
@@ -39,6 +40,24 @@ class ShellRoute extends StarRoute<ShellValue> {
       key: key,
     );
   }
+
+  @override
+  RouteNode<RouteValue>? decodeUrl(
+    List<UrlSegmentData> segments,
+  ) {
+    final next = StarRoute.matchUrl(
+      segments: segments,
+      routes: children,
+    );
+
+    if (next == null) {
+      return null;
+    }
+
+    return createNode(
+      next: next,
+    );
+  }
 }
 
 class ShellNode extends RouteNode<ShellValue> {
@@ -71,8 +90,7 @@ class ShellNode extends RouteNode<ShellValue> {
         }
       case (null, final n?):
         final index = tabs.indexWhere((e) => e.key == n.key);
-        tabs[index] = n;
-        
+
         if (index == -1) {
           value = ShellValue(
             tabIndex: 0,
@@ -81,6 +99,7 @@ class ShellNode extends RouteNode<ShellValue> {
           );
           onTop = n;
         } else {
+          tabs[index] = n;
           value = ShellValue(
             tabIndex: index,
             key: key,
@@ -112,7 +131,7 @@ class ShellNode extends RouteNode<ShellValue> {
   final ShellBuilder shellBuilder;
 
   @override
-  RouteNode<RouteValue>? get next => onTop ?? value.currTab;
+  RouteNode<RouteValue> get next => onTop ?? value.currTab;
   final RouteNode? onTop;
 
   @override
@@ -172,6 +191,11 @@ class ShellNode extends RouteNode<ShellValue> {
       tabs: value.tabs,
       key: key,
     );
+  }
+
+  @override
+  Iterable<UrlSegmentData> encodeUrl() {
+    return next.encodeUrl();
   }
 }
 

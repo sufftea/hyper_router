@@ -16,7 +16,8 @@ class ProductListScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: LimitWidth(
           child: Wrap(
-            children: products.map((e) => ProductWidget(product: e)).toList(),
+            children:
+                products.values.map((e) => ProductWidget(product: e)).toList(),
           ),
         ),
       ),

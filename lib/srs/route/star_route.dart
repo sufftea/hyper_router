@@ -1,8 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:star/srs/base/exceptions.dart';
+import 'package:star/srs/url/route_information_parser.dart';
 
 import 'package:star/srs/value/route_value.dart';
+
+class UrlParsingException extends StarException {
+  UrlParsingException(super.message);
+}
 
 abstract class StarRoute<T extends RouteValue> {
   StarRoute({
@@ -22,6 +28,32 @@ abstract class StarRoute<T extends RouteValue> {
     RouteNode? next,
     T? value,
   });
+
+  /// Receives a list of url segments and returns the stack parsed from them.
+  /// The first segment in the list is matched against this route. If it does
+  /// not correspond to this route, returns null.
+  ///
+  /// A segment is a part of the url separated by slashes ('/'). The slashes are
+  /// not included into the segment.
+  RouteNode? decodeUrl(List<UrlSegmentData> segments);
+
+  static RouteNode? matchUrl({
+    required List<UrlSegmentData> segments,
+    required List<StarRoute> routes,
+  }) {
+    if (segments.isEmpty) {
+      return null;
+    }
+
+    for (final route in routes) {
+      final node = route.decodeUrl(segments);
+      if (node != null) {
+        return node;
+      }
+    }
+
+    return null;
+  }
 }
 
 abstract class RouteNode<T extends RouteValue> {
@@ -55,6 +87,17 @@ abstract class RouteNode<T extends RouteValue> {
 
     return false;
   }
+
+  /// Converts the stack into a list of url segments.
+  Iterable<UrlSegmentData> encodeUrl();
+
+  @override
+  bool operator ==(Object other) {
+    return other is RouteNode && other.hashCode == this.hashCode;
+  }
+
+  @override
+  int get hashCode => super.hashCode + next.hashCode;
 }
 
 extension RouteNodeX on RouteNode {

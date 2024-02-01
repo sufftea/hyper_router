@@ -7,21 +7,23 @@ import 'package:flutter/material.dart';
 import 'package:star/star.dart';
 
 class ProductRouteValue extends RouteValue {
-  const ProductRouteValue(this.product);
+  const ProductRouteValue(this.productId);
 
-  final Product product;
+  final String productId;
 }
 
 class ProductDetailsScreen extends StatelessWidget {
   ProductDetailsScreen({
     required ProductRouteValue value,
     super.key,
-  }) : product = value.product;
+  }) : productId = value.productId;
 
-  final Product product;
+  final String productId;
 
   @override
   Widget build(BuildContext context) {
+    final product = products[productId];
+
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -29,7 +31,7 @@ class ProductDetailsScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildHeader(context),
+              buildHeader(context, product),
               const SizedBox(height: 16),
               const Text(
                 'Description',
@@ -41,7 +43,7 @@ class ProductDetailsScreen extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 product.description,
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),
@@ -50,7 +52,7 @@ class ProductDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildHeader(BuildContext context) {
+  Widget buildHeader(BuildContext context, Product product) {
     return switch (context.width) {
       < compactWidth => _PortraitHeader(product: product),
       _ => _LandscapeHeader(product: product),
