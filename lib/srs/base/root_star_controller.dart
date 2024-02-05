@@ -1,39 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:star/srs/base/star.dart';
 import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/nested_navigator.dart';
 import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/base/star_state.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/value/route_value.dart';
 
-class RootStarController implements StarController {
+class RootStarController extends ChangeNotifier implements StarController {
   RootStarController({
     required RouteValue initialRoute,
-    required RouteValue? Function(RouteNode stack) redirect,
+    required RouteValue? Function(BuildContext context, RouteNode stack)
+        redirect,
     required this.routeMap,
   }) {
-    state = StarState(redirect: (stack) {
-      if (redirect(stack) case final newTarget?) {
-        return createStack(newTarget);
+    _redirect = (stack) {
+      if (_redirectContext case final context?) {
+        if (redirect(context, stack) case final target?) {
+          return createStack(target);
+        }
       }
 
       return stack;
-    });
+    };
 
-    state.updateSilent(createStack(initialRoute));
+    _stack = createStack(initialRoute);
   }
 
   final rootNavigatorNode = NavigatorNode(GlobalKey<NavigatorState>());
 
-  late final StarState state;
-  RouteNode get stack => state.stack;
+  BuildContext? _redirectContext;
+  late final RouteNode Function(RouteNode stack) _redirect;
+
+  RouteNode? _stack;
+  @override
+  RouteNode get stack => _stack!;
+  void setStack(RouteNode value, {bool notify = true}) {
+    _stack = _redirect(value);
+    if (notify) {
+      notifyListeners();
+    }
+  }
 
   final Map<Object, StarRoute> routeMap;
 
   @override
   Future navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
-    state.stack = createStack(target, values);
+    setStack(createStack(target, values));
     return stack.last().popCompleter.future;
   }
 
@@ -48,7 +61,7 @@ class RootStarController implements StarController {
     stack.last().popCompleter.complete(result);
 
     if (stack.pop() case final popped?) {
-      state.stack = popped;
+      setStack(popped);
     } else {
       SystemNavigator.pop();
     }
@@ -69,9 +82,62 @@ class RootStarController implements StarController {
           "Route tree doesn't contain route with the provided key: ${target.key}");
     }
 
-    final valuesMap = state.values;
+    final valuesMap = extractValues();
     valuesMap[target.key] = target;
 
     return targetRoute.createNodeRec(values: valuesMap);
+  }
+
+  Map<Object, RouteValue> extractValues() {
+    final result = <Object, RouteValue>{};
+
+    _stack?.forEach((builder) {
+      result[builder.value.key] = builder.value;
+    });
+
+    return result;
+  }
+}
+
+class RedirectWatcher extends StatefulWidget {
+  const RedirectWatcher({
+    required this.child,
+    super.key,
+  });
+
+  // final void Function(BuildContext context)
+  final Widget child;
+
+  @override
+  State<RedirectWatcher> createState() => _RedirectWatcherState();
+}
+
+class _RedirectWatcherState extends State<RedirectWatcher> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    context
+        .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .router;
+    final controller = Star.configOf(context).rootController;
+    controller._redirectContext = context;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }

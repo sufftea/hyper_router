@@ -2,6 +2,8 @@ import 'package:example/features/demos/custom_route/email_list_screen.dart';
 import 'package:example/features/demos/dialog/dialog_examples_screen.dart';
 import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_screen.dart';
+import 'package:example/features/demos/value_based/product_details/product_details_screen.dart';
+import 'package:example/features/demos/value_based/product_list/product.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/home/widgets/header.dart';
 import 'package:example/features/home/widgets/usecase_banner.dart';

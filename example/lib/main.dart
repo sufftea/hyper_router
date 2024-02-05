@@ -1,4 +1,7 @@
+import 'package:example/features/demos/guard/auth_screen.dart';
+import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/guard/state/auth_cubit.dart';
+import 'package:example/features/demos/guard/state/auth_state.dart';
 import 'package:example/features/navigation/router.dart';
 import 'package:example/features/utils/material_match.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -18,15 +21,25 @@ class MainApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
       ],
-      child: MaterialApp.router(
-        theme: _createTheme(),
-        routerConfig: router,
+      child: BlocListener<AuthCubit, AuthState>(
+        listener: (context, state) {
+          final c = router.controller;
+
+          if (!state.authenticated &&
+              c.stack.containsNode(AuthwalledScreen.routeName.key)) {
+            c.navigate(AuthRouteValue(c.stack.last().value));
+          }
+        },
+        child: MaterialApp.router(
+          theme: _createTheme(),
+          routerConfig: router,
+        ),
       ),
     );
   }
 
   ThemeData _createTheme() {
-    final theme = FlexColorScheme.dark(
+    final theme = FlexColorScheme.light(
       useMaterial3: true,
       scheme: FlexScheme.deepPurple,
     ).toTheme;

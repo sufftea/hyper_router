@@ -238,7 +238,7 @@ class ShellValue extends RouteValue {
   }) {
     return ShellValue(
       tabs: tabs ?? this.tabs,
-      tabIndex: tabIndex ?? this.tabIndex,
+      tabIndex: tabIndex ?? this.tabIndex, 
       key: key ?? this.key,
     );
   }
