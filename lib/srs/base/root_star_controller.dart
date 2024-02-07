@@ -68,7 +68,7 @@ class RootStarController extends ChangeNotifier implements StarController {
   }
 
   List<Page> createPages(BuildContext context) {
-    return stack.createPages(context);
+    return stack.createPages(context).toList();
   }
 
   RouteNode createStack(

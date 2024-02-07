@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/utils/consecutive_pages.dart';
 import 'package:star/star.dart';
 
 class NamedRoute extends ValueRoute<RouteName> {
@@ -76,13 +77,10 @@ class NamedNode extends RouteNode<RouteName> {
   final RouteName value;
 
   @override
-  List<Page> createPages(BuildContext context) {
+  Iterable<Page> createPages(BuildContext context) {
     final page = buildPage(context);
 
-    return [
-      page,
-      ...next?.createPages(context) ?? [],
-    ];
+    return consecutive(page, next?.createPages(context));
   }
 
   @override

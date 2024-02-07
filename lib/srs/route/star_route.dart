@@ -82,7 +82,7 @@ abstract class RouteNode<T extends RouteValue> {
 
   bool get isTop => next == null;
 
-  List<Page> createPages(BuildContext context);
+  Iterable<Page> createPages(BuildContext context);
 
   RouteNode? pop() {
     if (next case final next?) {

@@ -36,7 +36,7 @@ class StarRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
           node: rootController.rootNavigatorNode,
           child: Builder(builder: (context) {
             return Navigator(
-              pages: rootController.stack.createPages(context),
+              pages: rootController.stack.createPages(context).toList(),
               key: rootController.rootNavigatorNode.key,
               onPopPage: (route, result) {
                 rootController.popRoute(result);

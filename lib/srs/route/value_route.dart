@@ -3,6 +3,7 @@ import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/url/route_information_parser.dart';
 import 'package:star/srs/url/url_parser.dart';
+import 'package:star/srs/utils/consecutive_pages.dart';
 import 'package:star/srs/value/route_value.dart';
 
 class ValueRoute<T extends RouteValue> extends StarRoute<T> {
@@ -100,13 +101,9 @@ class ValueNode<T extends RouteValue> extends RouteNode {
   final T value;
 
   @override
-  List<Page> createPages(BuildContext context) {
+  Iterable<Page> createPages(BuildContext context) {
     final page = buildPage(context);
-
-    return [
-      page,
-      ...next?.createPages(context) ?? [],
-    ];
+    return consecutive(page, next?.createPages(context));
   }
 
   // @override

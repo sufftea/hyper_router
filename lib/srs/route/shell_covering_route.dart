@@ -56,7 +56,7 @@ class ShellCoveringNode extends RouteNode<ShellCoveringRouteValue> {
   final RouteNode<RouteValue> next;
 
   @override
-  List<Page> createPages(BuildContext context) {
+  Iterable<Page> createPages(BuildContext context) {
     return next.createPages(context);
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/route/shell_covering_route.dart';
 import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/utils/consecutive_pages.dart';
 import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
 import 'package:star/srs/base/nested_navigator.dart';
@@ -118,7 +119,7 @@ class ShellNode extends RouteNode<ShellValue> {
   RouteKey get key => value.key;
 
   @override
-  List<Page> createPages(BuildContext context) {
+  Iterable<Page> createPages(BuildContext context) {
     final controller = Star.rootOf(context);
     final shellController = ShellController(
       value: value,
@@ -149,17 +150,14 @@ class ShellNode extends RouteNode<ShellValue> {
         shellController,
         Builder(builder: (context) {
           return NestedNavigator(
-            pages: nestedNodes.createPages(context),
+            pages: nestedNodes.createPages(context).toList(),
             key: ValueKey(shellController.tabIndex),
           );
         }),
       ),
     );
 
-    return [
-      page,
-      if (coveringNode != null) ...coveringNode!.createPages(context),
-    ];
+    return consecutive(page, coveringNode?.createPages(context));
   }
 
   @override

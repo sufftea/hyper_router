@@ -2,6 +2,7 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/nested_navigator.dart';
+import 'package:star/srs/utils/consecutive_pages.dart';
 import 'package:star/star.dart';
 
 class ResponsiveRoute extends NamedRoute {
@@ -38,14 +39,14 @@ class ResponsiveNode extends NamedNode {
   final Widget Function(BuildContext context) buildScreen;
 
   @override
-  List<Page> createPages(BuildContext context) {
+  Iterable<Page> createPages(BuildContext context) {
     return switch (context.width) {
-      < mediumWidth => [
+      < mediumWidth => consecutive(
           MaterialPage(
             child: buildScreen(context),
           ),
-          ...next?.createPages(context) ?? [],
-        ],
+          next?.createPages(context),
+        ),
       _ => [
           MaterialPage(
             child: Container(
@@ -88,19 +89,4 @@ class ResponsiveNode extends NamedNode {
         ],
     };
   }
-
-  // @override
-  // RouteNode<RouteValue>? pop() {
-  //   if (next == null) {
-  //     return null;
-  //   }
-
-  //   return ResponsiveNode(
-  //     buildPage: buildPage,
-  //     next: next?.pop(),
-  //     value: value,
-  //     buildScreen: buildScreen,
-  //     route: route,
-  //   );
-  // }
 }
