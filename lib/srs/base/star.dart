@@ -64,21 +64,21 @@ class Star implements RouterConfig<Object> {
 
   static StarController of(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
         .router
         .rootController;
   }
 
   static RootStarController rootOf(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
         .router
         .rootController;
   }
 
   static Star configOf(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
         .router;
   }
 
@@ -96,8 +96,8 @@ class Star implements RouterConfig<Object> {
   late final RouteInformationProvider? routeInformationProvider;
 }
 
-class InheritedFractalRouter extends InheritedWidget {
-  const InheritedFractalRouter({
+class InheritedStarRouter extends InheritedWidget {
+  const InheritedStarRouter({
     required this.router,
     required super.child,
     super.key,
@@ -106,7 +106,7 @@ class InheritedFractalRouter extends InheritedWidget {
   final Star router;
 
   @override
-  bool updateShouldNotify(InheritedFractalRouter oldWidget) {
+  bool updateShouldNotify(InheritedStarRouter oldWidget) {
     return oldWidget.router != router;
   }
 }

@@ -29,9 +29,17 @@ class ShellCoveringRoute extends StarRoute {
 
   @override
   RouteNode<RouteValue>? decodeUrl(List<UrlSegmentData> segments) {
-    return StarRoute.matchUrl(
+    final next = StarRoute.matchUrl(
       segments: segments,
       routes: children,
+    );
+
+    if (next == null) {
+      return null;
+    }
+    
+    return createNode(
+      next: next,
     );
   }
 

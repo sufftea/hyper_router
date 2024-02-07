@@ -129,7 +129,7 @@ class _RedirectWatcherState extends State<RedirectWatcher> {
     super.didChangeDependencies();
 
     context
-        .dependOnInheritedWidgetOfExactType<InheritedFractalRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
         .router;
     final controller = Star.configOf(context).rootController;
     controller._redirectContext = context;

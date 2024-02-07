@@ -29,6 +29,7 @@ import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
 
 final _demoShellKey = RouteKey();
+final _mainShellKey = RouteKey();
 
 final router = Star(
   initialRoute: HomeScreen.routeName,
@@ -44,6 +45,7 @@ final router = Star(
   },
   routes: [
     ShellRoute(
+      key: _mainShellKey,
       shellBuilder: (context, controller, child) =>
           MainTabsShell(controller: controller, child: child),
       tabs: [
@@ -111,7 +113,7 @@ final router = Star(
                       name: InboxSubrouteScreen.routeName,
                     ),
                     ShellCoveringRoute(
-                      shellKey: _demoShellKey,
+                      shellKey: _mainShellKey,
                       children: [
                         NamedRoute(
                           screenBuilder: (context) => const CoveringScreen(),
@@ -139,12 +141,6 @@ final router = Star(
                   ],
                 ),
               ],
-              // onTop: [
-              //   NamedRoute(
-              //     screenBuilder: (context) => const OverScreen(),
-              //     name: OverScreen.routeName,
-              //   ),
-              // ],
             ),
             ResponsiveRoute(
               screenBuilder: (context) => const EmailListScreen(),

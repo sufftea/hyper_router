@@ -19,7 +19,7 @@ class DemoTabsShell extends StatelessWidget {
       body: child,
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (value) {
-          controller.setTabIndex(value);
+          controller.setTabIndex(value, preserveState: false);
         },
         selectedIndex: controller.tabIndex,
         destinations: [

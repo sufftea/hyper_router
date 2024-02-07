@@ -29,7 +29,7 @@ class StarRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
   @override
   Widget build(BuildContext context) {
     final rootController = routerConfig.rootController;
-    return InheritedFractalRouter(
+    return InheritedStarRouter(
       router: routerConfig,
       child: RedirectWatcher(
         child: InheritedNavigatorNode(
