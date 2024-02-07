@@ -105,21 +105,7 @@ class ValueNode<T extends RouteValue> extends RouteNode {
     final page = buildPage(context);
     return consecutive(page, next?.createPages(context));
   }
-
-  // @override
-  // RouteNode<RouteValue>? pop() {
-  //   if (next case final next?) {
-  //     return ValueNode(
-  //       next: next.pop(),
-  //       value: value,
-  //       buildPage: buildPage,
-  //       route: route,
-  //     );
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
+  
   @override
   Iterable<UrlSegmentData> encodeUrl() {
     if (urlParser case final parser?) {

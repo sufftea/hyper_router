@@ -10,7 +10,7 @@ Value-based router for Flutter.
 - **Nested navigation** There is a built in `ShellRoute`. Supports preserving the stack when switching tabs.
 - **Return value from a route** 
 - **Custom routes**: Override built in classes for specialized use-cases.
-- **WEB SUPPORT IS INCOMING** 
+- **Optional URL support**
 
 ## Overview
 
@@ -18,8 +18,6 @@ Value-based router for Flutter.
 2) Access the controller with `Star.of(context)` or `context.star`.
 3) To navigate to a specific location in the tree, use the key associated with that location: `context.star.navigate(<key>)`.
 4) To pop a route, use `context.star.pop` or the default `Navigator.of(context).pop`.
-5) Star enforces the declared route tree, preventing navigation to routes that are not explicitly defined. (Unless you're using the native flutter API, which you still can. For example, to show dialogs).
-
 
 ## Route tree configuration
 ```dart
@@ -27,10 +25,8 @@ final router = Star(
   initialRoute: HomeScreen.routeName,
   routes: [
     ShellRoute(
-      shellBuilder: (context, controller, child) => TabsShell(
-        controller: controller,
-        child: child,
-      ),
+      shellBuilder: (context, controller, child) =>
+          MainTabsShell(controller: controller, child: child),
       tabs: [
         NamedRoute(
           screenBuilder: (context) => const HomeScreen(),
@@ -41,27 +37,22 @@ final router = Star(
               name: ProductListScreen.routeName,
               children: [
                 ValueRoute<ProductRouteValue>(
-                  screenBuilder: (context, value) => ProductDetailsScreen(
-                    value: value,
-                  ),
+                  screenBuilder: (context, value) =>
+                      ProductDetailsScreen(value: value),
                 ),
               ],
             ),
           ],
         ),
         NamedRoute(
-          screenBuilder: (context) => const CartScreen(),
-          name: CartScreen.routeName,
+          screenBuilder: (context) => const GuideScreen(),
+          name: GuideScreen.routeName,
         ),
         NamedRoute(
-          screenBuilder: (context) => const SettingsScreen(),
-          name: SettingsScreen.routeName,
+          screenBuilder: (context) => const InsideScreen(),
+          name: InsideScreen.routeName,
         ),
       ],
-    ),
-    NamedRoute(
-      screenBuilder: (context) => const AuthScreen(),
-      name: AuthScreen.routeName,
     ),
   ],
 );
@@ -91,7 +82,7 @@ Star.of(context).navigate(HomeScreen.routeName);
 
 ### ValueRoute\<T\>
 
-A route you can pass a value to. The type `T` is the key associated with the route. It can contain any data you want to pass to the route.
+A route you can pass a value to. The type `T` is the key associated with the route. It contains the data you want to pass to the route.
 
 Declaring the type:
 ```dart
@@ -111,8 +102,7 @@ context.star.navigate(ProductRouteValue(
 
 arguments:
 - `shellBuilder`: the screen that wraps the child route and displays the tab bar.
-- `tabs`: the routes that can be displayed inside the shell. 
-- Optionally, you can display a route on top of the shell, by placing it inside the `onTop` field.
+- `tabs`: the routes that will be displayed inside the shell. 
 
 The shell is provided with a `ShellController`. You can use it to switch between the tabs (`setTabIndex(index)`) and get the current tab index (`tabIndex`). The tab indexes are their indexes in the `tabs` field. Alternatively, it's still possible to navigate to the tabs the regular way by using `navigate`.
 
@@ -183,11 +173,10 @@ final result = await showDialog(Dialog(...));
 Navigator.of(context).pop(value);
 // context.star.pop(value) // will also work
 ```
-Such routes are not reflected in Star's internal state, so they can't use any of the perks provided by the package.
 
 ## Guards
 
-You can add a redirect callback that is triggered every time the route changes and redirects to a different screen if necessary.
+You can add a redirect callback that gets triggered every time the route changes and redirects to a different screen if necessary.
 
 For example, you might want to check if the user is logged in, and if not, redirect them to the login page:
 ```dart
@@ -208,7 +197,6 @@ final router = Star(
 - `containsNode` returns `true` if a route with the provided key is somewhere in the stack. Notice that it requires providing the `key` explicitly. 
   - `RouteName`'s key is the string you provide when you initialize it.
   - `RouteValue`'s key is its type.
-- It is possible to subscribe to the context inside the callback. This way you can redirect as soon as the condition changes, instead fo waiting for the user to try to change the route.
 - Return the value associated with the route you want to redirect to. This is the same value you would use for navigation. If no redirect is needed, return null.
 - `stack.last().value` is the value associated with the route the user was trying to navigate to. We're passing it into the auth screen, so that it can navigate to the desired route after the authentication is finished.
 
@@ -219,7 +207,7 @@ I tried to make the package really extensible, so it's possible to create a rout
 How the router works on the inside:
 
 1) The route tree is traversed from the target route to the root to construct a linked list of `RouteNode`s.
-2) Each node is responsible for building its own page and (recursively) all the consecutive pages. This happens inside the `createPages` method that returns the list of pages.
+2) Each node is responsible for building its own page and - recursively - all the consecutive pages. This happens inside the `createPages` method that returns the list of pages.
     - `NamedRoute` and `ValueRoute` just place their own and all the consecutive pages on top of each other:
       ```dart
       List<Page> createPages(BuildContext context) {
