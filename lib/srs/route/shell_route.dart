@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:star/srs/base/exceptions.dart';
+import 'package:star/srs/route/shell_covering_route.dart';
 import 'package:star/srs/url/route_information_parser.dart';
-
+import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
-import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/nested_navigator.dart';
 
 typedef ShellBuilder = Widget Function(
@@ -15,8 +16,12 @@ class ShellRoute extends StarRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
     required this.tabs,
-    this.onTop = const [],
-  }) : super(children: tabs + onTop);
+
+    /// Usually, you don't need to provide this. Use this for
+    /// [ShellCoveringRoute]
+    RouteKey? key,
+  })  : key = key ?? RouteKey(),
+        super(children: tabs);
 
   final Widget Function(
     BuildContext context,
@@ -25,19 +30,54 @@ class ShellRoute extends StarRoute<ShellValue> {
   ) shellBuilder;
 
   final List<StarRoute> tabs;
-  final List<StarRoute> onTop;
 
   @override
-  final Object key = UniqueKey();
+  final RouteKey key;
 
   @override
   RouteNode createNode({RouteNode? next, ShellValue? value}) {
-    return ShellNode.createFrom(
+    if (next != null) {
+      if (value != null) {
+        value = value.withNext(next);
+      } else {
+        value = ShellValue.fromNext(
+          key: key,
+          tabRoutes: tabs,
+          next: next,
+        );
+      }
+    } else {
+      value = ShellValue.def(key: key, tabs: tabs);
+    }
+
+    return ShellNode(
       shellBuilder: shellBuilder,
-      next: next,
-      oldValue: value,
-      tabs: tabs.map((e) => e.createNode()).toList(),
-      key: key,
+      value: value,
+      route: this,
+    );
+  }
+
+  @override
+  RouteNode<RouteValue> updateNode({
+    RouteNode<RouteValue>? next,
+    required ShellValue value,
+  }) {
+    return ShellNode(
+      shellBuilder: shellBuilder,
+      value: value,
+      route: this,
+    );
+  }
+
+  @override
+  RouteNode<RouteValue> copyNode({
+    RouteNode<RouteValue>? next,
+    required ShellValue value,
+  }) {
+    return ShellNode(
+      shellBuilder: shellBuilder,
+      value: value.withNext(next!),
+      route: this,
     );
   }
 
@@ -64,86 +104,44 @@ class ShellNode extends RouteNode<ShellValue> {
   ShellNode({
     required this.shellBuilder,
     required this.value,
-    required this.onTop,
+    required super.route,
   });
-
-  factory ShellNode.createFrom({
-    required ShellBuilder shellBuilder,
-    required RouteNode? next,
-    required ShellValue? oldValue,
-    required List<RouteNode> tabs,
-    required Object key,
-  }) {
-    final ShellValue value;
-    final RouteNode? onTop;
-
-    switch ((oldValue, next)) {
-      case (final v?, final n?):
-        final withSelected = v.withSelected(n);
-
-        if (withSelected == null) {
-          onTop = next;
-          value = v;
-        } else {
-          value = withSelected;
-          onTop = null;
-        }
-      case (null, final n?):
-        final index = tabs.indexWhere((e) => e.key == n.key);
-
-        if (index == -1) {
-          value = ShellValue(
-            tabIndex: 0,
-            key: key,
-            tabs: tabs,
-          );
-          onTop = n;
-        } else {
-          tabs[index] = n;
-          value = ShellValue(
-            tabIndex: index,
-            key: key,
-            tabs: tabs,
-          );
-          onTop = null;
-        }
-      case (final v?, null):
-        value = v;
-        onTop = null;
-      case (null, null):
-        value = ShellValue(
-          tabIndex: 0,
-          key: key,
-          tabs: tabs,
-        );
-        onTop = null;
-      default:
-        throw UnimplementedError();
-    }
-
-    return ShellNode(
-      shellBuilder: shellBuilder,
-      onTop: onTop,
-      value: value,
-    );
-  }
 
   final ShellBuilder shellBuilder;
 
   @override
-  RouteNode<RouteValue> get next => onTop ?? value.currTab;
-  final RouteNode? onTop;
+  RouteNode<RouteValue> get next => value.currTab;
 
   @override
   final ShellValue value;
+  @override
+  RouteKey get key => value.key;
 
   @override
   List<Page> createPages(BuildContext context) {
-    final controller = Star.of(context);
+    final controller = Star.rootOf(context);
     final shellController = ShellController(
       value: value,
       controller: controller,
     );
+
+    ShellCoveringNode? coveringNode;
+    next.forEach((node) {
+      if (node is ShellCoveringNode && node.shellKey == key) {
+        coveringNode = node;
+      }
+    });
+
+    late final RouteNode nestedNodes;
+    if (coveringNode case final coveringNode?) {
+      if (next.cut(coveringNode) case final next?) {
+        nestedNodes = next;
+      } else {
+        nestedNodes = value.tabNodes[value.nonCoveringTabIndex];
+      }
+    } else {
+      nestedNodes = next;
+    }
 
     final page = MaterialPage(
       child: shellBuilder(
@@ -151,7 +149,7 @@ class ShellNode extends RouteNode<ShellValue> {
         shellController,
         Builder(builder: (context) {
           return NestedNavigator(
-            pages: value.currTab.createPages(context),
+            pages: nestedNodes.createPages(context),
             key: ValueKey(shellController.tabIndex),
           );
         }),
@@ -160,37 +158,29 @@ class ShellNode extends RouteNode<ShellValue> {
 
     return [
       page,
-      if (onTop != null) ...onTop!.createPages(context),
+      if (coveringNode != null) ...coveringNode!.createPages(context),
     ];
   }
 
   @override
   RouteNode<RouteValue>? pop() {
-    if (onTop case final onTop?) {
-      final popped = onTop.pop();
+    if (_isShellCovering(next, key)) {
+      final updated = route.updateNode(
+        next: value.tabNodes[value.nonCoveringTabIndex],
+        value: value.withIndex(value.nonCoveringTabIndex),
+      );
 
-      return ShellNode.createFrom(
-        shellBuilder: shellBuilder,
+      return updated;
+    }
+
+    if (value.currTab.pop() case final popped?) {
+      return route.updateNode(
         next: popped,
-        oldValue: value,
-        tabs: value.tabs,
-        key: key,
+        value: value.withNext(popped),
       );
     }
 
-    final popped = value.currTab.pop();
-
-    if (popped == null) {
-      return null;
-    }
-
-    return ShellNode.createFrom(
-      shellBuilder: shellBuilder,
-      next: popped,
-      oldValue: value,
-      tabs: value.tabs,
-      key: key,
-    );
+    return null;
   }
 
   @override
@@ -203,44 +193,99 @@ class ShellValue extends RouteValue {
   ShellValue({
     required this.tabIndex,
     required this.key,
-    required this.tabs,
+    required this.tabNodes,
+    required this.nonCoveringTabIndex,
   });
 
-  final List<RouteNode> tabs;
-  final int tabIndex;
+  factory ShellValue.def({
+    required RouteKey key,
+    required List<StarRoute> tabs,
+  }) {
+    return ShellValue(
+      tabIndex: 0,
+      key: key,
+      tabNodes: tabs.map((e) => e.createNode()!).toList(),
+      nonCoveringTabIndex: 0,
+    );
+  }
 
-  RouteNode get currTab => tabs[tabIndex];
+  factory ShellValue.fromNext({
+    required RouteKey key,
+    required List<StarRoute> tabRoutes,
+    required RouteNode next,
+  }) {
+    final tabIndex = tabRoutes.indexWhere((e) => e.key == next.key);
+
+    return ShellValue(
+      tabIndex: tabIndex,
+      key: key,
+      tabNodes: tabRoutes.map((e) {
+        if (e.key == next.key) {
+          return next;
+        }
+        return e.createNode()!;
+      }).toList(),
+      nonCoveringTabIndex: _isShellCovering(next, key) ? 0 : tabIndex,
+    );
+  }
+
+  final List<RouteNode> tabNodes;
+  final int tabIndex;
+  final int nonCoveringTabIndex;
+
+  RouteNode get currTab => tabNodes[tabIndex];
 
   @override
-  final Object key;
+  final RouteKey key;
 
-  ShellValue? withSelected(RouteNode next) {
-    final index = tabs.indexWhere((tab) => tab.value.key == next.value.key);
-
-    if (index == -1) {
-      return null;
+  ShellValue withIndex(int index) {
+    var tab = tabNodes[index];
+    if (tab is ShellCoveringNode && tab.shellKey == key && tab.next.isTop) {
+      tabNodes[index] = tab.copyStack();
     }
 
-    return copyWith(
+    return ShellValue(
       tabIndex: index,
-      tabs: tabs.map((e) => e.value.key == next.value.key ? next : e).toList(),
+      key: key,
+      tabNodes: tabNodes,
+      nonCoveringTabIndex:
+          _isShellCovering(tab, key) ? nonCoveringTabIndex : index,
+    );
+  }
+
+  ShellValue withNext(RouteNode next) {
+    final tabIndex =
+        tabNodes.indexWhere((tab) => tab.value.key == next.value.key);
+
+    return ShellValue(
+      key: key,
+      tabIndex: tabIndex,
+      tabNodes: tabNodes
+          .map((e) => e.value.key == next.value.key ? next : e)
+          .toList(),
+      nonCoveringTabIndex: _isShellCovering(tabNodes[tabIndex], key)
+          ? nonCoveringTabIndex
+          : tabIndex,
     );
   }
 
   bool containsTab(Object key) {
-    return tabs.any((tab) => tab.value.key == key);
+    return tabNodes.any((tab) => tab.value.key == key);
   }
 
-  ShellValue copyWith({
-    List<RouteNode>? tabs,
-    int? tabIndex,
-    Object? key,
-  }) {
-    return ShellValue(
-      tabs: tabs ?? this.tabs,
-      tabIndex: tabIndex ?? this.tabIndex, 
-      key: key ?? this.key,
-    );
+  @override
+  String toString() {
+    final stacks = [
+      for (final tab in tabNodes)
+        () {
+          final stack = [];
+          tab.forEach((node) {
+            stack.add(node.value.toString());
+          });
+          return stack;
+        }(),
+    ];
+    return 'ShellValue(tabIndex: $tabIndex, tabStacks: $stacks)';
   }
 }
 
@@ -253,9 +298,9 @@ class ShellController {
   final ShellValue value;
   int get tabIndex => value.tabIndex;
 
-  RouteNode get root => value.tabs[value.tabIndex];
+  RouteNode get root => value.tabNodes[value.tabIndex];
 
-  final StarController controller;
+  final RootStarController controller;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved
@@ -263,18 +308,30 @@ class ShellController {
   ///   `null` (default): preserves state when switching tabs; resets to the first
   ///     route when activating the same tab again.
   void setTabIndex(int index, {bool? preserveState}) {
-    final oldIndex = value.tabIndex;
+    final ShellValue updatedValue;
 
-    final target = switch (preserveState ?? index != oldIndex) {
-      true => value.tabs[index].last().value,
-      false => value.tabs[index].value,
-    };
+    if (preserveState == null && index != value.tabIndex ||
+        preserveState == true) {
+      updatedValue = value.withIndex(index);
+    } else {
+      final next = value.tabNodes[index];
+      updatedValue = value.withNext(
+        next.route.copyNode(
+          next: null,
+          value: next.value,
+        ),
+      );
+    }
 
-    final values = <RouteValue>{};
-    value.tabs[index].forEach((builder) {
-      values.add(builder.value);
-    });
-
-    controller.navigate(target, values);
+    controller.setStack(
+      controller.stack.withUpdatedValue(
+        value.key,
+        updatedValue,
+      ),
+    );
   }
+}
+
+bool _isShellCovering(RouteNode node, RouteKey key) {
+  return node is ShellCoveringNode && node.shellKey == key;
 }

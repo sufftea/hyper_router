@@ -85,7 +85,7 @@ class RootStarController extends ChangeNotifier implements StarController {
     final valuesMap = extractValues();
     valuesMap[target.key] = target;
 
-    return targetRoute.createNodeRec(values: valuesMap);
+    return targetRoute.createStack(values: valuesMap)!;
   }
 
   Map<Object, RouteValue> extractValues() {
@@ -105,7 +105,6 @@ class RedirectWatcher extends StatefulWidget {
     super.key,
   });
 
-  // final void Function(BuildContext context)
   final Widget child;
 
   @override

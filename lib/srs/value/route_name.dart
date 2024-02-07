@@ -6,4 +6,9 @@ class RouteName extends RouteValue {
 
   @override
   Object get key => name;
+
+  @override
+  String toString() {
+    return "RouteName('$name')";
+  }
 }

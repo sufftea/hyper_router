@@ -1,9 +1,5 @@
 import 'package:example/features/demos/guard/log_out_dialog.dart';
-import 'package:example/features/demos/guard/state/auth_cubit.dart';
-import 'package:example/features/utils/context_x.dart';
-import 'package:example/features/utils/material_match.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:star/star.dart';
 
 class CreatePostScreen extends StatelessWidget {

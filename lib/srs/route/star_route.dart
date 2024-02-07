@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/value/route_key.dart';
 
 import 'package:star/srs/value/route_value.dart';
 
@@ -24,10 +25,24 @@ abstract class StarRoute<T extends RouteValue> {
 
   Object get key;
 
-  RouteNode createNode({
+  RouteNode? createNode({
     RouteNode? next,
     T? value,
   });
+
+  RouteNode updateNode({
+    RouteNode? next,
+    required T value,
+  }) {
+    return createNode(next: next, value: value)!;
+  }
+
+  RouteNode copyNode({
+    RouteNode? next,
+    required T value,
+  }) {
+    return createNode(next: next, value: value)!;
+  }
 
   /// Receives a list of url segments and returns the stack parsed from them.
   /// The first segment in the list is matched against this route. If it does
@@ -57,8 +72,11 @@ abstract class StarRoute<T extends RouteValue> {
 }
 
 abstract class RouteNode<T extends RouteValue> {
+  RouteNode({required this.route});
+
   RouteNode? get next;
   T get value;
+  final StarRoute route;
   Object get key => value.key;
   final popCompleter = Completer();
 
@@ -66,7 +84,22 @@ abstract class RouteNode<T extends RouteValue> {
 
   List<Page> createPages(BuildContext context);
 
-  RouteNode? pop();
+  RouteNode? pop() {
+    if (next case final next?) {
+      return route.copyNode(next: next.pop(), value: value);
+    }
+    return null;
+  }
+
+  /// Converts the stack into a list of url segments.
+  Iterable<UrlSegmentData> encodeUrl();
+
+  RouteNode? cut(Object key) {
+    if (key == this.key) {
+      return null;
+    }
+    return route.copyNode(next: next?.cut(key), value: value);
+  }
 
   RouteNode last() {
     RouteNode curr = this;
@@ -78,18 +111,24 @@ abstract class RouteNode<T extends RouteValue> {
     return curr;
   }
 
-  bool containsNode(Object key) {
-    if (this.key == key) {
-      return true;
-    } else if (next case final next?) {
-      return next.containsNode(key);
+  /// Returns a copy of the stack where the node with [key] is replaced with a
+  /// node containing the provided value.
+  RouteNode withUpdatedValue(Object key, RouteValue value) {
+    if (key == this.key) {
+      return route.updateNode(next: next, value: value);
     }
-
-    return false;
+    return route.copyNode(
+      next: next?.withUpdatedValue(key, value),
+      value: this.value,
+    );
   }
 
-  /// Converts the stack into a list of url segments.
-  Iterable<UrlSegmentData> encodeUrl();
+  RouteNode copyStack() {
+    return route.copyNode(
+      value: value,
+      next: next?.copyStack(),
+    );
+  }
 
   @override
   bool operator ==(Object other) {
@@ -101,12 +140,22 @@ abstract class RouteNode<T extends RouteValue> {
 }
 
 extension RouteNodeX on RouteNode {
-  void forEach(void Function(RouteNode builder) action) {
+  void forEach(void Function(RouteNode node) action) {
     RouteNode? curr = this;
     while (curr != null) {
       action(curr);
       curr = curr.next;
     }
+  }
+
+  bool containsNode(Object key) {
+    if (this.key == key) {
+      return true;
+    } else if (next case final next?) {
+      return next.containsNode(key);
+    }
+
+    return false;
   }
 }
 
@@ -118,7 +167,8 @@ extension TreeRouteX<T extends RouteValue> on StarRoute<T> {
     }
   }
 
-  RouteNode createNodeRec({
+  /// Creates a stack of [RouteNode]s from this route to the root.
+  RouteNode? createStack({
     RouteNode? next,
     required Map<Object, RouteValue> values,
   }) {
@@ -128,7 +178,7 @@ extension TreeRouteX<T extends RouteValue> on StarRoute<T> {
     );
 
     if (parent case final parent?) {
-      return parent.createNodeRec(
+      return parent.createStack(
         next: node,
         values: values,
       );

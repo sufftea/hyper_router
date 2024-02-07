@@ -21,6 +21,7 @@ class ResponsiveRoute extends NamedRoute {
       value: name,
       buildPage: (context) => buildPage(context, name),
       buildScreen: (context) => screenBuilder(context, name),
+      route: this,
     );
   }
 }
@@ -31,6 +32,7 @@ class ResponsiveNode extends NamedNode {
     required super.next,
     required super.value,
     required this.buildScreen,
+    required super.route,
   });
 
   final Widget Function(BuildContext context) buildScreen;
@@ -87,17 +89,18 @@ class ResponsiveNode extends NamedNode {
     };
   }
 
-  @override
-  RouteNode<RouteValue>? pop() {
-    if (next == null) {
-      return null;
-    }
+  // @override
+  // RouteNode<RouteValue>? pop() {
+  //   if (next == null) {
+  //     return null;
+  //   }
 
-    return ResponsiveNode(
-      buildPage: buildPage,
-      next: next?.pop(),
-      value: value,
-      buildScreen: buildScreen,
-    );
-  }
+  //   return ResponsiveNode(
+  //     buildPage: buildPage,
+  //     next: next?.pop(),
+  //     value: value,
+  //     buildScreen: buildScreen,
+  //     route: route,
+  //   );
+  // }
 }

@@ -35,6 +35,7 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
       next: next,
       value: value,
       urlParser: urlParser,
+      route: this,
     );
   }
 
@@ -85,6 +86,7 @@ class ValueNode<T extends RouteValue> extends RouteNode {
     required this.next,
     required this.value,
     required this.buildPage,
+    required super.route,
     this.urlParser,
   });
 
@@ -107,18 +109,19 @@ class ValueNode<T extends RouteValue> extends RouteNode {
     ];
   }
 
-  @override
-  RouteNode<RouteValue>? pop() {
-    if (next case final next?) {
-      return ValueNode(
-        next: next.pop(),
-        value: value,
-        buildPage: buildPage,
-      );
-    } else {
-      return null;
-    }
-  }
+  // @override
+  // RouteNode<RouteValue>? pop() {
+  //   if (next case final next?) {
+  //     return ValueNode(
+  //       next: next.pop(),
+  //       value: value,
+  //       buildPage: buildPage,
+  //       route: route,
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   @override
   Iterable<UrlSegmentData> encodeUrl() {

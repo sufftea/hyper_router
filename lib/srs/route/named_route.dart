@@ -28,6 +28,7 @@ class NamedRoute extends ValueRoute<RouteName> {
       next: next,
       value: name,
       buildPage: (context) => buildPage(context, name),
+      route: this,
     );
   }
 
@@ -63,6 +64,7 @@ class NamedNode extends RouteNode<RouteName> {
     required this.next,
     required this.value,
     required this.buildPage,
+    required super.route,
   });
 
   final Page Function(BuildContext context) buildPage;
@@ -81,19 +83,6 @@ class NamedNode extends RouteNode<RouteName> {
       page,
       ...next?.createPages(context) ?? [],
     ];
-  }
-
-  @override
-  RouteNode<RouteValue>? pop() {
-    if (next case final next?) {
-      return NamedNode(
-        next: next.pop(),
-        value: value,
-        buildPage: buildPage,
-      );
-    } else {
-      return null;
-    }
   }
 
   @override

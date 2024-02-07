@@ -35,6 +35,10 @@ class DemoTabsShell extends StatelessWidget {
             icon: Icon(i == 2 ? Icons.chat_bubble : Icons.chat_bubble_outline),
             label: "Chat",
           ),
+          NavigationDestination(
+            icon: Icon(i == 3 ? Icons.filter_none : Icons.filter_none),
+            label: "Covering Tab",
+          ),
         ],
       ),
     );

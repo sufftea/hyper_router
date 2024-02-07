@@ -15,6 +15,7 @@ import 'package:example/features/demos/nested_routes/docs_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_subroute_screen.dart';
 import 'package:example/features/demos/nested_routes/on_top_screen.dart';
+import 'package:example/features/demos/nested_routes/over_tab.dart';
 import 'package:example/features/demos/value_based/product_details/product_details_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/guide/guide_screen.dart';
@@ -22,8 +23,12 @@ import 'package:example/features/home/home_screen.dart';
 import 'package:example/features/internals/internal_screen.dart';
 import 'package:example/features/tabs/main_tabs_shell.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star/srs/route/shell_covering_route.dart';
 import 'package:star/srs/url/url_parser.dart';
+import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
+
+final _demoShellKey = RouteKey();
 
 final router = Star(
   initialRoute: HomeScreen.routeName,
@@ -74,8 +79,9 @@ final router = Star(
             ValueRoute<AuthRouteValue>(
               screenBuilder: (context, value) => AuthScreen(value: value),
               urlParser: QueryParamsUrlParser(
-                decodeSegment: (name, queryParams) =>
-                    AuthRouteValue(AuthwalledScreen.routeName),
+                decodeSegment: (name, queryParams) => name == 'login'
+                    ? AuthRouteValue(AuthwalledScreen.routeName)
+                    : null,
                 encodeSegment: (value) => ('login', {}),
               ),
             ),
@@ -90,6 +96,7 @@ final router = Star(
               ],
             ),
             ShellRoute(
+              key: _demoShellKey,
               shellBuilder: (context, controller, child) => DemoTabsShell(
                 controller: controller,
                 child: child,
@@ -103,6 +110,15 @@ final router = Star(
                       screenBuilder: (context) => const InboxSubrouteScreen(),
                       name: InboxSubrouteScreen.routeName,
                     ),
+                    ShellCoveringRoute(
+                      shellKey: _demoShellKey,
+                      children: [
+                        NamedRoute(
+                          screenBuilder: (context) => const CoveringScreen(),
+                          name: CoveringScreen.routeName,
+                        )
+                      ],
+                    ),
                   ],
                 ),
                 NamedRoute(
@@ -113,13 +129,22 @@ final router = Star(
                   screenBuilder: (context) => const ChatScreen(),
                   name: ChatScreen.routeName,
                 ),
-              ],
-              onTop: [
-                NamedRoute(
-                  screenBuilder: (context) => const OverScreen(),
-                  name: OverScreen.routeName,
+                ShellCoveringRoute(
+                  shellKey: _demoShellKey,
+                  children: [
+                    NamedRoute(
+                      screenBuilder: (context) => const CoveringTabScreen(),
+                      name: CoveringTabScreen.routeName,
+                    ),
+                  ],
                 ),
               ],
+              // onTop: [
+              //   NamedRoute(
+              //     screenBuilder: (context) => const OverScreen(),
+              //     name: OverScreen.routeName,
+              //   ),
+              // ],
             ),
             ResponsiveRoute(
               screenBuilder: (context) => const EmailListScreen(),

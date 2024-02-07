@@ -1,10 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:star/star.dart';
 
-class CoveringScreen extends StatelessWidget {
-  const CoveringScreen({super.key});
+class CoveringTabScreen extends StatelessWidget {
+  const CoveringTabScreen({super.key});
 
-  static const routeName = RouteName('covering-screen');
+  static const routeName = RouteName('covering-tab');
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class CoveringScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'This screen is displayed over the tab shell',
+            'This tab is displayed over the tab shell',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 24,

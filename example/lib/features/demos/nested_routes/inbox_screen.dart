@@ -50,7 +50,7 @@ class InboxScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                context.star.navigate(OverScreen.routeName);
+                context.star.navigate(CoveringScreen.routeName);
               },
               child: const Text('Open route on top of the shell'),
             ),
