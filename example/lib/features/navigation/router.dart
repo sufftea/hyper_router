@@ -18,6 +18,7 @@ import 'package:example/features/demos/nested_routes/on_top_screen.dart';
 import 'package:example/features/demos/nested_routes/over_tab.dart';
 import 'package:example/features/demos/value_based/product_details/product_details_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
+import 'package:example/features/error/error_screen.dart';
 import 'package:example/features/guide/guide_screen.dart';
 import 'package:example/features/home/home_screen.dart';
 import 'package:example/features/internals/internal_screen.dart';
@@ -32,6 +33,7 @@ final _demoShellKey = RouteKey();
 
 final router = Star(
   initialRoute: HomeScreen.routeName,
+  errorRoute: ErrorScreen.routeName,
   enableWeb: true,
   redirect: (context, stack) {
     final authCubit = context.read<AuthCubit>();
@@ -180,6 +182,10 @@ final router = Star(
           name: InsideScreen.routeName,
         ),
       ],
+    ),
+    NamedRoute(
+      screenBuilder: (context) => const ErrorScreen(),
+      name: ErrorScreen.routeName,
     ),
   ],
 );

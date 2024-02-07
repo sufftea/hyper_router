@@ -13,9 +13,10 @@ class Star implements RouterConfig<Object> {
   Star({
     required RouteValue initialRoute,
     required this.routes,
+    RouteValue? errorRoute,
     bool enableWeb = false,
     this.redirect = _defaultRedirect,
-  }) {
+  }) : errorRoute = errorRoute ?? initialRoute {
     for (final r in routes) {
       r.parent = null;
     }
@@ -43,7 +44,9 @@ class Star implements RouterConfig<Object> {
     );
 
     if (enableWeb) {
-      routeInformationParser = StarRouteInformationParser(roots: routes);
+      routeInformationParser = StarRouteInformationParser(
+        config: this,
+      );
 
       final u = routeInformationParser!
           .restoreRouteInformation(rootController.stack)!;
@@ -61,6 +64,7 @@ class Star implements RouterConfig<Object> {
   late final RootStarController rootController;
   final List<StarRoute> routes;
   final RouteValue? Function(BuildContext context, RouteNode stack) redirect;
+  final RouteValue errorRoute;
 
   static StarController of(BuildContext context) {
     return context

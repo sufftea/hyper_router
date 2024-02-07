@@ -17,7 +17,7 @@ class Product {
   final int score;
 }
 
-final products = Map.fromIterable(
+final products = Map<String, Product>.fromIterable(
   [
     Product(
       name: "Laptop",

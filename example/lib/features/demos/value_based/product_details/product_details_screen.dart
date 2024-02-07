@@ -26,27 +26,39 @@ class ProductDetailsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: LimitWidth(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              buildHeader(context, product),
-              const SizedBox(height: 16),
-              const Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
+      body: product == null
+          ? buildNoSuchProduct(context)
+          : buildProductDetails(context, product),
+    );
+  }
+
+  Widget buildNoSuchProduct(BuildContext context) {
+    return Center(
+      child: Text("Product with id $productId doesn't seem to exist"),
+    );
+  }
+
+  Widget buildProductDetails(BuildContext context, Product product) {
+    return SingleChildScrollView(
+      child: LimitWidth(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildHeader(context, product),
+            const SizedBox(height: 16),
+            const Text(
+              'Description',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 8),
-              Text(
-                product.description,
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              product.description,
+              style: const TextStyle(fontSize: 16),
+            ),
+          ],
         ),
       ),
     );
