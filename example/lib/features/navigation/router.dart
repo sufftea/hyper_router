@@ -15,7 +15,6 @@ import 'package:example/features/demos/nested_routes/docs_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_screen.dart';
 import 'package:example/features/demos/nested_routes/inbox_subroute_screen.dart';
 import 'package:example/features/demos/nested_routes/on_top_screen.dart';
-import 'package:example/features/demos/nested_routes/over_tab.dart';
 import 'package:example/features/demos/value_based/product_details/product_details_screen.dart';
 import 'package:example/features/demos/value_based/product_list/product_list_screen.dart';
 import 'package:example/features/error/error_screen.dart';
@@ -130,15 +129,6 @@ final router = Star(
                 NamedRoute(
                   screenBuilder: (context) => const ChatScreen(),
                   name: ChatScreen.routeName,
-                ),
-                ShellCoveringRoute(
-                  shellKey: _demoShellKey,
-                  children: [
-                    NamedRoute(
-                      screenBuilder: (context) => const CoveringTabScreen(),
-                      name: CoveringTabScreen.routeName,
-                    ),
-                  ],
                 ),
               ],
             ),

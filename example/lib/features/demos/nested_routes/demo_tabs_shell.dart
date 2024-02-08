@@ -19,7 +19,7 @@ class DemoTabsShell extends StatelessWidget {
       body: child,
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (value) {
-          controller.setTabIndex(value, preserveState: false);
+          controller.setTabIndex(value);
         },
         selectedIndex: controller.tabIndex,
         destinations: [
@@ -34,10 +34,6 @@ class DemoTabsShell extends StatelessWidget {
           NavigationDestination(
             icon: Icon(i == 2 ? Icons.chat_bubble : Icons.chat_bubble_outline),
             label: "Chat",
-          ),
-          NavigationDestination(
-            icon: Icon(i == 3 ? Icons.filter_none : Icons.filter_none),
-            label: "Covering Tab",
           ),
         ],
       ),

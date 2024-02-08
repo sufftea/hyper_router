@@ -29,14 +29,20 @@ abstract class StarRoute<T extends RouteValue> {
     T? value,
   });
 
-  RouteNode updateNode({
+  /// Prioritizes [value] over [next].
+  /// - [next] is what the node is currently pointing towards.
+  /// - [value] is the value the returned node is expected to contain.
+  RouteNode updateWithValue({
     RouteNode? next,
     required T value,
   }) {
     return createNode(next: next, value: value)!;
   }
 
-  RouteNode copyNode({
+  /// Prioritizes [next] over [value].
+  /// - [value] is the current value of the node.
+  /// - [next] is what the returned node is expected to be pointing to.
+  RouteNode updateWithNext({
     RouteNode? next,
     required T value,
   }) {
@@ -85,7 +91,7 @@ abstract class RouteNode<T extends RouteValue> {
 
   RouteNode? pop() {
     if (next case final next?) {
-      return route.copyNode(next: next.pop(), value: value);
+      return route.updateWithNext(next: next.pop(), value: value);
     }
     return null;
   }
@@ -97,7 +103,7 @@ abstract class RouteNode<T extends RouteValue> {
     if (key == this.key) {
       return null;
     }
-    return route.copyNode(next: next?.cut(key), value: value);
+    return route.updateWithNext(next: next?.cut(key), value: value);
   }
 
   RouteNode last() {
@@ -114,16 +120,16 @@ abstract class RouteNode<T extends RouteValue> {
   /// node containing the provided value.
   RouteNode withUpdatedValue(Object key, RouteValue value) {
     if (key == this.key) {
-      return route.updateNode(next: next, value: value);
+      return route.updateWithValue(next: next, value: value);
     }
-    return route.copyNode(
+    return route.updateWithNext(
       next: next?.withUpdatedValue(key, value),
       value: this.value,
     );
   }
 
   RouteNode copyStack() {
-    return route.copyNode(
+    return route.updateWithNext(
       value: value,
       next: next?.copyStack(),
     );
