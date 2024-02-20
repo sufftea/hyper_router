@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:example/features/demos/custom_route/email_detail_screen.dart';
 import 'package:example/features/demos/custom_route/email_list_screen.dart';
 import 'package:example/features/demos/custom_route/responsive_route.dart';
@@ -24,7 +22,6 @@ import 'package:example/features/internals/internal_screen.dart';
 import 'package:example/features/tabs/main_tabs_shell.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:star/srs/route/shell_covering_route.dart';
-import 'package:star/srs/url/url_parser.dart';
 import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
 
@@ -59,11 +56,7 @@ final router = Star(
                 ValueRoute<ProductRouteValue>(
                   screenBuilder: (context, value) =>
                       ProductDetailsScreen(value: value),
-                  urlParser: QueryParamsUrlParser(
-                    encodeSegment: (value) => (value.productId, {}),
-                    decodeSegment: (segment, queryParams) =>
-                        ProductRouteValue(segment),
-                  ),
+                  urlParser: ProductSegmentParser(),
                 ),
               ],
             ),
@@ -79,12 +72,7 @@ final router = Star(
             ),
             ValueRoute<AuthRouteValue>(
               screenBuilder: (context, value) => AuthScreen(value: value),
-              urlParser: QueryParamsUrlParser(
-                decodeSegment: (name, queryParams) => name == 'login'
-                    ? AuthRouteValue(AuthwalledScreen.routeName)
-                    : null,
-                encodeSegment: (value) => ('login', {}),
-              ),
+              urlParser: AuthSegmentParser(),
             ),
             NamedRoute(
               screenBuilder: (context) => const DialogExamplesScreen(),
@@ -140,24 +128,7 @@ final router = Star(
                   screenBuilder: (context, value) => EmailDetailScreen(
                     value: value,
                   ),
-                  urlParser: QueryParamsUrlParser(
-                    encodeSegment: (value) => (
-                      value.title
-                          .substring(0, min(value.title.length, 16))
-                          .replaceAll(' ', '-'),
-                      {'id': value.emailId},
-                    ),
-                    decodeSegment: (name, queryParams) {
-                      if (queryParams['id'] case final id?) {
-                        return EmailDetailRouteValue(
-                          emailId: id,
-                          title: name,
-                        );
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
+                  urlParser: EmailDetailSegmentParser(),
                 ),
               ],
             ),

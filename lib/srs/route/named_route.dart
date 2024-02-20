@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/url/url_data.dart';
 import 'package:star/srs/utils/consecutive_pages.dart';
 import 'package:star/star.dart';
 
@@ -34,24 +33,12 @@ class NamedRoute extends ValueRoute<RouteName> {
   }
 
   @override
-  RouteNode<RouteValue>? decodeUrl(
-    List<UrlSegmentData> segments,
+  RouteNode<RouteValue>? createFromUrl(
+    UrlData url,
   ) {
-    final data = segments.first;
-
-    if (data.segment == name.name) {
-      final next = StarRoute.matchUrl(
-        segments: segments.sublist(1),
-        routes: children,
-      );
-
-      if (next == null && segments.length >= 2) {
-        throw StarException(
-            "Couldn't match a url segment: ${segments[1].segment}");
-      }
-
+    if (url.segments.first == name.name) {
       return createNode(
-        next: next,
+        next: nextNodeFromUrl(url.copyWith(url.segments.skip(1))),
         value: name,
       );
     }
@@ -80,12 +67,17 @@ class NamedNode extends RouteNode<RouteName> {
   Iterable<Page> createPages(BuildContext context) {
     final page = buildPage(context);
 
-    return consecutive(page, next?.createPages(context));
+    return followByIterable(page, next?.createPages(context));
   }
 
   @override
-  Iterable<UrlSegmentData> encodeUrl() {
-    return [UrlSegmentData(segment: value.name)]
-        .followedBy(next?.encodeUrl() ?? []);
+  UrlData toUrl() {
+    final result = UrlData(segments: [value.name]);
+    
+    if (next case final next?) {
+      return result.followedBy(next.toUrl());
+    }
+
+    return result;
   }
 }

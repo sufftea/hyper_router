@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/url/url_data.dart';
 import 'package:star/srs/url/url_parser.dart';
 import 'package:star/srs/utils/consecutive_pages.dart';
 import 'package:star/srs/value/route_value.dart';
@@ -51,25 +51,11 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
   }
 
   @override
-  RouteNode<RouteValue>? decodeUrl(
-    List<UrlSegmentData> segments,
-  ) {
-    final data = segments.first;
-
+  RouteNode<RouteValue>? createFromUrl(UrlData url) {
     if (urlParser case final parser?) {
-      if (parser.decode(data) case final value?) {
-        final next = StarRoute.matchUrl(
-          segments: segments.sublist(1),
-          routes: children,
-        );
-
-        if (next == null && segments.length >= 2) {
-          throw StarException(
-              "Couldn't match a url segment: ${segments[1].segment}");
-        }
-
+      if (parser.decode(url) case (final value, final remaining)?) {
         return createNode(
-          next: next,
+          next: nextNodeFromUrl(url.copyWith(remaining)),
           value: value,
         );
       } else {
@@ -77,7 +63,8 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
       }
     } else {
       throw StarError(
-          "Couldn't parse url segment: \"${segments.first}\". Please, provide urlParser for $runtimeType");
+        "Couldn't parse url: \"${url.segments}\". Please, provide urlParser for $runtimeType",
+      );
     }
   }
 }
@@ -103,14 +90,19 @@ class ValueNode<T extends RouteValue> extends RouteNode {
   @override
   Iterable<Page> createPages(BuildContext context) {
     final page = buildPage(context);
-    return consecutive(page, next?.createPages(context));
+    return followByIterable(page, next?.createPages(context));
   }
-  
+
   @override
-  Iterable<UrlSegmentData> encodeUrl() {
+  UrlData toUrl() {
     if (urlParser case final parser?) {
-      final data = parser.encode(value);
-      return [data].followedBy(next?.encodeUrl() ?? []);
+      final url = parser.encode(value);
+
+      if (next case final next?) {
+        return url.followedBy(next.toUrl());
+      }
+
+      return url;
     } else {
       throw StarError(
           "Couldn't create url segment for $T. Please, provide a urlParser");

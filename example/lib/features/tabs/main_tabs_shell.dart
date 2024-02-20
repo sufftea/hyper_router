@@ -4,6 +4,7 @@ import 'package:example/features/tabs/navigation_tab.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:star/srs/route/shell_route/shell_controller.dart';
 import 'package:star/star.dart';
 
 class MainTabsShell extends StatelessWidget {
@@ -24,7 +25,6 @@ class MainTabsShell extends StatelessWidget {
         selectedIcon: const Icon(Icons.local_florist),
         label: "Home",
         onClick: (BuildContext context) {
-          // TODO: implement this into the router
           controller.setTabIndex(0);
         },
       ),

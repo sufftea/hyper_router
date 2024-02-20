@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/url/url_data.dart';
 import 'package:star/srs/value/route_key.dart';
 import 'package:star/srs/value/route_value.dart';
 
@@ -28,16 +28,13 @@ class ShellCoveringRoute extends StarRoute {
   }
 
   @override
-  RouteNode<RouteValue>? decodeUrl(List<UrlSegmentData> segments) {
-    final next = StarRoute.matchUrl(
-      segments: segments,
-      routes: children,
-    );
+  RouteNode<RouteValue>? createFromUrl(UrlData url) {
+    final next = StarRoute.matchUrl(url: url, routes: children);
 
     if (next == null) {
       return null;
     }
-    
+
     return createNode(
       next: next,
     );
@@ -74,8 +71,8 @@ class ShellCoveringNode extends RouteNode<ShellCoveringRouteValue> {
   }
 
   @override
-  Iterable<UrlSegmentData> encodeUrl() {
-    return next.encodeUrl();
+  UrlData toUrl() {
+    return next.toUrl();
   }
 
   @override

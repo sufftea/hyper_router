@@ -1,45 +1,53 @@
-import 'package:star/srs/url/route_information_parser.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:star/srs/url/url_data.dart';
 
 abstract class UrlParser<T> {
-  UrlParser();
+  UrlData encode(T value);
 
-  UrlSegmentData encode(T value);
-
-  T? decode(UrlSegmentData data);
+  (T value, Iterable<String> remainingSegments)? decode(UrlData url);
 }
 
-class QueryParamsUrlParser<T> extends UrlParser<T> {
-  QueryParamsUrlParser({
-    required this.encodeSegment,
-    required this.decodeSegment,
-  });
+abstract class UrlSegmentParser<T> extends UrlParser<T> {
+  SegmentData encodeSegment(T value);
 
-  final (String segment, Map<String, String?> queryParameters) Function(T value)
-      encodeSegment;
-
-  /// Return `null` if the provided data doesn't match the route
-  final T? Function(String segment, Map<String, String?> queryParams)
-      decodeSegment;
+  T? decodeSegment(SegmentData segment);
 
   @override
-  UrlSegmentData encode(value) {
-    final (segment, queryParameters) = encodeSegment(value);
+  UrlData encode(T value) {
+    final segment = encodeSegment(value);
 
-    return UrlSegmentData(
-      segment: segment,
-      queryParameters: queryParameters.map(
-        (key, value) => MapEntry(key, value == null ? [] : [value]),
-      ),
+    return UrlData(
+      segments: [segment.name],
+      queryParams: segment.queryParams,
+      states: segment.state,
     );
   }
 
   @override
-  T? decode(UrlSegmentData data) {
-    return decodeSegment(
-      data.segment,
-      data.queryParameters.map(
-        (key, value) => MapEntry(key, value.firstOrNull),
-      ),
-    );
+  (T, Iterable<String>)? decode(UrlData url) {
+    final value = decodeSegment(SegmentData(
+      name: url.segments.first,
+      queryParams: url.queryParams,
+      state: url.states,
+    ));
+
+    if (value == null) {
+      return null;
+    }
+
+    return (value, url.segments.skip(1));
   }
+}
+
+class SegmentData {
+  SegmentData({
+    required this.name,
+    final Map<String, List<String>>? queryParams,
+    final Map<Object, Object?>? state,
+  })  : queryParams = queryParams ?? {},
+        state = state ?? {};
+
+  final String name;
+  final Map<String, List<String>> queryParams;
+  final Map<Object, Object?> state;
 }

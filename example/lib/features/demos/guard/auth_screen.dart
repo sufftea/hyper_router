@@ -1,13 +1,41 @@
+import 'package:example/features/demos/guard/authwalled_screen.dart';
 import 'package:example/features/demos/guard/state/auth_cubit.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star/srs/url/url_parser.dart';
 import 'package:star/star.dart';
 
 class AuthRouteValue extends RouteValue {
   AuthRouteValue(this.redirect);
   final RouteValue? redirect;
+}
+
+class AuthSegmentParser extends UrlSegmentParser<AuthRouteValue> {
+  @override
+  AuthRouteValue? decodeSegment(SegmentData segment) {
+    if (segment.name == 'auth') {
+      return AuthRouteValue(
+        switch (segment.state['auth-redirect']) {
+          String name => RouteName(name),
+          _ => null,
+        },
+      );
+    }
+    return null;
+  }
+
+  @override
+  SegmentData encodeSegment(AuthRouteValue value) {
+    return SegmentData(
+      name: 'auth',
+      state: {
+        if (value.redirect case final RouteName redirect)
+          'auth-redirect': redirect.name,
+      },
+    );
+  }
 }
 
 class AuthScreen extends StatefulWidget {
@@ -71,10 +99,10 @@ class _AuthScreenState extends State<AuthScreen> {
                     await context.read<AuthCubit>().logIn();
                     loadingNotifier.value = false;
 
-                    if (widget.value.redirect case final redirect?) {
-                      if (mounted) {
-                        context.star.navigate(redirect);
-                      }
+                    if (mounted) {
+                      context.star.navigate(
+                        widget.value.redirect ?? AuthwalledScreen.routeName,
+                      );
                     }
                   },
                   focusNode: loginFocus,
@@ -93,7 +121,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               Positioned.fill(
                                 child: Opacity(
                                   opacity: loading ? 1 : 0,
-                                  child:  CircularProgressIndicator(
+                                  child: CircularProgressIndicator(
                                     color: context.col.onPrimary,
                                   ),
                                 ),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/url/route_information_parser.dart';
+import 'package:star/srs/url/url_data.dart';
 
 import 'package:star/srs/value/route_value.dart';
 
@@ -55,18 +55,28 @@ abstract class StarRoute<T extends RouteValue> {
   ///
   /// A segment is a part of the url separated by slashes ('/'). The slashes are
   /// not included into the segment.
-  RouteNode? decodeUrl(List<UrlSegmentData> segments);
+  RouteNode? createFromUrl(UrlData url);
+
+  RouteNode? nextNodeFromUrl(UrlData url) {
+    final next = StarRoute.matchUrl(url: url, routes: children);
+
+    if (next == null && url.segments.length >= 2) {
+      throw StarException("Couldn't match url: ${url.segments}");
+    }
+
+    return next;
+  }
 
   static RouteNode? matchUrl({
-    required List<UrlSegmentData> segments,
+    required UrlData url,
     required List<StarRoute> routes,
   }) {
-    if (segments.isEmpty) {
+    if (url.segments.isEmpty) {
       return null;
     }
 
     for (final route in routes) {
-      final node = route.decodeUrl(segments);
+      final node = route.createFromUrl(url);
       if (node != null) {
         return node;
       }
@@ -97,7 +107,7 @@ abstract class RouteNode<T extends RouteValue> {
   }
 
   /// Converts the stack into a list of url segments.
-  Iterable<UrlSegmentData> encodeUrl();
+  UrlData toUrl();
 
   RouteNode? cut(Object key) {
     if (key == this.key) {

@@ -41,7 +41,7 @@ class ResponsiveNode extends NamedNode {
   @override
   Iterable<Page> createPages(BuildContext context) {
     return switch (context.width) {
-      < mediumWidth => consecutive(
+      < mediumWidth => followByIterable(
           MaterialPage(
             child: buildScreen(context),
           ),

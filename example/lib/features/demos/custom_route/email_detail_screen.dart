@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:example/features/demos/custom_route/email.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:star/srs/url/url_parser.dart';
 import 'package:star/star.dart';
 
 class EmailDetailRouteValue extends RouteValue {
@@ -11,6 +14,32 @@ class EmailDetailRouteValue extends RouteValue {
   });
   final String emailId;
   final String title;
+}
+
+class EmailDetailSegmentParser extends UrlSegmentParser<EmailDetailRouteValue> {
+  @override
+  EmailDetailRouteValue? decodeSegment(SegmentData segment) {
+    if (segment.queryParams['id'] case [final id]) {
+      return EmailDetailRouteValue(
+        emailId: id,
+        title: segment.name,
+      );
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  SegmentData encodeSegment(EmailDetailRouteValue value) {
+    return SegmentData(
+      name: value.title
+          .substring(0, min(value.title.length, 16))
+          .replaceAll(' ', '-'),
+      queryParams: {
+        'id': [value.emailId]
+      },
+    );
+  }
 }
 
 class EmailDetailScreen extends StatelessWidget {
@@ -25,7 +54,7 @@ class EmailDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final email = emails[emailId];
 
-    if (email == null)  {
+    if (email == null) {
       return const Scaffold(
         body: Center(
           child: Text('An error occurred (ಥ﹏ಥ)'),

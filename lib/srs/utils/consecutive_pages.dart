@@ -1,4 +1,4 @@
-Iterable<T> consecutive<T>(
+Iterable<T> followByIterable<T>(
   T value,
   Iterable<T>? followedBy,
 ) {
