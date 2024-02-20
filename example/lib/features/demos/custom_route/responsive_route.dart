@@ -2,7 +2,7 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:star/srs/base/nested_navigator.dart';
-import 'package:star/srs/utils/consecutive_pages.dart';
+import 'package:star/srs/utils/iterable_x.dart';
 import 'package:star/star.dart';
 
 class ResponsiveRoute extends NamedRoute {
@@ -41,12 +41,9 @@ class ResponsiveNode extends NamedNode {
   @override
   Iterable<Page> createPages(BuildContext context) {
     return switch (context.width) {
-      < mediumWidth => followByIterable(
-          MaterialPage(
-            child: buildScreen(context),
-          ),
-          next?.createPages(context),
-        ),
+      < mediumWidth => <Page>[
+          MaterialPage(child: buildScreen(context)),
+        ].followedByOptional(next?.createPages(context)),
       _ => [
           MaterialPage(
             child: Container(

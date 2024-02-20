@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/utils/consecutive_pages.dart';
+import 'package:star/srs/utils/iterable_x.dart';
 import 'package:star/star.dart';
 
 class NamedRoute extends ValueRoute<RouteName> {
@@ -67,7 +67,7 @@ class NamedNode extends RouteNode<RouteName> {
   Iterable<Page> createPages(BuildContext context) {
     final page = buildPage(context);
 
-    return followByIterable(page, next?.createPages(context));
+    return [page].followedByOptional(next?.createPages(context));
   }
 
   @override

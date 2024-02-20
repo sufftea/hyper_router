@@ -5,7 +5,7 @@ import 'package:star/srs/route/shell_covering_route.dart';
 import 'package:star/srs/route/shell_route/shell_controller.dart';
 import 'package:star/srs/route/shell_route/shell_value.dart';
 import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/utils/consecutive_pages.dart';
+import 'package:star/srs/utils/iterable_x.dart';
 import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
 
@@ -67,7 +67,7 @@ class ShellNode extends RouteNode<ShellValue> {
       ),
     );
 
-    return followByIterable(page, coveringNode?.createPages(context));
+    return <Page>[page].followedByOptional(coveringNode?.createPages(context));
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:star/srs/base/entities.dart';
 import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/delegate.dart';
 import 'package:star/srs/base/exceptions.dart';
@@ -7,16 +8,17 @@ import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/value/route_value.dart';
 import 'package:star/srs/base/root_star_controller.dart';
 
-RouteValue? _defaultRedirect(BuildContext? _, RouteNode __) => null;
+RouteValue? _defaultRedirect(BuildContext? _, RedirectState __) => null;
+RouteValue? _defaultOnException(OnExceptionState error) => null;
 
 class Star implements RouterConfig<Object> {
   Star({
     required RouteValue initialRoute,
     required this.routes,
-    RouteValue? errorRoute,
+    RouteValue? Function(OnExceptionState state)? onException,
     bool enableWeb = false,
     this.redirect = _defaultRedirect,
-  }) : errorRoute = errorRoute ?? initialRoute {
+  }) : onException = onException ?? _defaultOnException {
     for (final r in routes) {
       r.parent = null;
     }
@@ -63,8 +65,11 @@ class Star implements RouterConfig<Object> {
   StarController get controller => rootController;
   late final RootStarController rootController;
   final List<StarRoute> routes;
-  final RouteValue? Function(BuildContext context, RouteNode stack) redirect;
-  final RouteValue errorRoute;
+  final RouteValue? Function(
+    BuildContext context,
+    RedirectState state,
+  ) redirect;
+  final RouteValue? Function(OnExceptionState state) onException;
 
   static StarController of(BuildContext context) {
     return context

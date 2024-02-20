@@ -3,7 +3,7 @@ import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/route/star_route.dart';
 import 'package:star/srs/url/url_data.dart';
 import 'package:star/srs/url/url_parser.dart';
-import 'package:star/srs/utils/consecutive_pages.dart';
+import 'package:star/srs/utils/iterable_x.dart';
 import 'package:star/srs/value/route_value.dart';
 
 class ValueRoute<T extends RouteValue> extends StarRoute<T> {
@@ -62,9 +62,7 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
         return null;
       }
     } else {
-      throw StarError(
-        "Couldn't parse url: \"${url.segments}\". Please, provide urlParser for $runtimeType",
-      );
+      return null;
     }
   }
 }
@@ -90,7 +88,7 @@ class ValueNode<T extends RouteValue> extends RouteNode {
   @override
   Iterable<Page> createPages(BuildContext context) {
     final page = buildPage(context);
-    return followByIterable(page, next?.createPages(context));
+    return [page].followedByOptional(next?.createPages(context));
   }
 
   @override

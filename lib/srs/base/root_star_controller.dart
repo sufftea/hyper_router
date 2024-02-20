@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:star/srs/base/entities.dart';
 import 'package:star/srs/base/star.dart';
 import 'package:star/srs/base/star_controller.dart';
 import 'package:star/srs/base/nested_navigator.dart';
@@ -10,13 +11,13 @@ import 'package:star/srs/value/route_value.dart';
 class RootStarController extends ChangeNotifier implements StarController {
   RootStarController({
     required RouteValue initialRoute,
-    required RouteValue? Function(BuildContext context, RouteNode stack)
+    required RouteValue? Function(BuildContext context, RedirectState state)
         redirect,
     required this.routeMap,
   }) {
     _redirect = (stack) {
       if (_redirectContext case final context?) {
-        if (redirect(context, stack) case final target?) {
+        if (redirect(context, RedirectState(stack: stack)) case final target?) {
           return createStack(target);
         }
       }
@@ -120,17 +121,13 @@ class _RedirectWatcherState extends State<RedirectWatcher> {
   @override
   void dispose() {
     super.dispose();
-
-
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    context
-        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
-        .router;
+    context.dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!.router;
     final controller = Star.configOf(context).rootController;
     controller._redirectContext = context;
   }

@@ -6,10 +6,6 @@ import 'package:star/srs/url/url_data.dart';
 
 import 'package:star/srs/value/route_value.dart';
 
-class UrlParsingException extends StarException {
-  UrlParsingException(super.message);
-}
-
 abstract class StarRoute<T extends RouteValue> {
   StarRoute({
     this.children = const [],
@@ -58,12 +54,14 @@ abstract class StarRoute<T extends RouteValue> {
   RouteNode? createFromUrl(UrlData url);
 
   RouteNode? nextNodeFromUrl(UrlData url) {
-    final next = StarRoute.matchUrl(url: url, routes: children);
-
-    if (next == null && url.segments.length >= 2) {
-      throw StarException("Couldn't match url: ${url.segments}");
+    if (url.segments.isEmpty) {
+      return null;
     }
 
+    final next = StarRoute.matchUrl(url: url, routes: children);
+    if (next == null) {
+      throw UrlParsingException(url: url);
+    }
     return next;
   }
 

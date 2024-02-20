@@ -21,6 +21,7 @@ import 'package:example/features/home/home_screen.dart';
 import 'package:example/features/internals/internal_screen.dart';
 import 'package:example/features/tabs/main_tabs_shell.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:star/srs/base/exceptions.dart';
 import 'package:star/srs/route/shell_covering_route.dart';
 import 'package:star/srs/value/route_key.dart';
 import 'package:star/star.dart';
@@ -29,13 +30,18 @@ final _demoShellKey = RouteKey();
 
 final router = Star(
   initialRoute: HomeScreen.routeName,
-  errorRoute: ErrorScreen.routeName,
   enableWeb: true,
-  redirect: (context, stack) {
+  onException: (state) {
+    if (state.exception is UrlParsingException) {
+      return ErrorRouteValue(state.routeInformation);
+    }
+    return null;
+  },
+  redirect: (context, state) {
     final authCubit = context.read<AuthCubit>();
     if (!authCubit.state.authenticated &&
-        stack.containsNode(AuthwalledScreen.routeName.key)) {
-      return AuthRouteValue(stack.last().value);
+        state.stack.containsNode(AuthwalledScreen.routeName.key)) {
+      return AuthRouteValue(state.stack.last().value);
     }
 
     return null;
@@ -144,9 +150,9 @@ final router = Star(
         ),
       ],
     ),
-    NamedRoute(
-      screenBuilder: (context) => const ErrorScreen(),
-      name: ErrorScreen.routeName,
+    ValueRoute<ErrorRouteValue>(
+      screenBuilder: (context, value) => ErrorScreen(value: value),
+      urlParser: ErrorSegmentParser(),
     ),
   ],
 );

@@ -1,11 +1,33 @@
 import 'package:example/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:star/srs/url/url_parser.dart';
 import 'package:star/star.dart';
 
-class ErrorScreen extends StatelessWidget {
-  const ErrorScreen({super.key});
+class ErrorRouteValue extends RouteValue {
+  ErrorRouteValue(this.routeInformation);
 
-  static const routeName = RouteName('error');
+  final RouteInformation routeInformation;
+}
+
+class ErrorSegmentParser extends UrlSegmentParser<ErrorRouteValue> {
+  @override
+  ErrorRouteValue? decodeSegment(SegmentData segment) {
+    return null;
+  }
+
+  @override
+  SegmentData encodeSegment(ErrorRouteValue value) {
+    return SegmentData(name: 'error');
+  }
+}
+
+class ErrorScreen extends StatelessWidget {
+  const ErrorScreen({
+    required this.value,
+    super.key,
+  });
+
+  final ErrorRouteValue value;
 
   @override
   Widget build(BuildContext context) {
@@ -14,12 +36,11 @@ class ErrorScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Center(
+          Center(
             child: Text(
-              "Couldn't parse URL",
-              style: TextStyle(
+              "Couldn't parse URL: ${value.routeInformation.uri}",
+              style: const TextStyle(
                 fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),
