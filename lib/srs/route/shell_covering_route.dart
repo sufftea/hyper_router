@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/value/route_key.dart';
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
+import 'package:hyper_router/srs/value/route_key.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
-class ShellCoveringRoute extends StarRoute {
+class ShellCoveringRoute extends HyperRoute {
   ShellCoveringRoute({
     required this.shellKey,
     required super.children,
@@ -29,7 +29,7 @@ class ShellCoveringRoute extends StarRoute {
 
   @override
   RouteNode<RouteValue>? createFromUrl(UrlData url) {
-    final next = StarRoute.matchUrl(url: url, routes: children);
+    final next = HyperRoute.matchUrl(url: url, routes: children);
 
     if (next == null) {
       return null;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/star.dart';
+import 'package:hyper_router/srs/base/hyper_router.dart';
 
 class NestedNavigator extends StatefulWidget {
   const NestedNavigator({
@@ -34,7 +34,7 @@ class _NestedNavigatorState extends State<NestedNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    final rootController = Star.rootOf(context);
+    final rootController = HyperRouter.rootOf(context);
 
     return InheritedNavigatorNode(
       node: node,

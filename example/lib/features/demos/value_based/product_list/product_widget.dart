@@ -4,7 +4,8 @@ import 'package:example/features/demos/value_based/star_rating_widget.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/widgets/banner_button.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class ProductWidget extends StatelessWidget {
   const ProductWidget({
@@ -20,7 +21,7 @@ class ProductWidget extends StatelessWidget {
       constraints: const BoxConstraints(maxWidth: 256),
       child: VerticalBannerButton(
         onPressed: () {
-          context.star.navigate(ProductRouteValue(product.id));
+          context.hyper.navigate(ProductRouteValue(product.id));
         },
         title: product.name,
         image: 'assets/value_based/product.jpeg',

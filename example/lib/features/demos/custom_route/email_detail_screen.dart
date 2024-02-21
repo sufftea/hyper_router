@@ -4,8 +4,8 @@ import 'package:example/features/demos/custom_route/email.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:star/srs/url/url_parser.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/srs/url/url_parser.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class EmailDetailRouteValue extends RouteValue {
   const EmailDetailRouteValue({
@@ -66,7 +66,7 @@ class EmailDetailScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.star.pop();
+            context.hyper.pop();
           },
           icon: switch (context.width) {
             < mediumWidth => const Icon(Icons.arrow_back),

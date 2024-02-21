@@ -2,7 +2,7 @@ import 'package:example/features/demos/custom_route/email.dart';
 import 'package:example/features/demos/custom_route/email_detail_screen.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class EmailListScreen extends StatelessWidget {
   const EmailListScreen({super.key});
@@ -17,7 +17,7 @@ class EmailListScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.star.pop();
+            context.hyper.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -46,7 +46,7 @@ class EmailEntryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.star.navigate(EmailDetailRouteValue(
+        context.hyper.navigate(EmailDetailRouteValue(
           emailId: email.id,
           title: email.title,
         ));

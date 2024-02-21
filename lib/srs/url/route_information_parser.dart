@@ -1,19 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/entities.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/base/star.dart';
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/base/entities.dart';
+import 'package:hyper_router/srs/base/exceptions.dart';
+import 'package:hyper_router/srs/base/hyper_router.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
-class StarRouteInformationParser extends RouteInformationParser<RouteNode> {
-  StarRouteInformationParser({
+class HyperRouteInformationParser extends RouteInformationParser<RouteNode> {
+  HyperRouteInformationParser({
     required this.config,
   });
 
-  final Star config;
-  List<StarRoute> get roots => config.routes;
+  final HyperRouter config;
+  List<HyperRoute> get roots => config.routes;
 
   @override
   Future<RouteNode<RouteValue>> parseRouteInformation(
@@ -30,7 +30,7 @@ class StarRouteInformationParser extends RouteInformationParser<RouteNode> {
         queryParams: routeInformation.uri.queryParametersAll,
         states: routeInformation.state as Map<Object, Object?>? ?? {},
       );
-      final result = StarRoute.matchUrl(
+      final result = HyperRoute.matchUrl(
         url: url,
         routes: roots,
       );

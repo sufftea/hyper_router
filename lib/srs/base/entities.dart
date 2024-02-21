@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/route/star_route.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
 
 class RedirectState {
   RedirectState({required this.stack});

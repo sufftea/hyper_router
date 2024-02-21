@@ -1,7 +1,7 @@
 
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/value/route_key.dart';
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/value/route_key.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
 class ShellValue extends RouteValue {
   ShellValue({
@@ -12,7 +12,7 @@ class ShellValue extends RouteValue {
 
   factory ShellValue.def({
     required RouteKey key,
-    required List<StarRoute> tabs,
+    required List<HyperRoute> tabs,
   }) {
     return ShellValue(
       tabIndex: 0,
@@ -23,7 +23,7 @@ class ShellValue extends RouteValue {
 
   factory ShellValue.fromNext({
     required RouteKey key,
-    required List<StarRoute> tabRoutes,
+    required List<HyperRoute> tabRoutes,
     required RouteNode next,
   }) {
     final tabIndex = tabRoutes.indexWhere((e) => e.key == next.key);

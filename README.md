@@ -1,4 +1,4 @@
-# Star
+# HYPER_ROUTER
 
 Value-based router for Flutter.
 
@@ -15,13 +15,13 @@ Value-based router for Flutter.
 ## Overview
 
 1) Declare the route tree. Each node in the tree has an associated "key": it can be either a specific object (`RouteName`), or a type (`RouteValue`).  Keys must be unique.
-2) Access the controller with `Star.of(context)` or `context.star`.
-3) To navigate to a specific location in the tree, use the key associated with that location: `context.star.navigate(<key>)`.
-4) To pop a route, use `context.star.pop` or the default `Navigator.of(context).pop`.
+2) Access the controller with `HyperRouter.of(context)` or `context.hyper`.
+3) To navigate to a specific location in the tree, use the key associated with that location: `context.hyper.navigate(<key>)`.
+4) To pop a route, use `context.hyper.pop` or the default `Navigator.of(context).pop`.
 
 ## Route tree configuration
 ```dart
-final router = Star(
+final router = Hyper(
   initialRoute: HomeScreen.routeName,
   routes: [
     ShellRoute(
@@ -76,8 +76,8 @@ class HomeScreen extends StatelessWidget {
 ```
 Navigating:
 ```dart
-Star.of(context).navigate(HomeScreen.routeName); 
-// context.star.navigate(HomeScreen.routeName); // quicker way
+HyperRouter.of(context).navigate(HomeScreen.routeName); 
+// context.hyper.navigate(HomeScreen.routeName); // quicker way
 ```
 
 ### ValueRoute\<T\>
@@ -93,7 +93,7 @@ class ProductRouteValue extends RouteValue {
 ```
 Navigating:
 ```dart
-context.star.navigate(ProductRouteValue(
+context.hyper.navigate(ProductRouteValue(
   Product(/*...*/)
 )); 
 ```
@@ -111,7 +111,8 @@ Internally, `ShellRoute` also has a key associated with it that stores the state
 Example:
 ```dart
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class TabsShell extends StatelessWidget {
   const TabsShell({
@@ -158,11 +159,11 @@ class TabsShell extends StatelessWidget {
 
 It's the same as everywhere else: 
 ```dart
-final result = await context.star.navigate(FormScreen.routeName);
+final result = await context.hyper.navigate(FormScreen.routeName);
 ```
 ```dart
 // FormScreen
-context.star.pop(value);
+context.hyper.pop(value);
 ```
 Or you can use the native flutter push. For example, to show a dialog:
 ```dart
@@ -171,7 +172,7 @@ final result = await showDialog(Dialog(...));
 ```dart
 // Dialog
 Navigator.of(context).pop(value);
-// context.star.pop(value) // will also work
+// context.hyper.pop(value) // will also work
 ```
 
 ## Guards
@@ -180,7 +181,7 @@ You can add a redirect callback that gets triggered every time the route changes
 
 For example, you might want to check if the user is logged in, and if not, redirect them to the login page:
 ```dart
-final router = Star(
+final router = HyperRouter(
   redirect: (context, stack) {
     if (stack.containsNode(AuthwalledScreen.routeName.key)) {
       if (!context.watch<AuthCubit>().state.authenticated) {
@@ -202,7 +203,7 @@ final router = Star(
 
 ## Creating a custom route
 
-I tried to make the package really extensible, so it's possible to create a route for any specialized use-case. In the [demo app](https://github.com/sufftea/star/tree/concept/example), I created a responsive [list-detail view](https://m3.material.io/foundations/layout/canonical-layouts/list-detail): it displays the list and the detail pages side by side on a wide screen (similarly to a shell route), and regularly on top of each other on a small screen. 
+I tried to make the package really extensible, so it's possible to create a route for any specialized use-case. In the [demo app](https://github.com/sufftea/hyper_router/tree/concept/example), I created a responsive [list-detail view](https://m3.material.io/foundations/layout/canonical-layouts/list-detail): it displays the list and the detail pages side by side on a wide screen (similarly to a shell route), and regularly on top of each other on a small screen. 
 
 How the router works on the inside:
 
@@ -220,9 +221,9 @@ How the router works on the inside:
       }
       ```
     - `ShellRoute` only places its own page into the list, while all its children go into the nested navigator inside the shell page.
-3) To create your own route, you need to override these two classes: `StarRoute` and `RouteNode`. 
+3) To create your own route, you need to override these two classes: `HyperRoute` and `RouteNode`. 
 
-This should be enough to understand the example from [the demo](https://github.com/sufftea/star/tree/concept/example).
+This should be enough to understand the example from [the demo](https://github.com/sufftea/hyper_router/tree/concept/example).
 
 
 

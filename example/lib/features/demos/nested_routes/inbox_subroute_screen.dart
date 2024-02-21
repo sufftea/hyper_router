@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class InboxSubrouteScreen extends StatelessWidget {
   const InboxSubrouteScreen({super.key});
@@ -12,7 +13,7 @@ class InboxSubrouteScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.star.pop();
+            context.hyper.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),

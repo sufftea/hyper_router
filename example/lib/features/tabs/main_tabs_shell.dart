@@ -4,8 +4,7 @@ import 'package:example/features/tabs/navigation_tab.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
-import 'package:star/srs/route/shell_route/shell_controller.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class MainTabsShell extends StatelessWidget {
   const MainTabsShell({
@@ -33,7 +32,7 @@ class MainTabsShell extends StatelessWidget {
         selectedIcon: const Icon(Icons.developer_mode),
         label: "Guide",
         onClick: (BuildContext context) {
-          context.star.navigate(GuideScreen.routeName);
+          context.hyper.navigate(GuideScreen.routeName);
         },
       ),
       NavigationTab(
@@ -41,7 +40,7 @@ class MainTabsShell extends StatelessWidget {
         selectedIcon: const Icon(Icons.settings_applications),
         label: "Insides",
         onClick: (BuildContext context) {
-          context.star.navigate(InsideScreen.routeName);
+          context.hyper.navigate(InsideScreen.routeName);
         },
       ),
     ];

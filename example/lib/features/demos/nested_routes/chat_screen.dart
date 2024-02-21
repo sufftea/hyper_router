@@ -1,6 +1,7 @@
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
@@ -13,7 +14,7 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.star.pop();
+            context.hyper.pop();
           },
           icon: const Icon(Icons.arrow_back),
         ),

@@ -1,4 +1,4 @@
-extension StarIterable<T> on Iterable<T> {
+extension HyperIterableX<T> on Iterable<T> {
   Iterable<T> followedByOptional(Iterable<T>? other) {
     if (other == null) {
       return this;

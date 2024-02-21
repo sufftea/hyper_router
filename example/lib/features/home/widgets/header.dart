@@ -16,6 +16,8 @@ class HomeHeader extends StatelessWidget {
           Positioned.fill(
             child: Image.asset(
               'assets/home/header.jpeg',
+              color: context.col.primaryContainer.withOpacity(0.5),
+              colorBlendMode: BlendMode.modulate,
               fit: BoxFit.cover,
             ),
           ),
@@ -26,15 +28,15 @@ class HomeHeader extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    'Star',
+                    'HYPER_ROUTER',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: switch (context.width) {
                         > mediumWidth => 92,
                         > compactWidth => 64,
-                        _ => 32,
+                        _ => 48,
                       },
-                      color: context.col.onInverseSurface,
+                      color: context.col.primary,
                       fontWeight: FontWeight.w900,
                     ),
                   ),

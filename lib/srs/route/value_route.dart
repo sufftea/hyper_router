@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/url/url_parser.dart';
-import 'package:star/srs/utils/iterable_x.dart';
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/base/exceptions.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
+import 'package:hyper_router/srs/url/url_parser.dart';
+import 'package:hyper_router/srs/utils/hyper_iterable_x.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
-class ValueRoute<T extends RouteValue> extends StarRoute<T> {
+class ValueRoute<T extends RouteValue> extends HyperRoute<T> {
   ValueRoute({
     required this.screenBuilder,
     this.defaultValue,
@@ -28,7 +28,7 @@ class ValueRoute<T extends RouteValue> extends StarRoute<T> {
     value ??= defaultValue;
 
     if (value == null) {
-      throw StarError("No value provided for ValueRoute<$key>");
+      throw HyperError("No value provided for ValueRoute<$key>");
     }
 
     return ValueNode(
@@ -102,7 +102,7 @@ class ValueNode<T extends RouteValue> extends RouteNode {
 
       return url;
     } else {
-      throw StarError(
+      throw HyperError(
           "Couldn't create url segment for $T. Please, provide a urlParser");
     }
   }

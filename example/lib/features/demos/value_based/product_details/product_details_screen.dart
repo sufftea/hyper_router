@@ -4,8 +4,8 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:star/srs/url/url_parser.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class ProductRouteValue extends RouteValue {
   const ProductRouteValue(this.productId);

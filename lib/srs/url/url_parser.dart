@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:star/srs/url/url_data.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
 
 abstract class UrlParser<T> {
   UrlData encode(T value);

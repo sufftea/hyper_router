@@ -1,7 +1,7 @@
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/material_match.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class DialogScreen extends StatefulWidget {
   const DialogScreen({super.key});
@@ -43,7 +43,7 @@ class _DialogScreenState extends State<DialogScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    context.star.pop();
+                    context.hyper.pop();
                   },
                   style: ButtonStyle(
                     textStyle: materialMatch(
@@ -55,7 +55,7 @@ class _DialogScreenState extends State<DialogScreen> {
                 ),
                 TextButton(
                   onPressed: () {
-                    context.star.pop(textController.text);
+                    context.hyper.pop(textController.text);
 
                     // This would also work:
                     // Navigator.of(context).pop(textController.text);

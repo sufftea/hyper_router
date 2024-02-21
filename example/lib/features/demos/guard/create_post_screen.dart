@@ -1,6 +1,6 @@
 import 'package:example/features/demos/guard/log_out_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class CreatePostScreen extends StatelessWidget {
   const CreatePostScreen({super.key});

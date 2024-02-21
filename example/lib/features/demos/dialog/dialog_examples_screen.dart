@@ -3,7 +3,7 @@ import 'package:example/features/demos/dialog/text_dialog.dart';
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 import 'package:toastification/toastification.dart';
 
 class DialogExamplesScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class _DialogExamplesScreenState extends State<DialogExamplesScreen> {
     }
 
     final col = context.col;
-    
+
     if (result is String?) {
       toastification.show(
         context: context,
@@ -98,7 +98,8 @@ class _DialogExamplesScreenState extends State<DialogExamplesScreen> {
             const SizedBox(height: 8),
             OutlinedButton(
               onPressed: () async {
-                final result = await context.star.navigate(DialogScreen.routeName);
+                final result =
+                    await context.hyper.navigate(DialogScreen.routeName);
                 showResult(result);
               },
               child: const Text('Open a page'),

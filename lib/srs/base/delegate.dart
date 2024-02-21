@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/nested_navigator.dart';
-import 'package:star/srs/base/root_star_controller.dart';
-import 'package:star/srs/base/star.dart';
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/base/nested_navigator.dart';
+import 'package:hyper_router/srs/base/root_hyper_controller.dart';
+import 'package:hyper_router/srs/base/hyper_router.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
-class StarRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
-  StarRouterDelegate({
+class HyperRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
+  HyperRouterDelegate({
     required this.routerConfig,
     required this.initialRoute,
   }) {
@@ -24,12 +24,12 @@ class StarRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
   }
 
   final RouteValue initialRoute;
-  final Star routerConfig;
+  final HyperRouter routerConfig;
 
   @override
   Widget build(BuildContext context) {
     final rootController = routerConfig.rootController;
-    return InheritedStarRouter(
+    return InheritedHyperTree(
       router: routerConfig,
       child: RedirectWatcher(
         child: InheritedNavigatorNode(

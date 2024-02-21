@@ -7,7 +7,7 @@ import 'package:example/features/utils/material_match.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
 
 void main() {
   runApp(const MainApp());
@@ -40,7 +40,7 @@ class MainApp extends StatelessWidget {
   }
 
   ThemeData _createTheme() {
-    final theme = FlexColorScheme.light(
+    final theme = FlexColorScheme.dark(
       useMaterial3: true,
       scheme: FlexScheme.deepPurple,
     ).toTheme;

@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/url/url_data.dart';
+import 'package:hyper_router/srs/base/exceptions.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
 
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
-abstract class StarRoute<T extends RouteValue> {
-  StarRoute({
+abstract class HyperRoute<T extends RouteValue> {
+  HyperRoute({
     this.children = const [],
   }) {
     for (final child in children) {
@@ -15,8 +15,8 @@ abstract class StarRoute<T extends RouteValue> {
     }
   }
 
-  final List<StarRoute> children;
-  late final StarRoute? parent;
+  final List<HyperRoute> children;
+  late final HyperRoute? parent;
 
   Object get key;
 
@@ -58,7 +58,7 @@ abstract class StarRoute<T extends RouteValue> {
       return null;
     }
 
-    final next = StarRoute.matchUrl(url: url, routes: children);
+    final next = HyperRoute.matchUrl(url: url, routes: children);
     if (next == null) {
       throw UrlParsingException(url: url);
     }
@@ -67,7 +67,7 @@ abstract class StarRoute<T extends RouteValue> {
 
   static RouteNode? matchUrl({
     required UrlData url,
-    required List<StarRoute> routes,
+    required List<HyperRoute> routes,
   }) {
     if (url.segments.isEmpty) {
       return null;
@@ -89,7 +89,7 @@ abstract class RouteNode<T extends RouteValue> {
 
   RouteNode? get next;
   T get value;
-  final StarRoute route;
+  final HyperRoute route;
   Object get key => value.key;
   final popCompleter = Completer();
 
@@ -172,8 +172,8 @@ extension RouteNodeX on RouteNode {
   }
 }
 
-extension TreeRouteX<T extends RouteValue> on StarRoute<T> {
-  void forEach(void Function(StarRoute r) action) {
+extension TreeRouteX<T extends RouteValue> on HyperRoute<T> {
+  void forEach(void Function(HyperRoute r) action) {
     action(this);
     for (final child in children) {
       child.forEach(action);

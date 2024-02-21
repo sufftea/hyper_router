@@ -1,12 +1,12 @@
 import 'package:example/features/utils/material_match.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class TextDialog extends StatefulWidget {
   const TextDialog({super.key});
 
   static const routeName = RouteName('text-dialog');
-  
+
   @override
   State<TextDialog> createState() => _TextDialogState();
 }
@@ -43,8 +43,8 @@ class _TextDialogState extends State<TextDialog> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      context.star.pop(textController.text);
-          
+                      context.hyper.pop(textController.text);
+
                       // This would also work:
                       // Navigator.of(context).pop(textController.text);
                     },

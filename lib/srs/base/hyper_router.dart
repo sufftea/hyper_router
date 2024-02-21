@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/entities.dart';
-import 'package:star/srs/base/star_controller.dart';
-import 'package:star/srs/base/delegate.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/url/route_information_parser.dart';
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/value/route_value.dart';
-import 'package:star/srs/base/root_star_controller.dart';
+import 'package:hyper_router/srs/base/entities.dart';
+import 'package:hyper_router/srs/base/hyper_controller.dart';
+import 'package:hyper_router/srs/base/delegate.dart';
+import 'package:hyper_router/srs/base/exceptions.dart';
+import 'package:hyper_router/srs/url/route_information_parser.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
+import 'package:hyper_router/srs/base/root_hyper_controller.dart';
 
 RouteValue? _defaultRedirect(BuildContext? _, RedirectState __) => null;
 RouteValue? _defaultOnException(OnExceptionState error) => null;
 
-class Star implements RouterConfig<Object> {
-  Star({
+class HyperRouter implements RouterConfig<Object> {
+  HyperRouter({
     required RouteValue initialRoute,
     required this.routes,
     RouteValue? Function(OnExceptionState state)? onException,
@@ -23,30 +23,30 @@ class Star implements RouterConfig<Object> {
       r.parent = null;
     }
 
-    final routeMap = <Object, StarRoute>{};
+    final routeMap = <Object, HyperRoute>{};
     for (final r in routes) {
       r.forEach((r) {
         if (routeMap.containsKey(r.key)) {
-          throw StarError('Duplicate key detected: ${r.key}');
+          throw HyperError('Duplicate key detected: ${r.key}');
         }
 
         routeMap[r.key] = r;
       });
     }
 
-    rootController = RootStarController(
+    rootController = RootHyperController(
       initialRoute: initialRoute,
       redirect: redirect,
       routeMap: routeMap,
     );
 
-    routerDelegate = StarRouterDelegate(
+    routerDelegate = HyperRouterDelegate(
       initialRoute: initialRoute,
       routerConfig: this,
     );
 
     if (enableWeb) {
-      routeInformationParser = StarRouteInformationParser(
+      routeInformationParser = HyperRouteInformationParser(
         config: this,
       );
 
@@ -62,32 +62,32 @@ class Star implements RouterConfig<Object> {
     }
   }
 
-  StarController get controller => rootController;
-  late final RootStarController rootController;
-  final List<StarRoute> routes;
+  HyperController get controller => rootController;
+  late final RootHyperController rootController;
+  final List<HyperRoute> routes;
   final RouteValue? Function(
     BuildContext context,
     RedirectState state,
   ) redirect;
   final RouteValue? Function(OnExceptionState state) onException;
 
-  static StarController of(BuildContext context) {
+  static HyperController of(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedHyperTree>()!
         .router
         .rootController;
   }
 
-  static RootStarController rootOf(BuildContext context) {
+  static RootHyperController rootOf(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedHyperTree>()!
         .router
         .rootController;
   }
 
-  static Star configOf(BuildContext context) {
+  static HyperRouter configOf(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!
+        .dependOnInheritedWidgetOfExactType<InheritedHyperTree>()!
         .router;
   }
 
@@ -96,7 +96,7 @@ class Star implements RouterConfig<Object> {
       RootBackButtonDispatcher();
 
   @override
-  late final StarRouterDelegate routerDelegate;
+  late final HyperRouterDelegate routerDelegate;
 
   @override
   late final RouteInformationParser<Object>? routeInformationParser;
@@ -105,17 +105,17 @@ class Star implements RouterConfig<Object> {
   late final RouteInformationProvider? routeInformationProvider;
 }
 
-class InheritedStarRouter extends InheritedWidget {
-  const InheritedStarRouter({
+class InheritedHyperTree extends InheritedWidget {
+  const InheritedHyperTree({
     required this.router,
     required super.child,
     super.key,
   });
 
-  final Star router;
+  final HyperRouter router;
 
   @override
-  bool updateShouldNotify(InheritedStarRouter oldWidget) {
+  bool updateShouldNotify(InheritedHyperTree oldWidget) {
     return oldWidget.router != router;
   }
 }

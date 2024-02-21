@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/route/shell_covering_route.dart';
-import 'package:star/srs/route/shell_route/shell_controller.dart';
-import 'package:star/srs/route/shell_route/shell_node.dart';
-import 'package:star/srs/route/shell_route/shell_value.dart';
-import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/value/route_key.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/srs/route/shell_covering_route.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_controller.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_node.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_value.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
+import 'package:hyper_router/srs/value/route_key.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 typedef ShellBuilder = Widget Function(
   BuildContext context,
@@ -13,7 +13,7 @@ typedef ShellBuilder = Widget Function(
   Widget child,
 );
 
-class ShellRoute extends StarRoute<ShellValue> {
+class ShellRoute extends HyperRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
     required this.tabs,
@@ -30,7 +30,7 @@ class ShellRoute extends StarRoute<ShellValue> {
     Widget child,
   ) shellBuilder;
 
-  final List<StarRoute> tabs;
+  final List<HyperRoute> tabs;
 
   @override
   final RouteKey key;
@@ -81,7 +81,7 @@ class ShellRoute extends StarRoute<ShellValue> {
   RouteNode<RouteValue>? createFromUrl(
     UrlData url,
   ) {
-    final next = StarRoute.matchUrl(
+    final next = HyperRoute.matchUrl(
       url: url,
       routes: children,
     );

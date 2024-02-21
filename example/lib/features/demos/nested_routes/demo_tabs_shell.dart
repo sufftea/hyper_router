@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/route/shell_route/shell_controller.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_controller.dart';
 
 class DemoTabsShell extends StatelessWidget {
   const DemoTabsShell({

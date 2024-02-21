@@ -3,7 +3,7 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/material_match.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class LogOutDialog extends StatelessWidget {
   const LogOutDialog({
@@ -40,7 +40,7 @@ class LogOutDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => context.star.pop(),
+                    onPressed: () => context.hyper.pop(),
                     style: ButtonStyle(
                       textStyle: materialMatch(
                         all: const TextStyle(
@@ -84,7 +84,7 @@ class _LoadingButtonState extends State<_LoadingButton> {
         isLoading.value = false;
 
         if (mounted) {
-          context.star.pop();
+          context.hyper.pop();
         }
       },
       style: ButtonStyle(

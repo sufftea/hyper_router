@@ -1,5 +1,5 @@
-import 'package:star/srs/route/shell_route/shell_value.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_value.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class ShellController {
   ShellController({
@@ -12,7 +12,7 @@ class ShellController {
 
   RouteNode get root => value.tabNodes[value.tabIndex];
 
-  final RootStarController controller;
+  final RootHyperController controller;
 
   /// [preserveState] behaviour:
   ///   `true`: subroutes within each tab are preserved

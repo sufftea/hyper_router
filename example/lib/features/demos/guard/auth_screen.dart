@@ -4,8 +4,8 @@ import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:star/srs/url/url_parser.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class AuthRouteValue extends RouteValue {
   AuthRouteValue(this.redirect);
@@ -100,7 +100,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     loadingNotifier.value = false;
 
                     if (mounted) {
-                      context.star.navigate(
+                      context.hyper.navigate(
                         widget.value.redirect ?? AuthwalledScreen.routeName,
                       );
                     }

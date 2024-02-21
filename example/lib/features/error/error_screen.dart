@@ -1,7 +1,7 @@
 import 'package:example/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:star/srs/url/url_parser.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/srs/url/url_parser.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class ErrorRouteValue extends RouteValue {
   ErrorRouteValue(this.routeInformation);
@@ -48,7 +48,7 @@ class ErrorScreen extends StatelessWidget {
           Center(
             child: FilledButton(
               onPressed: () {
-                context.star.navigate(HomeScreen.routeName);
+                context.hyper.navigate(HomeScreen.routeName);
               },
               child: const Text('Go home'),
             ),

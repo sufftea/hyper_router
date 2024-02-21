@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/base/nested_navigator.dart';
-import 'package:star/srs/route/shell_covering_route.dart';
-import 'package:star/srs/route/shell_route/shell_controller.dart';
-import 'package:star/srs/route/shell_route/shell_value.dart';
-import 'package:star/srs/url/url_data.dart';
-import 'package:star/srs/utils/iterable_x.dart';
-import 'package:star/srs/value/route_key.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/srs/base/exceptions.dart';
+import 'package:hyper_router/srs/base/nested_navigator.dart';
+import 'package:hyper_router/srs/route/shell_covering_route.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_controller.dart';
+import 'package:hyper_router/srs/route/shell_route/shell_value.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
+import 'package:hyper_router/srs/utils/hyper_iterable_x.dart';
+import 'package:hyper_router/srs/value/route_key.dart';
+import 'package:hyper_router/hyper_router.dart';
 
 class ShellNode extends RouteNode<ShellValue> {
   ShellNode({
@@ -27,14 +27,14 @@ class ShellNode extends RouteNode<ShellValue> {
 
   @override
   Iterable<Page> createPages(BuildContext context) {
-    final controller = Star.rootOf(context);
+    final controller = HyperRouter.rootOf(context);
     final shellController = ShellController(
       value: value,
       controller: controller,
     );
 
     if (_isShellCovering(next, key)) {
-      throw StarError(
+      throw HyperError(
           "[ShellCoveringNode] can't be a direct child of [ShellRoute]");
     }
 

@@ -21,14 +21,12 @@ import 'package:example/features/home/home_screen.dart';
 import 'package:example/features/internals/internal_screen.dart';
 import 'package:example/features/tabs/main_tabs_shell.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/route/shell_covering_route.dart';
-import 'package:star/srs/value/route_key.dart';
-import 'package:star/star.dart';
+
+import 'package:hyper_router/hyper_router.dart';
 
 final _demoShellKey = RouteKey();
 
-final router = Star(
+final router = HyperRouter(
   initialRoute: HomeScreen.routeName,
   enableWeb: true,
   onException: (state) {

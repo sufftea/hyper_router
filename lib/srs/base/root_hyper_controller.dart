@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:star/srs/base/entities.dart';
-import 'package:star/srs/base/star.dart';
-import 'package:star/srs/base/star_controller.dart';
-import 'package:star/srs/base/nested_navigator.dart';
-import 'package:star/srs/base/exceptions.dart';
-import 'package:star/srs/route/star_route.dart';
-import 'package:star/srs/value/route_value.dart';
+import 'package:hyper_router/srs/base/entities.dart';
+import 'package:hyper_router/srs/base/hyper_router.dart';
+import 'package:hyper_router/srs/base/hyper_controller.dart';
+import 'package:hyper_router/srs/base/nested_navigator.dart';
+import 'package:hyper_router/srs/base/exceptions.dart';
+import 'package:hyper_router/srs/route/hyper_route.dart';
+import 'package:hyper_router/srs/value/route_value.dart';
 
-class RootStarController extends ChangeNotifier implements StarController {
-  RootStarController({
+class RootHyperController extends ChangeNotifier implements HyperController {
+  RootHyperController({
     required RouteValue initialRoute,
     required RouteValue? Function(BuildContext context, RedirectState state)
         redirect,
@@ -43,7 +43,7 @@ class RootStarController extends ChangeNotifier implements StarController {
     }
   }
 
-  final Map<Object, StarRoute> routeMap;
+  final Map<Object, HyperRoute> routeMap;
 
   @override
   Future navigate(RouteValue target, [Set<RouteValue> values = const {}]) {
@@ -76,10 +76,10 @@ class RootStarController extends ChangeNotifier implements StarController {
     RouteValue target, [
     Set<RouteValue> values = const {},
   ]) {
-    final StarRoute? targetRoute = routeMap[target.key];
+    final HyperRoute? targetRoute = routeMap[target.key];
 
     if (targetRoute == null) {
-      throw StarError(
+      throw HyperError(
           "Route tree doesn't contain route with the provided key: ${target.key}");
     }
 
@@ -127,8 +127,8 @@ class _RedirectWatcherState extends State<RedirectWatcher> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    context.dependOnInheritedWidgetOfExactType<InheritedStarRouter>()!.router;
-    final controller = Star.configOf(context).rootController;
+    context.dependOnInheritedWidgetOfExactType<InheritedHyperTree>()!.router;
+    final controller = HyperRouter.configOf(context).rootController;
     controller._redirectContext = context;
   }
 

@@ -1,22 +1,22 @@
-import 'package:star/srs/url/url_data.dart';
+import 'package:hyper_router/srs/url/url_data.dart';
 
-class StarError extends Error {
-  StarError(this.message);
+class HyperError extends Error {
+  HyperError(this.message);
   final String message;
 
   @override
   String toString() {
-    return "StarError: $message";
+    return "HyperError: $message";
   }
 }
 
-class StarException implements Exception {
-  StarException(this.message);
+class HyperException implements Exception {
+  HyperException(this.message);
   final String message;
 
   @override
   String toString() {
-    return 'StarException: $message';
+    return 'HyperException: $message';
   }
 }
 

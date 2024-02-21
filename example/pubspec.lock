@@ -251,6 +251,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  hyper_router:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   iconsax_flutter:
     dependency: transitive
     description:
@@ -440,13 +447,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.1"
-  star:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.1"
   state_notifier:
     dependency: transitive
     description:

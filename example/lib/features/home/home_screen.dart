@@ -8,7 +8,8 @@ import 'package:example/features/home/widgets/usecase_banner.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
-import 'package:star/star.dart';
+import 'package:hyper_router/hyper_router.dart';
+
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -41,7 +42,7 @@ class HomeScreen extends StatelessWidget {
       final items = [
         UsecaseBanner(
           onPressed: () {
-            context.star.navigate(ProductListScreen.routeName);
+            context.hyper.navigate(ProductListScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/typesafe.jpeg',
@@ -50,7 +51,7 @@ class HomeScreen extends StatelessWidget {
         ),
         UsecaseBanner(
           onPressed: () {
-            context.star.navigate(InboxScreen.routeName);
+            context.hyper.navigate(InboxScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/nested.jpeg',
@@ -59,7 +60,7 @@ class HomeScreen extends StatelessWidget {
         ),
         UsecaseBanner(
           onPressed: () async {
-            context.star.navigate(DialogExamplesScreen.routeName);
+            context.hyper.navigate(DialogExamplesScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/dialog.jpeg',
@@ -68,7 +69,7 @@ class HomeScreen extends StatelessWidget {
         ),
         UsecaseBanner(
           onPressed: () {
-            context.star.navigate(AuthwalledScreen.routeName);
+            context.hyper.navigate(AuthwalledScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/guards.jpeg',
@@ -78,7 +79,7 @@ Can subscribe to the context.''',
         ),
         UsecaseBanner(
           onPressed: () {
-            context.star.navigate(EmailListScreen.routeName);
+            context.hyper.navigate(EmailListScreen.routeName);
           },
           minimized: cons.maxWidth < compactWidth,
           image: 'assets/home/extensible.jpeg',
