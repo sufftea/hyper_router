@@ -1,27 +1,27 @@
 # HYPER_ROUTER
 
-Value-based router for Flutter.
+Value-BASED router for Flutter.
 
 ## Features
 
-- **Value-based navigation:** To navigate to a route, pass a value of it's associated type to the navigator. This value can contain the data you want to pass to the route.
-- **Declarative:** Route tree configuration; navigation to a specific location in the tree.
-- **Guards**: Redirect on route change.
-- **Nested navigation** There is a built in `ShellRoute`. Supports preserving the stack when switching tabs.
-- **Return value from a route** 
-- **Custom routes**: Override built in classes for specialized use-cases.
-- **Optional URL support**
+- **Value-based navigation:** navigate between app states using values, making the navigation type-safe.
+- **Declarative**
+- **Route guards**
+- **Nested navigation**
+- **Returning a value from a route:** pass data back to the originating screen when a route is popped.
+- **Optional URL support:** implement URL parsing only when it's necessary.
+- **Highly extensible**
 
 ## Overview
 
-1) Declare the route tree. Each node in the tree has an associated "key": it can be either a specific object (`RouteName`), or a type (`RouteValue`).  Keys must be unique.
-2) Access the controller with `HyperRouter.of(context)` or `context.hyper`.
-3) To navigate to a specific location in the tree, use the key associated with that location: `context.hyper.navigate(<key>)`.
-4) To pop a route, use `context.hyper.pop` or the default `Navigator.of(context).pop`.
+1) **Declare your route tree.** Each node in the tree is associated with a unique key.
+2) **Access the controller:** Use `HyperRouter.of(context)` or `context.hyper` to interact with the router.
+3) **Navigate:** Push new routes onto the stack using their associated keys with ``context.hyper.navigate(<key>)``.
+4) **Pop routes:** Return to the previous screen using `context.hyper.pop` or `Navigator.of(context).pop`.
 
 ## Route tree configuration
 ```dart
-final router = Hyper(
+final router = HyperRouter(
   initialRoute: HomeScreen.routeName,
   routes: [
     ShellRoute(
@@ -58,40 +58,46 @@ final router = Hyper(
 );
 ```
 Notice the 3 types of routes:
-- `NamedRoute`
-- `ValueRoute<T>`
-- `ShellRoute`
+
+- `NamedRoute`: A basic route associated with a screen and a unique name.
+- `ValueRoute<T>`: A route that expects a value of type `T`, allowing you to pass data during navigation.
+- `ShellRoute`: A route that wraps multiple nested navigators to display additional interface around them, such as a tab bar.
+
+The keys, associated with routes, are hidden in `RouteValue` instances:
+- `RouteName` (for `NamedRoute`) uses the provided string as its key.
+- Your custom type `T` for `ValueRoute<T>` uses `T` as the key.
 
 
 ### NamedRoute
 
-The most common kind of a route. `routeName` is the key that will be used to navigate to this location. 
+The most common type of route. Use it for simple navigation between screens that doesn't require passing data.
 
-Declaring the route name:
+1. Declare the route name:
 ```dart
 class HomeScreen extends StatelessWidget {
   static const routeName = RouteName('home');
   // ...
 }
 ```
-Navigating:
+2. Navigate:
 ```dart
 HyperRouter.of(context).navigate(HomeScreen.routeName); 
-// context.hyper.navigate(HomeScreen.routeName); // quicker way
+// Or, for convenience:
+// context.hyper.navigate(HomeScreen.routeName);
 ```
 
 ### ValueRoute\<T\>
 
-A route you can pass a value to. The type `T` is the key associated with the route. It contains the data you want to pass to the route.
+Use a `ValueRoute` to pass data to a screen during navigation. The type `T` acts as the key for this route. Here's how it works:
 
-Declaring the type:
+1. Declare the value type:
 ```dart
 class ProductRouteValue extends RouteValue {
   const ProductRouteValue(this.product);
   final Product product;
 }
 ```
-Navigating:
+2. Navigate:
 ```dart
 context.hyper.navigate(ProductRouteValue(
   Product(/*...*/)
@@ -100,19 +106,24 @@ context.hyper.navigate(ProductRouteValue(
 
 ### ShellRoute
 
-arguments:
+Use `ShellRoute` to create a bottom navigation bar or similar persistent UI elements that house multiple routes.
+
+**Arguments:**
 - `shellBuilder`: the screen that wraps the child route and displays the tab bar.
 - `tabs`: the routes that will be displayed inside the shell. 
 
-The shell is provided with a `ShellController`. You can use it to switch between the tabs (`setTabIndex(index)`) and get the current tab index (`tabIndex`). The tab indexes are their indexes in the `tabs` field. Alternatively, it's still possible to navigate to the tabs the regular way by using `navigate`.
+The shell builder is provided with a `ShellController`. 
 
-Internally, `ShellRoute` also has a key associated with it that stores the state of each tab.
+**Using the `ShellController`:**
+- `setTabIndex(index)`: Switch to the tab at the specified index.
+- `tabIndex`: Get the index of the currently active tab.
+
+> Btw: Internally, `ShellRoute`, like `ValueRoute`, also has a `RouteValue` associated with it that contains the state of each tab.
 
 Example:
 ```dart
 import 'package:flutter/material.dart';
 import 'package:hyper_router/hyper_router.dart';
-
 
 class TabsShell extends StatelessWidget {
   const TabsShell({
@@ -156,54 +167,97 @@ class TabsShell extends StatelessWidget {
 ```
 
 ## Returning value from a route
+ 
+HYPER_ROUTER allows you to pass data back from a route when it's popped.
 
-It's the same as everywhere else: 
+Receiving the result:
 ```dart
 final result = await context.hyper.navigate(FormScreen.routeName);
 ```
+Returning the result:
 ```dart
 // FormScreen
 context.hyper.pop(value);
 ```
-Or you can use the native flutter push. For example, to show a dialog:
+ 
+Native flutter push & pop work too. For example, showing a dialog:
 ```dart
 final result = await showDialog(Dialog(...));
 ```
 ```dart
-// Dialog
 Navigator.of(context).pop(value);
-// context.hyper.pop(value) // will also work
 ```
 
 ## Guards
 
-You can add a redirect callback that gets triggered every time the route changes and redirects to a different screen if necessary.
-
-For example, you might want to check if the user is logged in, and if not, redirect them to the login page:
+Use the riderect callback to control navigation flow based on conditions like authentication status:
 ```dart
 final router = HyperRouter(
-  redirect: (context, stack) {
-    if (stack.containsNode(AuthwalledScreen.routeName.key)) {
-      if (!context.watch<AuthCubit>().state.authenticated) {
-        return AuthRouteValue(stack.last().value);
-      }
+  redirect: (context, state) {
+    final authCubit = context.read<AuthCubit>();
+
+    // Check if user is logged in and trying to access an authenticated route
+    if (!authCubit.state.authenticated &&
+        state.stack.containsNode(AuthwalledScreen.routeName.key)) {
+      return AuthScreen.routeName; // Redirect to authentication
     }
 
-    return null;
+    return null; // No redirection needed
   },
   // ...
 );
 ```
-- `stack` is a linked list of all the route nodes that are about to be displayed. The first element is the root route, the last is the route that's going to be at the top.
-- `containsNode` returns `true` if a route with the provided key is somewhere in the stack. Notice that it requires providing the `key` explicitly. 
-  - `RouteName`'s key is the string you provide when you initialize it.
-  - `RouteValue`'s key is its type.
-- Return the value associated with the route you want to redirect to. This is the same value you would use for navigation. If no redirect is needed, return null.
-- `stack.last().value` is the value associated with the route the user was trying to navigate to. We're passing it into the auth screen, so that it can navigate to the desired route after the authentication is finished.
+- `state.stack` Represents the upcoming navigation stack. The first element will be at the bottom, the last at the top.
+- `stack.containsNode` Checks if a route with the provided key exists in the stack. Notice that it requires providing the `key` explicitly.
+- Return:
+  - The route key to redirect the user. This is the same value you would use for `navigate`.
+  - `null`, if no redirect is necessary.
+
+## Enable URL
+There are two use-cases that require URL support: web apps and deep linking. Since most Flutter apps are targetting mobile platforms, and deep linking usually covers only a few destinations, HYPER_ROUTER was designed to make URL support optional.
+
+### Web
+
+By default, your app will work in the browser just fine, but the URL will not be updating. To fix that, set the `enableUrl` property to `true`:
+```dart
+final router = HyperRouter(
+  enableUrl: true,
+  // ...
+);
+```
+
+
+> A segment is a part of the URL separated by a slash (`/`).
+
+Now, you need to make sure that every route can be parsed to and from a URL segment. `NamedRoute` supports parsing by default, but `ValueRoute` needs to be provided with a parser. 
+
+**Creating a URL parser:**
+
+Here we're creating a parser for `ProductRouteValue`. We want the url to look like this: `home/products/<productID>`. The parser is responsible for the `<productId>` segment:
+```dart
+class ProductSegmentParser extends UrlSegmentParser<ProductRouteValue> {
+  @override
+  ProductRouteValue? decodeSegment(SegmentData segment) {
+    return ProductRouteValue(segment.name);
+  }
+
+  @override
+  SegmentData encodeSegment(ProductRouteValue value) {
+    return SegmentData(name: value.productId);
+  }
+}
+```
+You can optionally provide query parameters to `SegmentData` (`queryParams` field). They will be placed at the end of the URL. If the stack contains more than one route with query parameters, they'll be combined.
+
+`segment.state` is stored in the browser's history. You can put the data that you don't want visible in the URL there, and it will be restored when the user navigates with browser's back and forward buttons.
+
+### Deep linking
+
+TODO (although probably already possible)
 
 ## Creating a custom route
 
-I tried to make the package really extensible, so it's possible to create a route for any specialized use-case. In the [demo app](https://github.com/sufftea/hyper_router/tree/concept/example), I created a responsive [list-detail view](https://m3.material.io/foundations/layout/canonical-layouts/list-detail): it displays the list and the detail pages side by side on a wide screen (similarly to a shell route), and regularly on top of each other on a small screen. 
+I tried to design the package to be highly extensible to make it possible to create a route for any unusual use-case. As an example, in the [demo app](https://github.com/sufftea/hyper_router/tree/concept/example), I created a responsive [list-detail view](https://m3.material.io/foundations/layout/canonical-layouts/list-detail): it displays the list and the detail pages side by side on a wide screen (similarly to a shell route), and regularly, on top of each other, on a small screen. 
 
 How the router works on the inside:
 
@@ -211,13 +265,9 @@ How the router works on the inside:
 2) Each node is responsible for building its own page and - recursively - all the consecutive pages. This happens inside the `createPages` method that returns the list of pages.
     - `NamedRoute` and `ValueRoute` just place their own and all the consecutive pages on top of each other:
       ```dart
-      List<Page> createPages(BuildContext context) {
+      Iterable<Page> createPages(BuildContext context) {
         final page = buildPage(context);
-
-        return [
-          page,
-          ...next?.createPages(context) ?? [],
-        ];
+        return [page].followedByOptional(next?.createPages(context));
       }
       ```
     - `ShellRoute` only places its own page into the list, while all its children go into the nested navigator inside the shell page.

@@ -28,7 +28,7 @@ final _demoShellKey = RouteKey();
 
 final router = HyperRouter(
   initialRoute: HomeScreen.routeName,
-  enableWeb: true,
+  enableUrl: true,
   onException: (state) {
     if (state.exception is UrlParsingException) {
       return ErrorRouteValue(state.routeInformation);

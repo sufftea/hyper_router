@@ -15,8 +15,8 @@ class HyperRouter implements RouterConfig<Object> {
   HyperRouter({
     required RouteValue initialRoute,
     required this.routes,
+    bool enableUrl = false,
     RouteValue? Function(OnExceptionState state)? onException,
-    bool enableWeb = false,
     this.redirect = _defaultRedirect,
   }) : onException = onException ?? _defaultOnException {
     for (final r in routes) {
@@ -45,7 +45,7 @@ class HyperRouter implements RouterConfig<Object> {
       routerConfig: this,
     );
 
-    if (enableWeb) {
+    if (enableUrl) {
       routeInformationParser = HyperRouteInformationParser(
         config: this,
       );
