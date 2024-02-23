@@ -5,18 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "flutter_stack_router",
+      "name": "hyper_router",
       "request": "launch",
       "type": "dart"
     },
     {
-      "name": "flutter_stack_router (profile mode)",
+      "name": "hyper_router (profile mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "profile"
     },
     {
-      "name": "flutter_stack_router (release mode)",
+      "name": "hyper_router (release mode)",
       "request": "launch",
       "type": "dart",
       "flutterMode": "release"

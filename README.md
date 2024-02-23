@@ -1,3 +1,5 @@
+![img](example/assets/logo.png)
+
 # HYPER_ROUTER
 
 Value-BASED router for Flutter.
@@ -49,8 +51,8 @@ final router = HyperRouter(
           name: GuideScreen.routeName,
         ),
         NamedRoute(
-          screenBuilder: (context) => const InsideScreen(),
-          name: InsideScreen.routeName,
+          screenBuilder: (context) => const SettingsScreen(),
+          name: SettingsScreen.routeName,
         ),
       ],
     ),
@@ -59,9 +61,9 @@ final router = HyperRouter(
 ```
 Notice the 3 types of routes:
 
-- `NamedRoute`: A basic route associated with a screen and a unique name.
-- `ValueRoute<T>`: A route that expects a value of type `T`, allowing you to pass data during navigation.
-- `ShellRoute`: A route that wraps multiple nested navigators to display additional interface around them, such as a tab bar.
+- `NamedRoute`: A basic route, associated with a unique name.
+- `ValueRoute<T>`: A route that lets you to pass data to another screen.
+- `ShellRoute`: A route that wraps a nested navigator with an interface surrounding it, such as a tab bar.
 
 The keys, associated with routes, are hidden in `RouteValue` instances:
 - `RouteName` (for `NamedRoute`) uses the provided string as its key.
@@ -70,7 +72,7 @@ The keys, associated with routes, are hidden in `RouteValue` instances:
 
 ### NamedRoute
 
-The most common type of route. Use it for simple navigation between screens that doesn't require passing data.
+Use for simple navigation between screens that doesn't require passing data.
 
 1. Declare the route name:
 ```dart
@@ -88,16 +90,16 @@ HyperRouter.of(context).navigate(HomeScreen.routeName);
 
 ### ValueRoute\<T\>
 
-Use a `ValueRoute` to pass data to a screen during navigation. The type `T` acts as the key for this route. Here's how it works:
+Use a `ValueRoute<T>` if you need to pass data to the route during navigation.
 
-1. Declare the value type:
+1. Declare the value type by extending `RouteValue`:
 ```dart
 class ProductRouteValue extends RouteValue {
   const ProductRouteValue(this.product);
   final Product product;
 }
 ```
-2. Navigate:
+2. To navigate to the route, pass a value of your type to the navigator:
 ```dart
 context.hyper.navigate(ProductRouteValue(
   Product(/*...*/)
@@ -106,7 +108,7 @@ context.hyper.navigate(ProductRouteValue(
 
 ### ShellRoute
 
-Use `ShellRoute` to create a bottom navigation bar or similar persistent UI elements that house multiple routes.
+Use `ShellRoute` to create a bottom navigation bar.
 
 **Arguments:**
 - `shellBuilder`: the screen that wraps the child route and displays the tab bar.
@@ -167,8 +169,6 @@ class TabsShell extends StatelessWidget {
 ```
 
 ## Returning value from a route
- 
-HYPER_ROUTER allows you to pass data back from a route when it's popped.
 
 Receiving the result:
 ```dart
@@ -249,7 +249,7 @@ class ProductSegmentParser extends UrlSegmentParser<ProductRouteValue> {
 ```
 You can optionally provide query parameters to `SegmentData` (`queryParams` field). They will be placed at the end of the URL. If the stack contains more than one route with query parameters, they'll be combined.
 
-`segment.state` is stored in the browser's history. You can put the data that you don't want visible in the URL there, and it will be restored when the user navigates with browser's back and forward buttons.
+`segment.state` is stored in the browser's history. You can put the data that you don't want visible in the URL there, and it will be restored when the user navigates using browser's back and forward buttons.
 
 ### Deep linking
 
@@ -257,7 +257,7 @@ TODO (although probably already possible)
 
 ## Creating a custom route
 
-I tried to design the package to be highly extensible to make it possible to create a route for any unusual use-case. As an example, in the [demo app](https://github.com/sufftea/hyper_router/tree/concept/example), I created a responsive [list-detail view](https://m3.material.io/foundations/layout/canonical-layouts/list-detail): it displays the list and the detail pages side by side on a wide screen (similarly to a shell route), and regularly, on top of each other, on a small screen. 
+I tried to design the package to be highly extensible to make it possible to create a route for any werid and unusual use-case. As an example, in the [demo app](https://github.com/sufftea/hyper_router/tree/concept/example), I created a responsive [list-detail view](https://m3.material.io/foundations/layout/canonical-layouts/list-detail): it displays the list and the detail pages side by side on a wide screen (similarly to a shell route), and regularly, on top of each other, on a small screen. 
 
 How the router works on the inside:
 

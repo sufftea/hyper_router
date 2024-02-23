@@ -7,17 +7,14 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
+  hyper_router: 
+    path: ..
   flex_color_scheme: ^7.3.1
   flutter:
     sdk: flutter
-  # flutter_riverpod: ^2.4.9
-  hyper_router: 
-    path: ..
   provider: ^6.1.1
   flutter_bloc: ^8.1.3
   toastification: ^1.2.0
-  # riverpod: ^2.4.1
-  # riverpod_annotation: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +29,4 @@ flutter:
     - assets/value_based/
     - assets/guard/
     - assets/nested/
+    - assets/
