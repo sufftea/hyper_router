@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hyper_router/srs/url/url_data.dart';
-import 'package:hyper_router/srs/utils/hyper_iterable_x.dart';
 import 'package:hyper_router/hyper_router.dart';
 
 class NamedRoute extends ValueRoute<RouteName> {

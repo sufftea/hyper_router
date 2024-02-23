@@ -83,7 +83,7 @@ class _LoadingButtonState extends State<_LoadingButton> {
         await context.read<AuthCubit>().logOut();
         isLoading.value = false;
 
-        if (mounted) {
+        if (context.mounted) {
           context.hyper.pop();
         }
       },

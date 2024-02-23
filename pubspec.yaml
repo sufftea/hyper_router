@@ -1,5 +1,5 @@
 name: hyper_router
-description: Declarative, type-safe, codegen-free router for flutter. 
+description: Declarative, type-safe, codegen-free router for flutter. Optional URL support. Highly extensible.
 version: 0.0.1
 repository: https://github.com/sufftea/hyper_router
 
