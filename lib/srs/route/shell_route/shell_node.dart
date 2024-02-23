@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hyper_router/srs/base/exceptions.dart';
 import 'package:hyper_router/srs/base/nested_navigator.dart';
-import 'package:hyper_router/srs/route/shell_covering_route.dart';
-import 'package:hyper_router/srs/route/shell_route/shell_controller.dart';
 import 'package:hyper_router/srs/route/shell_route/shell_value.dart';
 import 'package:hyper_router/srs/url/url_data.dart';
-import 'package:hyper_router/srs/utils/hyper_iterable_x.dart';
-import 'package:hyper_router/srs/value/route_key.dart';
 import 'package:hyper_router/hyper_router.dart';
 
 class ShellNode extends RouteNode<ShellValue> {

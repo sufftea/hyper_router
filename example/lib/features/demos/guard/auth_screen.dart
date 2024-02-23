@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-
 class AuthRouteValue extends RouteValue {
   AuthRouteValue(this.redirect);
   final RouteValue? redirect;
@@ -99,7 +98,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     await context.read<AuthCubit>().logIn();
                     loadingNotifier.value = false;
 
-                    if (mounted) {
+                    if (context.mounted) {
                       context.hyper.navigate(
                         widget.value.redirect ?? AuthwalledScreen.routeName,
                       );

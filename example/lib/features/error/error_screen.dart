@@ -1,6 +1,5 @@
 import 'package:example/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:hyper_router/srs/url/url_parser.dart';
 import 'package:hyper_router/hyper_router.dart';
 
 class ErrorRouteValue extends RouteValue {
