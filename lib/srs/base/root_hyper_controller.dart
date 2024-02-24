@@ -130,6 +130,7 @@ class _RedirectWatcherState extends State<RedirectWatcher> {
     context.dependOnInheritedWidgetOfExactType<InheritedHyperTree>()!.router;
     final controller = HyperRouter.configOf(context).rootController;
     controller._redirectContext = context;
+    controller._stack = controller._redirect(controller._stack!);
   }
 
   @override
