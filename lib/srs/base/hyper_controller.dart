@@ -7,4 +7,3 @@ abstract class HyperController {
 
   RouteNode get stack;
 }
-
