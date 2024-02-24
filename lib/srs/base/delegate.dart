@@ -8,7 +8,8 @@ import 'package:hyper_router/srs/base/hyper_router.dart';
 import 'package:hyper_router/srs/route/hyper_route.dart';
 import 'package:hyper_router/srs/value/route_value.dart';
 
-class HyperRouterDelegate extends RouterDelegate<RouteNode> with ChangeNotifier {
+class HyperRouterDelegate extends RouterDelegate<RouteNode>
+    with ChangeNotifier {
   HyperRouterDelegate({
     required this.routerConfig,
     required this.initialRoute,
