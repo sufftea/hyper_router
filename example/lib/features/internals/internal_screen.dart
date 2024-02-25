@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-
 class InsideScreen extends StatelessWidget {
   const InsideScreen({super.key});
 

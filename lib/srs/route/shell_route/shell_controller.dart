@@ -43,7 +43,7 @@ class ShellController {
         ),
       );
     }
-    
+
     controller.setStack(
       controller.stack.withUpdatedValue(
         value.key,

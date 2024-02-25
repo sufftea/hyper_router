@@ -6,7 +6,6 @@ import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-
 class ProductRouteValue extends RouteValue {
   const ProductRouteValue(this.productId);
 

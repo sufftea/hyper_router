@@ -2,7 +2,6 @@ import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-
 class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
