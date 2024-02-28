@@ -13,26 +13,6 @@ class TabsShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final i = controller.tabIndex;
-
-    return Scaffold(
-      body: child,
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (value) {
-          controller.setTabIndex(value);
-        },
-        selectedIndex: controller.tabIndex,
-        destinations: [
-          NavigationDestination(
-            icon: Icon(i == 0 ? Icons.inbox : Icons.inbox_outlined),
-            label: "Home",
-          ),
-          NavigationDestination(
-            icon: Icon(i == 1 ? Icons.description : Icons.description_outlined),
-            label: "Tab2",
-          ),
-        ],
-      ),
-    );
+    return Scaffold(body: child);
   }
 }
