@@ -16,7 +16,7 @@ class ShellValue extends RouteValue {
     return ShellValue(
       tabIndex: 0,
       key: key,
-      tabNodes: tabs.map((e) => e.createNode()!).toList(),
+      tabNodes: tabs.map((e) => e.createNode()).toList(),
     );
   }
 
@@ -34,7 +34,7 @@ class ShellValue extends RouteValue {
         if (e.key == next.key) {
           return next;
         }
-        return e.createNode()!;
+        return e.createNode();
       }).toList(),
     );
   }

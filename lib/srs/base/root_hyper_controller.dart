@@ -83,13 +83,17 @@ class RootHyperController extends ChangeNotifier implements HyperController {
           "Route tree doesn't contain route with the provided key: ${target.key}");
     }
 
-    final valuesMap = extractValues();
+    final valuesMap = extractCurrentValues();
     valuesMap[target.key] = target;
+    valuesMap.addAll(Map.fromIterable(
+      values,
+      key: (element) => element.key,
+    ));
 
     return targetRoute.createStack(values: valuesMap)!;
   }
 
-  Map<Object, RouteValue> extractValues() {
+  Map<Object, RouteValue> extractCurrentValues() {
     final result = <Object, RouteValue>{};
 
     _stack?.forEach((builder) {

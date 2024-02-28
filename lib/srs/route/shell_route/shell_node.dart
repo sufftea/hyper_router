@@ -11,7 +11,11 @@ class ShellNode extends RouteNode<ShellValue> {
     required super.route,
   });
 
-  final ShellBuilder shellBuilder;
+  final Widget Function(
+    BuildContext context,
+    ShellController controller,
+    Widget child,
+  ) shellBuilder;
 
   @override
   RouteNode<RouteValue> get next => value.currTab;

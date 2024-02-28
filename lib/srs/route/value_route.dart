@@ -6,6 +6,23 @@ import 'package:hyper_router/srs/url/url_parser.dart';
 import 'package:hyper_router/srs/utils/hyper_iterable_x.dart';
 import 'package:hyper_router/srs/value/route_value.dart';
 
+/// Use when you need to pass data to the route. `T` is the type you will use to
+/// navigate to this route and pass data.
+///
+/// To declare the value type, extend [RouteValue]:
+/// ```dart
+/// class ProductRouteValue extends RouteValue {
+///   const ProductRouteValue(this.product);
+///   final Product product;
+/// }
+/// ```
+/// To navigate to the route, pass a value of type `T` the to the navigator:
+/// ```dart
+/// context.hyper.navigate(ProductRouteValue(Product(/*...*/)));
+/// ```
+///
+/// If you `enableUrl`, make sure to provide a `urlParser` for serializing the
+/// value.
 class ValueRoute<T extends RouteValue> extends HyperRoute<T> {
   ValueRoute({
     required this.screenBuilder,
@@ -17,7 +34,17 @@ class ValueRoute<T extends RouteValue> extends HyperRoute<T> {
 
   final Page Function(BuildContext context, Widget child)? pageBuilder;
   final Widget Function(BuildContext context, T value) screenBuilder;
+
+  /// During navigation, when a new stack is being composed, the values from the
+  /// previous stack are reused. However, if the new stack contains routes (apart from
+  /// the target route) that aren't present in the previous stack, those routes
+  /// will have to rely on their default values.
+  ///
+  /// You can also use the `values` parameter in [HyperController.navigate] to
+  /// provide values for such routes.
   final T? defaultValue;
+
+  /// Provide if you've set [HyperRouter.enableUrl] to `true`.
   final UrlParser<T>? urlParser;
 
   @override
