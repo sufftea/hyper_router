@@ -13,10 +13,9 @@ class StarRatingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: context.theme.copyWith(
-        iconTheme: IconThemeData(
-          color: context.col.primary,
-        )
-      ),
+          iconTheme: IconThemeData(
+        color: context.col.primary,
+      )),
       child: Row(
         children: [
           for (int i = 1; i <= 5; i++)

@@ -4,12 +4,7 @@ import 'package:hyper_router/srs/route/shell_route/shell_value.dart';
 import 'package:hyper_router/srs/url/url_data.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-typedef ShellBuilder = Widget Function(
-  BuildContext context,
-  ShellController controller,
-  Widget child,
-);
-
+/// Route that wraps a nested navigator. Usually for displaying a nav bar.
 class ShellRoute extends HyperRoute<ShellValue> {
   ShellRoute({
     required this.shellBuilder,
@@ -21,6 +16,7 @@ class ShellRoute extends HyperRoute<ShellValue> {
   })  : key = key ?? RouteKey(),
         super(children: tabs);
 
+  /// The wrapper around the nested navigator. [child] is the nested navigator.
   final Widget Function(
     BuildContext context,
     ShellController controller,

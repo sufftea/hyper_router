@@ -72,7 +72,7 @@ class NamedNode extends RouteNode<RouteName> {
   @override
   UrlData toUrl() {
     final result = UrlData(segments: [value.name]);
-    
+
     if (next case final next?) {
       return result.followedBy(next.toUrl());
     }

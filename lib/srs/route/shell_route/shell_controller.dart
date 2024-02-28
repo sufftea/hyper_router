@@ -10,8 +10,6 @@ class ShellController {
   final ShellValue value;
   int get tabIndex => value.tabIndex;
 
-  RouteNode get root => value.tabNodes[value.tabIndex];
-
   final RootHyperController controller;
 
   /// [preserveState] behaviour:
@@ -43,7 +41,7 @@ class ShellController {
         ),
       );
     }
-    
+
     controller.setStack(
       controller.stack.withUpdatedValue(
         value.key,

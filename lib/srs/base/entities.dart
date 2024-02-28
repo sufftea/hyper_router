@@ -4,6 +4,7 @@ import 'package:hyper_router/srs/route/hyper_route.dart';
 class RedirectState {
   RedirectState({required this.stack});
 
+  /// The navigation stack that is about to be displayed.
   final RouteNode stack;
 }
 

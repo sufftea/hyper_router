@@ -15,7 +15,16 @@ class HyperRouter implements RouterConfig<Object> {
   HyperRouter({
     required RouteValue initialRoute,
     required this.routes,
+
+    /// If enabled, the router will try to create URLs for routes it navigates
+    /// to, or parse URLs it receives from the browser. Make sure to provide
+    /// url parsers for routes that need them.
     bool enableUrl = false,
+
+    /// Triggered when an exeption is thrown during URL deserialization.
+    ///
+    /// Return the value for the route you wish to redirect to (e.g. to display
+    /// an error message), or null to let the exception propagate further.
     RouteValue? Function(OnExceptionState state)? onException,
     this.redirect = _defaultRedirect,
   }) : onException = onException ?? _defaultOnException {
@@ -64,7 +73,19 @@ class HyperRouter implements RouterConfig<Object> {
 
   HyperController get controller => rootController;
   late final RootHyperController rootController;
+
+  /// The navigation tree.
   final List<HyperRoute> routes;
+
+  /// Triggered during navigation, or on the first initialization.
+  ///
+  /// To redirect, return the value corresponding to the route you want to
+  /// redirect to. This is the same value you would use when calling
+  /// `navigate`
+  ///
+  /// Return `null` if no redirect is necessary.
+  ///
+  /// Don't subscribe to the `context`, only `read`.
   final RouteValue? Function(
     BuildContext context,
     RedirectState state,

@@ -4,6 +4,12 @@ import 'package:hyper_router/srs/url/url_data.dart';
 import 'package:hyper_router/srs/value/route_key.dart';
 import 'package:hyper_router/srs/value/route_value.dart';
 
+/// The routes located below this one in the routing tree will be displayed on
+/// top (rather than inside the nested navigator) of the [ShellRoute]  with the
+/// corresponding [shellKey].
+///
+/// This is a "proxy" route: it doesn't have a page of its own and you can't
+/// navigate to it directly. Must contain at least one child.
 class ShellCoveringRoute extends HyperRoute {
   ShellCoveringRoute({
     required this.shellKey,
@@ -15,13 +21,13 @@ class ShellCoveringRoute extends HyperRoute {
   final RouteKey shellKey;
 
   @override
-  RouteNode<RouteValue>? createNode({
+  RouteNode<RouteValue> createNode({
     RouteNode<RouteValue>? next,
     RouteValue? value,
   }) {
     return ShellCoveringNode(
       shellKey: shellKey,
-      next: next ?? children.first.createNode()!,
+      next: next ?? children.first.createNode(),
       value: ShellCoveringRouteValue(key),
       route: this,
     );

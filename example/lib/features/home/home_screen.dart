@@ -10,7 +10,6 @@ import 'package:example/features/widgets/limit_width.dart';
 import 'package:flutter/material.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 

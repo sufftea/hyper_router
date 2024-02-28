@@ -1,3 +1,7 @@
+## 0.0.4
+
+Added documentation.
+
 ## 0.0.3
 
 Fix: Call `redirect` on initialization.

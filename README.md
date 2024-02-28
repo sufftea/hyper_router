@@ -2,17 +2,25 @@
 
 # HYPER_ROUTER
 
-Value-BASED router for Flutter.
+Declarative, type-safe, codegen-free router for flutter.
+
+---
+
+Other popular routing solutions use url strings to represent their state. That leads to problems like having to serialize values to pass them between screens, or not being able to save the state of nested routes. HYPER_ROUTER stores its state as a datastructure instead, which allows much more flexibility and makes the API more coincise.
+
+HYPER_ROUTER still supports web and deep-linking, which require serializing objects, but it makes it optional, so you only have to implement it when you actually need it.
 
 ## Features
 
-- **Value-based navigation:** navigate between app states using values, making the navigation type-safe.
-- **Declarative**
+- **Value-based navigation**
+- **Declarative** 
 - **Route guards**
-- **Nested navigation**
-- **Returning a value from a route:** pass data back to the originating screen when a route is popped.
-- **Optional URL support:** implement URL parsing only when it's necessary.
+- **Nested navigation with state preservation**
+- **Returning a value from a route**
+- **Optional URL support**
 - **Highly extensible**
+- **No code-gen**
+
 
 ## Overview
 
@@ -248,6 +256,8 @@ class ProductSegmentParser extends UrlSegmentParser<ProductRouteValue> {
 }
 ```
 You can optionally provide query parameters to `SegmentData` (`queryParams` field). They will be placed at the end of the URL. If the stack contains more than one route with query parameters, they'll be combined.
+
+`decodeSegment` should return `null` if it doesn't recognize the segment.
 
 `segment.state` is stored in the browser's history. You can put the data that you don't want visible in the URL there, and it will be restored when the user navigates using browser's back and forward buttons.
 

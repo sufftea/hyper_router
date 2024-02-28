@@ -6,7 +6,6 @@ import 'package:example/features/widgets/banner_button.dart';
 import 'package:flutter/material.dart';
 import 'package:hyper_router/hyper_router.dart';
 
-
 class ProductWidget extends StatelessWidget {
   const ProductWidget({
     required this.product,

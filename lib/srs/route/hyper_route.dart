@@ -18,9 +18,10 @@ abstract class HyperRoute<T extends RouteValue> {
   final List<HyperRoute> children;
   late final HyperRoute? parent;
 
+  /// Same as [RouteValue.key]
   Object get key;
 
-  RouteNode? createNode({
+  RouteNode createNode({
     RouteNode? next,
     T? value,
   });
@@ -32,7 +33,7 @@ abstract class HyperRoute<T extends RouteValue> {
     RouteNode? next,
     required T value,
   }) {
-    return createNode(next: next, value: value)!;
+    return createNode(next: next, value: value);
   }
 
   /// Prioritizes [next] over [value].
@@ -42,7 +43,7 @@ abstract class HyperRoute<T extends RouteValue> {
     RouteNode? next,
     required T value,
   }) {
-    return createNode(next: next, value: value)!;
+    return createNode(next: next, value: value);
   }
 
   /// Receives a list of url segments and returns the stack parsed from them.
@@ -53,6 +54,8 @@ abstract class HyperRoute<T extends RouteValue> {
   /// not included into the segment.
   RouteNode? createFromUrl(UrlData url);
 
+  /// Finds a route that matches the url among its children and returns a stack
+  /// created from it.
   RouteNode? nextNodeFromUrl(UrlData url) {
     if (url.segments.isEmpty) {
       return null;
@@ -65,6 +68,7 @@ abstract class HyperRoute<T extends RouteValue> {
     return next;
   }
 
+  /// Finds a route that matches the url and creates a stack from it.
   static RouteNode? matchUrl({
     required UrlData url,
     required List<HyperRoute> routes,
@@ -82,17 +86,54 @@ abstract class HyperRoute<T extends RouteValue> {
 
     return null;
   }
+
+  void forEach(void Function(HyperRoute r) action) {
+    action(this);
+    for (final child in children) {
+      child.forEach(action);
+    }
+  }
+
+  /// Creates a stack of [RouteNode]s from this route to the root.
+  RouteNode? createStack({
+    RouteNode? next,
+    required Map<Object, RouteValue> values,
+  }) {
+    final node = createNode(
+      next: next,
+      value: values[key] as T?,
+    );
+
+    if (parent case final parent?) {
+      return parent.createStack(
+        next: node,
+        values: values,
+      );
+    } else {
+      return node;
+    }
+  }
 }
 
+/// A linked list representing the navigation stack. Each [RouteNode]
+/// corresponds to a route.
 abstract class RouteNode<T extends RouteValue> {
   RouteNode({required this.route});
 
+  /// [RouteNode] that follows this one.
   RouteNode? get next;
+
+  /// The [RouteValue] of this route
   T get value;
+
+  /// The route configuration (from the tree)
   final HyperRoute route;
+
+  /// Same as [RouteValue.key]
   Object get key => value.key;
   final popCompleter = Completer();
 
+  /// True if this is the last node in the list
   bool get isTop => next == null;
 
   Iterable<Page> createPages(BuildContext context);
@@ -104,9 +145,10 @@ abstract class RouteNode<T extends RouteValue> {
     return null;
   }
 
-  /// Converts the stack into a list of url segments.
   UrlData toUrl();
 
+  /// Returns a copy of the list from the node it's called on, up to the node
+  /// with the provided [key]
   RouteNode? cut(Object key) {
     if (key == this.key) {
       return null;
@@ -114,6 +156,7 @@ abstract class RouteNode<T extends RouteValue> {
     return route.updateWithNext(next: next?.cut(key), value: value);
   }
 
+  /// Returns the last node in the list
   RouteNode last() {
     RouteNode curr = this;
 
@@ -143,24 +186,7 @@ abstract class RouteNode<T extends RouteValue> {
     );
   }
 
-  @override
-  bool operator ==(Object other) {
-    return other is RouteNode && other.hashCode == this.hashCode;
-  }
-
-  @override
-  int get hashCode => super.hashCode + next.hashCode;
-}
-
-extension RouteNodeX on RouteNode {
-  void forEach(void Function(RouteNode node) action) {
-    RouteNode? curr = this;
-    while (curr != null) {
-      action(curr);
-      curr = curr.next;
-    }
-  }
-
+  /// Check if the stack contains a node with the provided [key]
   bool containsNode(Object key) {
     if (this.key == key) {
       return true;
@@ -170,33 +196,20 @@ extension RouteNodeX on RouteNode {
 
     return false;
   }
-}
 
-extension TreeRouteX<T extends RouteValue> on HyperRoute<T> {
-  void forEach(void Function(HyperRoute r) action) {
-    action(this);
-    for (final child in children) {
-      child.forEach(action);
+  void forEach(void Function(RouteNode node) action) {
+    RouteNode? curr = this;
+    while (curr != null) {
+      action(curr);
+      curr = curr.next;
     }
   }
 
-  /// Creates a stack of [RouteNode]s from this route to the root.
-  RouteNode? createStack({
-    RouteNode? next,
-    required Map<Object, RouteValue> values,
-  }) {
-    final node = createNode(
-      next: next,
-      value: values[key] as T?,
-    );
-
-    if (parent case final parent?) {
-      return parent.createStack(
-        next: node,
-        values: values,
-      );
-    } else {
-      return node;
-    }
+  @override
+  bool operator ==(Object other) {
+    return other is RouteNode && other.hashCode == this.hashCode;
   }
+
+  @override
+  int get hashCode => super.hashCode + next.hashCode;
 }

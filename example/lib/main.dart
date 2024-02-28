@@ -7,7 +7,6 @@ import 'package:example/features/utils/material_match.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hyper_router/srs/route/hyper_route.dart';
 
 void main() {
   runApp(const MainApp());
