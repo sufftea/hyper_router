@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyper_router/srs/base/exceptions.dart';
 import 'package:hyper_router/srs/route/hyper_route.dart';
@@ -51,7 +53,11 @@ class ValueRoute<T extends RouteValue> extends HyperRoute<T> {
   Object get key => T;
 
   @override
-  RouteNode createNode({RouteNode? next, T? value}) {
+  RouteNode createNode({
+    RouteNode? next,
+    T? value,
+    Completer? popCompleter,
+  }) {
     value ??= defaultValue;
 
     if (value == null) {
@@ -64,6 +70,7 @@ class ValueRoute<T extends RouteValue> extends HyperRoute<T> {
       value: value,
       urlParser: urlParser,
       route: this,
+      popCompleter: popCompleter,
     );
   }
 
@@ -101,6 +108,7 @@ class ValueNode<T extends RouteValue> extends RouteNode {
     required this.buildPage,
     required super.route,
     this.urlParser,
+    super.popCompleter,
   });
 
   final Page Function(BuildContext context) buildPage;

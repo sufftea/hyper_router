@@ -24,6 +24,7 @@ abstract class HyperRoute<T extends RouteValue> {
   RouteNode createNode({
     RouteNode? next,
     T? value,
+    Completer? popCompleter,
   });
 
   /// Prioritizes [value] over [next].
@@ -32,8 +33,13 @@ abstract class HyperRoute<T extends RouteValue> {
   RouteNode updateWithValue({
     RouteNode? next,
     required T value,
+    Completer? popCompleter,
   }) {
-    return createNode(next: next, value: value);
+    return createNode(
+      next: next,
+      value: value,
+      popCompleter: popCompleter,
+    );
   }
 
   /// Prioritizes [next] over [value].
@@ -42,8 +48,13 @@ abstract class HyperRoute<T extends RouteValue> {
   RouteNode updateWithNext({
     RouteNode? next,
     required T value,
+    Completer? popCompleter,
   }) {
-    return createNode(next: next, value: value);
+    return createNode(
+      next: next,
+      value: value,
+      popCompleter: popCompleter,
+    );
   }
 
   /// Receives a list of url segments and returns the stack parsed from them.
@@ -98,16 +109,19 @@ abstract class HyperRoute<T extends RouteValue> {
   RouteNode? createStack({
     RouteNode? next,
     required Map<Object, RouteValue> values,
+    Map<Object, Completer> popCompleters = const {},
   }) {
     final node = createNode(
       next: next,
       value: values[key] as T?,
+      popCompleter: popCompleters[key],
     );
 
     if (parent case final parent?) {
       return parent.createStack(
         next: node,
         values: values,
+        popCompleters: popCompleters,
       );
     } else {
       return node;
@@ -118,7 +132,10 @@ abstract class HyperRoute<T extends RouteValue> {
 /// A linked list representing the navigation stack. Each [RouteNode]
 /// corresponds to a route.
 abstract class RouteNode<T extends RouteValue> {
-  RouteNode({required this.route});
+  RouteNode({
+    required this.route,
+    Completer? popCompleter,
+  }) : popCompleter = popCompleter ?? Completer();
 
   /// [RouteNode] that follows this one.
   RouteNode? get next;
@@ -131,7 +148,7 @@ abstract class RouteNode<T extends RouteValue> {
 
   /// Same as [RouteValue.key]
   Object get key => value.key;
-  final popCompleter = Completer();
+  final Completer popCompleter;
 
   /// True if this is the last node in the list
   bool get isTop => next == null;
@@ -140,7 +157,11 @@ abstract class RouteNode<T extends RouteValue> {
 
   RouteNode? pop() {
     if (next case final next?) {
-      return route.updateWithNext(next: next.pop(), value: value);
+      return route.updateWithNext(
+        next: next.pop(),
+        value: value,
+        popCompleter: popCompleter,
+      );
     }
     return null;
   }
@@ -153,7 +174,11 @@ abstract class RouteNode<T extends RouteValue> {
     if (key == this.key) {
       return null;
     }
-    return route.updateWithNext(next: next?.cut(key), value: value);
+    return route.updateWithNext(
+      next: next?.cut(key),
+      value: value,
+      popCompleter: popCompleter,
+    );
   }
 
   /// Returns the last node in the list
@@ -171,11 +196,16 @@ abstract class RouteNode<T extends RouteValue> {
   /// node containing the provided value.
   RouteNode withUpdatedValue(Object key, RouteValue value) {
     if (key == this.key) {
-      return route.updateWithValue(next: next, value: value);
+      return route.updateWithValue(
+        next: next,
+        value: value,
+        popCompleter: popCompleter,
+      );
     }
     return route.updateWithNext(
       next: next?.withUpdatedValue(key, value),
       value: this.value,
+      popCompleter: popCompleter,
     );
   }
 

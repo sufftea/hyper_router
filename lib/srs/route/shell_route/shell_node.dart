@@ -9,6 +9,7 @@ class ShellNode extends RouteNode<ShellValue> {
     required this.shellBuilder,
     required this.value,
     required super.route,
+    super.popCompleter,
   });
 
   final Widget Function(
@@ -75,6 +76,7 @@ class ShellNode extends RouteNode<ShellValue> {
       return route.updateWithValue(
         next: popped,
         value: value.withNext(popped),
+        popCompleter: popCompleter,
       );
     }
 

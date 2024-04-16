@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyper_router/srs/base/entities.dart';
@@ -83,24 +85,26 @@ class RootHyperController extends ChangeNotifier implements HyperController {
           "Route tree doesn't contain route with the provided key: ${target.key}");
     }
 
-    final valuesMap = extractCurrentValues();
+    final valuesMap = <Object, RouteValue>{};
+
+    _stack?.forEach((builder) {
+      valuesMap[builder.value.key] = builder.value;
+    });
     valuesMap[target.key] = target;
     valuesMap.addAll(Map.fromIterable(
       values,
       key: (element) => element.key,
     ));
 
-    return targetRoute.createStack(values: valuesMap)!;
-  }
-
-  Map<Object, RouteValue> extractCurrentValues() {
-    final result = <Object, RouteValue>{};
-
-    _stack?.forEach((builder) {
-      result[builder.value.key] = builder.value;
+    final popCompleters = <Object, Completer>{};
+    _stack?.forEach((node) {
+      popCompleters[node.key] = node.popCompleter;
     });
 
-    return result;
+    return targetRoute.createStack(
+      values: valuesMap,
+      popCompleters: popCompleters,
+    )!;
   }
 }
 
