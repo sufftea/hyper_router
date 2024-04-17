@@ -16,7 +16,7 @@ void main() {
 
       await widgetTester.pumpWidget(
         ChangeNotifierProvider(
-          create: (context) => ValueNotifier(AuthState(false)),
+          create: (context) => ValueNotifier(_AuthState(false)),
           child: MaterialApp.router(
             routerConfig: router,
           ),
@@ -32,7 +32,7 @@ void main() {
 
       final loginContext = widgetTester.firstElement(find.byType(LoginScreen));
 
-      loginContext.read<ValueNotifier<AuthState>>().value = AuthState(true);
+      loginContext.read<ValueNotifier<_AuthState>>().value = _AuthState(true);
       loginContext.hyper.navigate(HomeScreen.routeName);
 
       await widgetTester.pumpAndSettle();
@@ -48,7 +48,7 @@ void main() {
 
       await widgetTester.pumpWidget(
         ChangeNotifierProvider(
-          create: (context) => ValueNotifier(AuthState(true)),
+          create: (context) => ValueNotifier(_AuthState(true)),
           child: MaterialApp.router(
             routerConfig: router,
           ),
@@ -80,7 +80,7 @@ void main() {
 
       await widgetTester.pumpWidget(
         ChangeNotifierProvider(
-          create: (context) => ValueNotifier(AuthState(true)),
+          create: (context) => ValueNotifier(_AuthState(true)),
           child: MaterialApp.router(
             routerConfig: router,
           ),
@@ -127,7 +127,7 @@ HyperRouter _createRouter() {
     initialRoute: HomeScreen.routeName,
     redirect: (context, state) {
       final authenticated =
-          context.read<ValueNotifier<AuthState>>().value.authenticated;
+          context.read<ValueNotifier<_AuthState>>().value.authenticated;
 
       if (!authenticated) {
         return LoginScreen.routeName;
@@ -164,8 +164,8 @@ HyperRouter _createRouter() {
   );
 }
 
-class AuthState {
-  AuthState(this.authenticated);
+class _AuthState {
+  _AuthState(this.authenticated);
 
   final bool authenticated;
 }
