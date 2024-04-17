@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'base/screens/home_screen.dart';
@@ -34,6 +32,46 @@ void main() async {
 
       await widgetTester.pumpAndSettle();
     },
+  );
+
+
+  testWidgets(
+    'Pop with value after an intermediate navigation',
+    (widgetTester) async {
+      final router = _createRouter();
+
+      await widgetTester.pumpWidget(MaterialApp.router(
+        routerConfig: router,
+      ));
+
+      await widgetTester.pumpAndSettle();
+
+      const popValue = 'pop result';
+      final homeContext = widgetTester.firstElement(find.byType(HomeScreen));
+      final dialogResult = homeContext.hyper.navigate(_DialogScreen.name);
+      await widgetTester.pumpAndSettle();
+
+      final dialogContext =
+          widgetTester.firstElement(find.byType(_DialogScreen));
+      dialogContext.hyper.navigate(_SubdialogScreen.name);
+      await widgetTester.pumpAndSettle();
+
+      final subdialogContext =
+          widgetTester.firstElement(find.byType(_SubdialogScreen));
+      subdialogContext.hyper.pop();
+      await widgetTester.pumpAndSettle();
+
+      dialogContext.hyper.pop(popValue);
+      await widgetTester.pumpAndSettle();
+
+      await expectLater(
+        dialogResult,
+        completion(popValue),
+        reason:
+            'The future returned from .navigate completes with the value passed into pop()',
+      );
+    },
+    timeout: const Timeout(Duration(seconds: 4)),
   );
 }
 

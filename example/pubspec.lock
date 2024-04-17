@@ -257,7 +257,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   iconsax_flutter:
     dependency: transitive
     description:
