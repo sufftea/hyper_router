@@ -36,7 +36,6 @@ class _DialogScreenState extends State<DialogScreen> {
               decoration: const InputDecoration(hintText: 'text'),
               controller: textController,
             ),
-            // const SizedBox(height: 16),
             const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

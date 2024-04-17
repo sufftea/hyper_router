@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:example/features/utils/context_x.dart';
 import 'package:example/features/utils/screen_sizes.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,7 @@ class ResponsiveRoute extends NamedRoute {
   RouteNode<RouteValue> createNode({
     RouteNode<RouteValue>? next,
     RouteName? value,
+    Completer? popCompleter,
   }) {
     return ResponsiveNode(
       next: next,
