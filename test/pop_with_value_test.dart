@@ -1,0 +1,84 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'base/screens/home_screen.dart';
+import 'package:hyper_router/hyper_router.dart';
+
+void main() async {
+  testWidgets(
+    'Pop with value',
+    (widgetTester) async {
+      final router = _createRouter();
+
+      await widgetTester.pumpWidget(MaterialApp.router(
+        routerConfig: router,
+      ));
+
+      await widgetTester.pumpAndSettle();
+
+      const popResult = 'pop result';
+      final homeContext = widgetTester.firstElement(find.byType(HomeScreen));
+      final dialogResult = homeContext.hyper.navigate(_DialogScreen.name);
+      expect(
+        dialogResult,
+        completion(popResult),
+        reason:
+            'The future returned from .navigate completes with the value passed into pop()',
+      );
+      await widgetTester.pumpAndSettle();
+
+      final dialogContext =
+          widgetTester.firstElement(find.byType(_DialogScreen));
+      dialogContext.hyper.pop(popResult);
+
+      await widgetTester.pumpAndSettle();
+    },
+  );
+}
+
+HyperRouter _createRouter() {
+  return HyperRouter(
+    initialRoute: HomeScreen.routeName,
+    routes: [
+      NamedRoute(
+        screenBuilder: (context) => const HomeScreen(),
+        name: HomeScreen.routeName,
+        children: [
+          NamedRoute(
+            name: _DialogScreen.name,
+            screenBuilder: (context) => const _DialogScreen(),
+            children: [
+              NamedRoute(
+                screenBuilder: (context) => _SubdialogScreen(),
+                name: _SubdialogScreen.name,
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
+class _DialogScreen extends StatelessWidget {
+  const _DialogScreen({super.key});
+
+  static const name = RouteName('dialogScreen');
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold();
+  }
+}
+
+class _SubdialogScreen extends StatelessWidget {
+  const _SubdialogScreen({super.key});
+
+  static const name = RouteName('subdialogScreen');
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold();
+  }
+}
