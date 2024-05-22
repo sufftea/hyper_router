@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyper_router/srs/url/url_data.dart';
 import 'package:hyper_router/hyper_router.dart';
@@ -22,12 +24,14 @@ class NamedRoute extends ValueRoute<RouteName> {
   RouteNode<RouteValue> createNode({
     RouteNode<RouteValue>? next,
     RouteName? value,
+    Completer? popCompleter,
   }) {
     return NamedNode(
       next: next,
       value: name,
       buildPage: (context) => buildPage(context, name),
       route: this,
+      popCompleter: popCompleter,
     );
   }
 
@@ -52,6 +56,7 @@ class NamedNode extends RouteNode<RouteName> {
     required this.value,
     required this.buildPage,
     required super.route,
+    super.popCompleter,
   });
 
   final Page Function(BuildContext context) buildPage;

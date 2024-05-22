@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyper_router/srs/route/shell_route/shell_node.dart';
 import 'package:hyper_router/srs/route/shell_route/shell_value.dart';
@@ -29,7 +31,11 @@ class ShellRoute extends HyperRoute<ShellValue> {
   final RouteKey key;
 
   @override
-  RouteNode createNode({RouteNode? next, ShellValue? value}) {
+  RouteNode createNode({
+    RouteNode? next,
+    ShellValue? value,
+    Completer? popCompleter,
+  }) {
     return ShellNode(
       shellBuilder: shellBuilder,
       value: switch ((next, value)) {
@@ -43,6 +49,7 @@ class ShellRoute extends HyperRoute<ShellValue> {
         (null, null) => value = ShellValue.def(key: key, tabs: tabs),
       },
       route: this,
+      popCompleter: popCompleter,
     );
   }
 
@@ -50,11 +57,13 @@ class ShellRoute extends HyperRoute<ShellValue> {
   RouteNode<RouteValue> updateWithValue({
     RouteNode<RouteValue>? next,
     required ShellValue value,
+    Completer? popCompleter,
   }) {
     return ShellNode(
       shellBuilder: shellBuilder,
       value: value,
       route: this,
+      popCompleter: popCompleter,
     );
   }
 
@@ -62,11 +71,13 @@ class ShellRoute extends HyperRoute<ShellValue> {
   RouteNode<RouteValue> updateWithNext({
     RouteNode<RouteValue>? next,
     required ShellValue value,
+    Completer? popCompleter,
   }) {
     return ShellNode(
       shellBuilder: shellBuilder,
       value: value.withNext(next!),
       route: this,
+      popCompleter: popCompleter,
     );
   }
 

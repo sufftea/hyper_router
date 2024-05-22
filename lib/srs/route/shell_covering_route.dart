@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hyper_router/srs/route/hyper_route.dart';
 import 'package:hyper_router/srs/url/url_data.dart';
@@ -24,12 +26,14 @@ class ShellCoveringRoute extends HyperRoute {
   RouteNode<RouteValue> createNode({
     RouteNode<RouteValue>? next,
     RouteValue? value,
+    Completer? popCompleter,
   }) {
     return ShellCoveringNode(
       shellKey: shellKey,
       next: next ?? children.first.createNode(),
       value: ShellCoveringRouteValue(key),
       route: this,
+      popCompleter: popCompleter,
     );
   }
 
@@ -56,6 +60,7 @@ class ShellCoveringNode extends RouteNode<ShellCoveringRouteValue> {
     required this.value,
     required this.next,
     required super.route,
+    super.popCompleter,
   });
 
   final RouteKey shellKey;

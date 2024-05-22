@@ -29,6 +29,7 @@ class ShellController {
           next.route.updateWithNext(
             next: null,
             value: next.value,
+            popCompleter: next.popCompleter,
           ),
         );
       }
@@ -38,6 +39,7 @@ class ShellController {
         next.route.updateWithNext(
           next: null,
           value: next.value,
+          popCompleter: next.popCompleter,
         ),
       );
     }

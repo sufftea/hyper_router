@@ -1,3 +1,10 @@
+## 0.0.5
+
+- Fix [issue#2](https://github.com/sufftea/hyper_router/issues/2)
+
+
+- Add tests.
+
 ## 0.0.4
 
 Added documentation.

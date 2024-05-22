@@ -1,11 +1,10 @@
 name: hyper_router
 description: Declarative, type-safe, codegen-free router for flutter. Optional URL support. Highly extensible.
-version: 0.0.4
+version: 0.0.5
 repository: https://github.com/sufftea/hyper_router
 
-
 environment:
-  sdk: '>=3.1.2 <4.0.0'
+  sdk: ">=3.1.2 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -16,6 +15,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.1
+  provider: ^6.1.1
 
 topics:
   - navigation
