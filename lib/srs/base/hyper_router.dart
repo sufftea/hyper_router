@@ -59,11 +59,22 @@ class HyperRouter implements RouterConfig<Object> {
         config: this,
       );
 
-      final u = routeInformationParser!
+      var initialRouteInformation = routeInformationParser!
           .restoreRouteInformation(rootController.stack)!;
 
+      Uri defaultPlatformUri = Uri.parse(
+        WidgetsBinding.instance.platformDispatcher.defaultRouteName,
+      );
+
+      if (defaultPlatformUri.pathSegments.isNotEmpty) {
+        initialRouteInformation = RouteInformation(
+          uri: defaultPlatformUri,
+          state: initialRouteInformation.state,
+        );
+      }
+
       routeInformationProvider = PlatformRouteInformationProvider(
-        initialRouteInformation: u,
+        initialRouteInformation: initialRouteInformation,
       );
     } else {
       routeInformationParser = null;

@@ -1,3 +1,8 @@
+## 0.0.6
+
+  - Fix: navigating to a url from external source opened the initial route instead of the provided route
+
+
 ## 0.0.5
 
 - Fix [issue#2](https://github.com/sufftea/hyper_router/issues/2)

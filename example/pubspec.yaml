@@ -7,19 +7,19 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
-  hyper_router: 
+  hyper_router:
     path: ..
-  flex_color_scheme: ^7.3.1
+  flex_color_scheme: ^8.0.1
   flutter:
     sdk: flutter
   provider: ^6.1.1
   flutter_bloc: ^8.1.3
-  toastification: ^1.2.0
+  toastification: ^2.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
+  flutter_lints: ^5.0.0
   riverpod_generator: ^2.3.3
 
 flutter:
