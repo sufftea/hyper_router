@@ -7,9 +7,9 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
-  hyper_router: 
+  hyper_router:
     path: ..
-  flex_color_scheme: ^7.3.1
+  flex_color_scheme: ^8.0.1
   flutter:
     sdk: flutter
   provider: ^6.1.1
