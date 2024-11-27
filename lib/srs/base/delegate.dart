@@ -39,6 +39,7 @@ class HyperRouterDelegate extends RouterDelegate<RouteNode>
             return Navigator(
               pages: rootController.stack.createPages(context).toList(),
               key: rootController.rootNavigatorNode.key,
+              // TODO: https://github.com/flutter/flutter/issues/153122
               onPopPage: (route, result) {
                 rootController.popRoute(result);
                 return false;
