@@ -22,4 +22,4 @@ jobs:
       - name: Run tests
         run: flutter test
       - name: Dry pubilsh
-        run: dart pub publish --dry-run 
+        run: dart pub publish --dry-run
