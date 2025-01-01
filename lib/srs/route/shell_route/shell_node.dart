@@ -47,7 +47,7 @@ class ShellNode extends RouteNode<ShellValue> {
 
     late final RouteNode nextCut;
     if (coveringNode case final coveringNode?) {
-      if (next.cut(coveringNode) case final next?) {
+      if (next.cut(coveringNode.key) case final next?) {
         nextCut = next;
       }
     } else {

@@ -169,7 +169,7 @@ abstract class RouteNode<T extends RouteValue> {
   UrlData toUrl();
 
   /// Returns a copy of the list from the node it's called on, up to the node
-  /// with the provided [key]
+  /// with the provided [key] (excluding the node with the [key])
   RouteNode? cut(Object key) {
     if (key == this.key) {
       return null;
