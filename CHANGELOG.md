@@ -1,3 +1,7 @@
+## 0.0.7
+  - Quickfix: fix the behavior of shellCoveringRoute (issue #7)
+
+
 ## 0.0.6
 
   - Fix: navigating to a url from external source opened the initial route instead of the provided route

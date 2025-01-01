@@ -34,7 +34,6 @@ void main() async {
     },
   );
 
-
   testWidgets(
     'Pop with value after an intermediate navigation',
     (widgetTester) async {
@@ -100,7 +99,7 @@ HyperRouter _createRouter() {
 }
 
 class _DialogScreen extends StatelessWidget {
-  const _DialogScreen({super.key});
+  const _DialogScreen();
 
   static const name = RouteName('dialogScreen');
 
@@ -111,7 +110,7 @@ class _DialogScreen extends StatelessWidget {
 }
 
 class _SubdialogScreen extends StatelessWidget {
-  const _SubdialogScreen({super.key});
+  const _SubdialogScreen();
 
   static const name = RouteName('subdialogScreen');
 

@@ -85,11 +85,6 @@ class ShellCoveringNode extends RouteNode<ShellCoveringRouteValue> {
   UrlData toUrl() {
     return next.toUrl();
   }
-
-  @override
-  RouteNode<RouteValue>? cut(Object key) {
-    return next.cut(key);
-  }
 }
 
 class ShellCoveringRouteValue extends RouteValue {
